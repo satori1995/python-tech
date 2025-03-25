@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1396,6 +1396,133 @@ heapq.heappop(data, item)
 <p>最后，堆可以用来实现排序，效率也很高，但相比三路快排还差了那么一点。但堆存在的目的不在于排序，而在于它的动态性。优先队列就不必说了，还有 TOP K。虽然三路快排和堆都可以实现 TOP K，但前者要求数据必须一次性全部给出，而堆则没有这个要求，换句话说堆可以满足对流式数据的处理。</p>
 <p>比如 1T 的文件，一行就是一串数字，如果想在 16G 内存的机器上查找最大的 100 个数字，用快排是无法实现的，因为无法将文件一次性加载到内存中。但堆可以实现这个需求，先读取 100 行维护一个小根堆，然后从 101 行继续读取，依次和堆顶进行比较。如果小于堆顶元素，那么它一定不是前 100 个最大的数字；如果大于堆顶元素，那么就替换掉，然后 sift_down，维护堆的形状。这样总有一刻，能够选出最大的 100 个数字。</p>
 <p>所以当数组 data 不断变化时，将其维护成一个堆，然后通过 heappush 添加元素、heappop 弹出堆顶元素、data[0] 获取堆顶元素，往往是最佳选择。并且添加和弹出都是 logN 级别的时间复杂度，也正是这个特性，它适合优先队列以及流式数据（数据无法一次性全部给出）的处理。</p>
+<div style="break-before: page; page-break-before: always;"></div><p>假设有这样一种数据：</p>
+<pre><code class="language-python">data = [
+    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
+    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
+]
+
+# 我们需要变成如下格式
+&quot;&quot;&quot;
+[('apple', [30, 35, 32]),
+ ('pear', [60, 32, 60]),
+ ('banana', [102, 104])]
+&quot;&quot;&quot;
+</code></pre>
+<p>如果是你的话，你会怎么做呢？很容易想到的一种解决方案是构造一个字典：</p>
+<pre><code class="language-python">data = [
+    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
+    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
+]
+
+data_dict = {}
+for name, count in data:
+    if name not in data_dict:
+        data_dict[name] = []
+    data_dict[name].append(count)
+
+print(data_dict)
+&quot;&quot;&quot;
+{'apple': [30, 35, 32], 
+ 'pear': [60, 32, 60], 
+ 'banana': [102, 104]}
+&quot;&quot;&quot;
+print(list(data_dict.items()))
+&quot;&quot;&quot;
+[('apple', [30, 35, 32]), 
+ ('pear', [60, 32, 60]), 
+ ('banana', [102, 104])]
+&quot;&quot;&quot;
+</code></pre>
+<p>这种方案完全没有问题，不过我们还可以写的更优雅一些，也就是使用字典的 setdefault 方法：</p>
+<pre><code class="language-Python">data = [
+    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
+    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
+]
+
+data_dict = {}
+for name, count in data:
+    # setdefault(k, v) 含义如下
+    # 当 k 不存在时，将 k: v 设置在字典中，并返回 v
+    # 当 k 存在时，直接返回 k 对应值
+    data_dict.setdefault(name, []).append(count)
+
+print(list(data_dict.items()))
+&quot;&quot;&quot;
+[('apple', [30, 35, 32]), 
+ ('pear', [60, 32, 60]), 
+ ('banana', [102, 104])]
+&quot;&quot;&quot;
+</code></pre>
+<p>setdefault 是一个非常方便的方法，但是使用频率却不怎么高，或者说该方法不太让人喜欢。主要是每次调用都要给一个初始值，比如代码中的空列表 []。另外这里的初始值可以任意，如果你希望添加的时候还能实现去重效果，那么就将空列表换成空集合即可。</p>
+<p>或者我们还可以使用 defaultdict，它位于 collections 模块中。</p>
+<pre><code class="language-Python">from collections import defaultdict
+
+data = [
+    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
+    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
+    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
+]
+
+# 里面接收一个 callable
+# 当访问的 k 不存在时，返回 callable 调用之后的值
+data_dict1 = defaultdict(list)
+for name, count in data:
+    data_dict1[name].append(count)
+
+print(list(data_dict1.items()))
+&quot;&quot;&quot;
+[('apple', [30, 35, 32]),
+ ('pear', [60, 32, 60]), 
+ ('banana', [102, 104])]
+&quot;&quot;&quot;
+
+# 也可以指定为 set
+data_dict2 = defaultdict(set)
+for name, count in data:
+    data_dict2[name].add(count)
+
+print(list(data_dict2.items()))
+&quot;&quot;&quot;
+[('apple', {32, 35, 30}), 
+ ('pear', {32, 60}), 
+ ('banana', {104, 102})]
+&quot;&quot;&quot;
+</code></pre>
+<p>总的来说，defaultdict 和字典的 setdefault 方法非常类似，我们使用 setdefault 即可，因为 setdefault 其实更加方便。我们不妨再看个更复杂的例子。</p>
+<pre><code class="language-Python">data = [
+    (&quot;a&quot;, &quot;x&quot;, 1),
+    (&quot;a&quot;, &quot;x&quot;, 2),
+    (&quot;a&quot;, &quot;x&quot;, 3),
+    (&quot;a&quot;, &quot;y&quot;, 4),
+    (&quot;a&quot;, &quot;y&quot;, 5),
+    (&quot;a&quot;, &quot;z&quot;, 6),
+    
+    (&quot;b&quot;, &quot;x&quot;, 7),
+    (&quot;b&quot;, &quot;x&quot;, 8),
+    (&quot;b&quot;, &quot;y&quot;, 9),
+    (&quot;b&quot;, &quot;z&quot;, 10),
+]
+# 如果我想得到下面的结果，怎么做呢？
+&quot;&quot;&quot;
+{'a': {'x': [1, 2, 3], 'y': [4, 5], 'z': [6]}, 
+ 'b': {'x': [7, 8], 'y': [9], 'z': [10]}}
+&quot;&quot;&quot;
+# 使用 setdefault 会非常方便
+data_dict = {}
+for first, second, value in data:
+    data_dict.setdefault(first, {}).setdefault(second, []).append(value)
+
+print(data_dict)
+</code></pre>
+<p>以上就是数据分组，比较简单，setdefault 这个方法非常方便，但总是容易被遗忘。</p>
 
                     </main>
 
