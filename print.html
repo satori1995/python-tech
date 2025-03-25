@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="全方位解析 f-string/doc.html">全方位解析 f-string</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -1523,6 +1523,725 @@ for first, second, value in data:
 print(data_dict)
 </code></pre>
 <p>以上就是数据分组，比较简单，setdefault 这个方法非常方便，但总是容易被遗忘。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="楔子-1"><a class="header" href="#楔子-1">楔子</a></h2>
+<p>在 Python3.6 之前，格式化字符串一般会使用百分号占位符或者 format 函数，举个例子：</p>
+<pre><code class="language-Python">name = &quot;古明地觉&quot;
+address = &quot;地灵殿&quot;
+
+# 使用百分号占位符格式化字符串
+print(
+    &quot;我是 %s, 来自 %s&quot; % (name, address)
+)  # 我是 古明地觉, 来自 地灵殿
+
+# 使用format函数格式化字符串
+print(
+    &quot;我是 {}, 来自 {}&quot;.format(name, address)
+)  # 我是 古明地觉, 来自 地灵殿
+
+# format 函数还支持关键字参数
+print(
+    &quot;我是 {name}, 来自 {address}&quot;.format(address=address, name=name)
+)  # 我是 古明地觉, 来自 地灵殿
+</code></pre>
+<p>但是从 3.6 开始，Python 新增了一个格式化字符串的方法，称之为 f-string。f-string 的功能非常强大，可以说是一把 &quot;瑞士军刀&quot;。</p>
+<pre><code class="language-Python">name = &quot;古明地觉&quot;
+address = &quot;地灵殿&quot;
+
+print(
+    f&quot;我是 {name}, 来自 {address}&quot;
+)  # 我是 古明地觉, 来自 地灵殿
+</code></pre>
+<p>使用 f-string 需要给字符串增加一个前缀 f，此时 <strong>{}</strong> 和它里面的内容则不再表示字符串，而是整体作为一个需要单独计算的值或者表达式、或者变量。我们再举个例子：</p>
+<pre><code class="language-Python">print(f&quot;1 + 1 = {1 + 1}&quot;)  # 1 + 1 = 2
+print(f&quot;sum([1, 2, 3]) = {sum([1, 2, 3])}&quot;)  # sum([1, 2, 3]) = 6
+print(f&quot;{'--'.join(['a', 'b', 'c', 'd'])}&quot;)  # a--b--c--d
+
+try:
+    print(f&quot;{a}&quot;)
+except Exception as e:
+    print(e)  # name 'a' is not defined
+
+# 在f-string中，{} 里面的内容是需要单独计算的
+# 可以是常量，比如 {123}、{'hello'} 等等。可以是表达式，比如 {1 + 1}、{2 &gt; 1} 等等
+# 可以是变量，比如 {a}、{name}，但是变量要定义好，而上面的 a 没有定义，所以报错
+
+# 或者定义一个变量
+a = lambda x: x + 100
+print(f&quot;{a}&quot;)  # &lt;function &lt;lambda&gt; at 0x000...&gt;
+print(f&quot;{a(1)}&quot;)  # 101
+</code></pre>
+<p>我们看到 f-string 还是很方便的，并且和 format 功能类似，但是性能要优于 format 函数。当然 f-string 的功能远没有目前介绍的这么简单，它支持的操作非常多，下面就来逐一介绍。</p>
+<h2 id="实现-repr-打印"><a class="header" href="#实现-repr-打印">实现 repr 打印</a></h2>
+<p>有时候我们在打印的时候需要带上引号。</p>
+<pre><code class="language-Python">name = &quot;古明地觉&quot;
+
+print(name)  # 古明地觉
+print(&quot;%s&quot; % name)  # 古明地觉
+# 如果使用 %r 打印，会带上单引号
+print(&quot;%r&quot; % name)  # '古明地觉'
+
+# 上面类似于 str 和 repr 的区别
+print(str(name))  # 古明地觉
+print(repr(name))  # '古明地觉'
+
+# 等价于调用 __str__ 和 __repr__
+print(name.__str__())  # 古明地觉
+print(name.__repr__())  # '古明地觉'
+</code></pre>
+<p>如果在交互式环境下，不使用 print，而是直接输入变量 name、然后回车，那么会调用 __repr__ 方法。如果使用 print(name)，那么不管在什么环境，都会调用 __str__ 方法。</p>
+<p>那么在字符串周围带上一层单引号，有什么意义呢？</p>
+<pre><code class="language-python">birthday = &quot;1995-07-05&quot;
+print(&quot;select name from where birthday &gt; %s&quot; % birthday)  
+print(&quot;select name from where birthday &gt; %r&quot; % birthday)  
+&quot;&quot;&quot;
+select name from where birthday &gt; 1995-07-05
+select name from where birthday &gt; '1995-07-05'
+&quot;&quot;&quot;
+</code></pre>
+<p>看到区别了吗？如果是第一个查询，那么肯定是会报错的。重点来了，如何通过 f-string 实现这种效果呢？</p>
+<pre><code class="language-Python">birthday = &quot;1995-07-05&quot;
+
+# 我们只需要在打印的内容后面加上一个!r即可
+print(f&quot;{birthday!r}&quot;)  # '1995-07-05'
+print(f&quot;{birthday}&quot;)  # 1995-07-05
+
+# &quot;{name}&quot; &lt;==&gt; str(name) &lt;==&gt; name.__str__()
+# &quot;{name!r}&quot; &lt;==&gt; repr(name) &lt;==&gt; name.__repr__()
+
+print(f&quot;{'.'.join(['a', 'b', 'c'])}&quot;)  # a.b.c
+print(f&quot;{'.'.join(['a', 'b', 'c'])!r}&quot;)  # 'a.b.c'
+
+# 注意：!r 针对的是字符串
+# 虽然也可以作用于其它对象，不过没有效果
+print(f&quot;{123!r}&quot;)  # 123
+print(f&quot;{3.14!r}&quot;)  # 3.14
+
+# 另外除了 !r，还有 !s 和 !a，只有这三种
+# !a 和 !r 类似，!s是默认选择、加不加均可
+print(f&quot;{birthday}&quot;)  # 1995-07-05
+print(f&quot;{birthday!s}&quot;)  # 1995-07-05
+print(f&quot;{birthday!a}&quot;)  # '1995-07-05'
+print(f&quot;{birthday!r}&quot;)  # '1995-07-05'
+</code></pre>
+<p>以上就是字符串的 repr 打印。</p>
+<h2 id="整数的进制转换"><a class="header" href="#整数的进制转换">整数的进制转换</a></h2>
+<p>我们在打印整数的时候，有时候需要转成某个进制之后再打印。</p>
+<pre><code class="language-Python">i = 123
+# 打印 2 进制
+print(f&quot;{i:b}&quot;)  # 1111011
+# 打印 8 进制
+print(f&quot;{i:o}&quot;)  # 173
+# 打印 10 进制
+# 默认是 10 进制，也可以直接使用 {i}
+print(f&quot;{i:d}&quot;)  # 123
+# 打印 16 进制
+print(f&quot;{i:x}&quot;)  # 7b
+
+# 类似于内置函数 bin、oct、hex
+# 但是这些内置函数调用之后会带上一个前缀
+print(bin(i))  # 0b1111011
+print(oct(i))  # 0o173
+print(hex(i))  # 0x7b
+
+# f-string 可不可以实现呢？答案是可以的
+print(f&quot;{i:#b}&quot;)  # 0b1111011
+print(f&quot;{i:#o}&quot;)  # 0o173
+print(f&quot;{i:#x}&quot;)  # 0x7b
+# 对于表示 16 进制的 x，我们还可以将 x 大写
+# 此时输出的内容也是大写格式的
+print(f&quot;{i:#X}&quot;)  # 0X7B
+</code></pre>
+<p>另外除了 # 号，还可以使用 +、-、以及空格，功能如下：</p>
+<ul>
+<li>+：显示正负号；</li>
+<li>-：负数显示符号、正数不显示；</li>
+<li>空格：正数显示空格、负数不显示，只能是一个空格；</li>
+<li>#：显示前缀，比如 0b、0o、0x</li>
+</ul>
+<p>注意：这几个符号不可混用，并且最多只能出现一次。</p>
+<pre><code class="language-Python">print(f&quot;{123:+x}, {-123:+x}&quot;)  # +7b, -7b
+print(f&quot;{123:-x}, {-123:-x}&quot;)  # 7b, -7b
+print(f&quot;{123: x}, {-123: x}&quot;)  #  7b, -7b
+print(f&quot;{123:#x}, {-123:#x}&quot;)  # 0x7b, -0x7b
+</code></pre>
+<p>另外，Python 在创建整数的时候，还支持使用 _ 进行分隔，但打印的时候不会将 _ 显示出来。</p>
+<pre><code class="language-Python">num = 100_000_000
+print(num)  # 100000000
+
+# 但如果是 f-string 的话
+print(f&quot;{num:_d}&quot;)
+&quot;&quot;&quot;
+100_000_000
+&quot;&quot;&quot;
+print(f&quot;{num:_b}&quot;)
+print(f&quot;{num:#_b}&quot;)
+&quot;&quot;&quot;
+101_1111_0101_1110_0001_0000_0000
+0b101_1111_0101_1110_0001_0000_0000
+&quot;&quot;&quot;
+print(f&quot;{num:_o}&quot;)
+print(f&quot;{num:#_o}&quot;)
+&quot;&quot;&quot;
+5_7536_0400
+0o5_7536_0400
+&quot;&quot;&quot;
+print(f&quot;{num:_x}&quot;)
+print(f&quot;{num:#_x}&quot;)
+&quot;&quot;&quot;
+5f5_e100
+0x5f5_e100
+&quot;&quot;&quot;
+
+# 只需要在 b、d、o、x 前面加上一个 _ 即可
+# 这样打印出来的字符串也会带上 _ 分隔符
+# 另外分隔符还可以使用逗号
+print(f&quot;{num:,d}&quot;)
+&quot;&quot;&quot;
+100,000,000
+&quot;&quot;&quot;
+</code></pre>
+<p>注意：b、o、d、x 这些只能用于整数，不能是其它类型的对象。</p>
+<pre><code class="language-Python">print(f&quot;{'aaa':b}&quot;)
+&quot;&quot;&quot;
+    print(f&quot;{'aaa':b}&quot;)
+ValueError: Unknown format code 'b' for object of type 'str'
+&quot;&quot;&quot;
+</code></pre>
+<p>最后再来补充一个字符，整数除了可以使用 b、o、d、x 之外， 还可以使用一个字符，也就是 c。</p>
+<pre><code class="language-Python">num = 97
+
+print(chr(num))  # a
+print(f&quot;{num:c}&quot;)  # a
+</code></pre>
+<p>以上就是整数的进制转换。</p>
+<h2 id="整数的填充"><a class="header" href="#整数的填充">整数的填充</a></h2>
+<p>很多时候，打印出来的整数都会进行位数的填充，比如 1 的话，就打印 001，18 则打印 018，123 则打印本身的 123。这种需求，要怎么去处理它呢？</p>
+<pre><code class="language-Python">num = 1
+# 还记得这个 d 吗？
+# 我们说直接打印的话，有它没它无影响
+# 但是对于填充的话，它就派上用场了
+print(f&quot;{num:03d}&quot;)  # 001
+print(f&quot;{num:013d}&quot;)  # 0000000000001
+</code></pre>
+<p>填充只能用 0 或者空格来填充，比如 0123d，表示打印出来要占 123 个字符，够的话不管了，不够则使用 0 在左边填充。</p>
+<p>如果是 123d，它代表的可不是占 23 个字符、不够用 1 填充，它代表的还是占 123 个字符，但是由于我们没有指定 0，所以默认使用空格在左边填充。</p>
+<pre><code class="language-Python"># 长度 23，不够使用空格填充
+print(f&quot;{1:23d}&quot;)   #                       1
+# 长度 23，不够使用 0 填充
+print(f&quot;{1:023d}&quot;)  # 00000000000000000000001
+
+# 当然我们同样可以结合 +、-、空格、#
+print(f&quot;{1:+08d}&quot;)  # +0000001
+# 可以的话，再将分隔符包含进来
+print(f&quot;{1:+023_d}&quot;)  # +00_000_000_000_000_001
+print(f&quot;{1:+023,d}&quot;)  # +00,000,000,000,000,001
+</code></pre>
+<p>当然，以上规则除了适用于十进制的 d，也同样适用于二进制的 b、八进制的 o、十六进制的 x。</p>
+<pre><code class="language-Python">print(f&quot;{123:x}&quot;)
+print(f&quot;{123:016x}&quot;)
+&quot;&quot;&quot;
+7b
+000000000000007b
+&quot;&quot;&quot;
+
+# 打印显示正负号，然后占 8 个字符
+print(f&quot;{123:+08d}&quot;)
+print(f&quot;{123:+8d}&quot;)
+&quot;&quot;&quot;
++0000123
+    +123
+&quot;&quot;&quot;
+
+# 打印的时候带上前缀，占 18 个字符
+print(f&quot;{123:#018b}&quot;)
+print(f&quot;{123:#18b}&quot;)
+# 打印的时候带上前缀和分隔符，占 18 个字符
+print(f&quot;{123:#18_b}&quot;)
+&quot;&quot;&quot;
+0b0000000001111011
+         0b1111011
+        0b111_1011
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到填充的时候，如果用 0 填充，那么会填充在 0b、+ 等前缀的后面；如果用空格填充，那么会填充在前缀的前面。当然这也符合我们正常人的思维：</p>
+<ul>
+<li>如果是 &quot;+    123&quot; 或者 &quot;00000+123&quot;，明显觉得别扭；</li>
+<li>如果是 &quot;    +123&quot; 或者 &quot;+00000123&quot;，则明显顺眼多了；</li>
+</ul>
+<p>当然工作中我们不会用的这么复杂，知道整数如何填充即可。</p>
+<h2 id="浮点数的小数保留"><a class="header" href="#浮点数的小数保留">浮点数的小数保留</a></h2>
+<p>浮点数的小数比较长的话，我们打印的时候一般会只打印前两位或前三位，这在 f-string 里面如何实现呢？</p>
+<pre><code class="language-Python">num = 123.13421
+
+# f 是保留小数，但我们没有指定精度，所以默认保留后 6 位，不够用 0 补齐
+print(f&quot;{num:f}&quot;)
+&quot;&quot;&quot;
+123.134210
+&quot;&quot;&quot;
+
+# .2f 则是保留两位小数
+print(f&quot;{num:.2f}&quot;)
+&quot;&quot;&quot;
+123.13
+&quot;&quot;&quot;
+
+# 10.2f 也是保留两位小数，然后整体占满 10 个字符长度，不够的话使用空格在左边填充
+print(f&quot;{num:10.2f}&quot;)
+&quot;&quot;&quot;
+    123.13
+&quot;&quot;&quot;
+
+# 如果不想使用空格填充的话
+# 那么也可以使用(也只能使用) 0 来进行填充，规则和整数是类似的
+print(f&quot;{num:010.2f}&quot;)
+&quot;&quot;&quot;
+0000123.13
+&quot;&quot;&quot;
+</code></pre>
+<p>当然 +、-、空格 同样可以适用于浮点数，规则也和整数类似，同样的，下面这些在工作中也不常用，所以我们知道怎么保留指定位数的小数即可。</p>
+<pre><code class="language-Python">num = 123.13421
+
+print(f&quot;{num:+10.2f}&quot;)   
+print(f&quot;{num:+010.2f}&quot;)  
+&quot;&quot;&quot;
+   +123.13
++000123.13
+&quot;&quot;&quot;
+
+# 同理，浮点数也支持使用下划线或者逗号进行分隔
+print(f&quot;{num:+10_.2f}&quot;)  
+print(f&quot;{num:+10,.2f}&quot;) 
+&quot;&quot;&quot;
+   +123.13
+   +123.13
+&quot;&quot;&quot;
+
+# 上面由于有效字符比较少，所以没有分隔符
+# 我们用 0 填充一下
+print(f&quot;{num:+010_.2f}&quot;)
+print(f&quot;{num:+010,.2f}&quot;)
+&quot;&quot;&quot;
++00_123.13
++00,123.13
+&quot;&quot;&quot;
+</code></pre>
+<p>以上就是浮点数的小数保留。</p>
+<h2 id="任意字符的填充"><a class="header" href="#任意字符的填充">任意字符的填充</a></h2>
+<p>我们上面介绍的还只是 f-string 的一部分，接下来就是 f-string 的杀手锏。</p>
+<pre><code class="language-Python">name = &quot;古明地觉&quot;
+
+print(f&quot;~{name:&gt;10}~&quot;)
+print(f&quot;~{name:^10}~&quot;)
+print(f&quot;~{name:&lt;10}~&quot;)
+&quot;&quot;&quot;
+~      古明地觉~
+~   古明地觉   ~
+~古明地觉      ~
+&quot;&quot;&quot;
+</code></pre>
+<ul>
+<li>&gt;n：输出的字符串占 n 个字符，原始的内容右对齐，长度不够则在左边用空格填充；</li>
+<li>^n：输出的字符串占 n 个字符，原始的内容居中对齐，长度不够则在左右两端用空格填充；</li>
+<li>&lt;n：输出的字符串占 n 个字符，原始的内容左对齐，长度不够则在右边用空格填充；</li>
+</ul>
+<p>还可以将 !r、!s、!a 结合起来使用。</p>
+<pre><code class="language-Python">print(f&quot;{'abc'!s:&gt;10}&quot;) 
+print(f&quot;{'abc'!r:&gt;10}&quot;) 
+print(f&quot;{'abc'!a:&gt;10}&quot;) 
+&quot;&quot;&quot;
+       abc
+     'abc'
+     'abc'
+&quot;&quot;&quot;
+</code></pre>
+<p>这些规则也适用于数值：</p>
+<pre><code class="language-Python">print(f&quot;{3:&gt;10}&quot;)
+print(f&quot;{3.14:&gt;10}&quot;)
+&quot;&quot;&quot;
+         3
+      3.14
+&quot;&quot;&quot;
+</code></pre>
+<p>另外默认是使用空格填充的，那么可不可以使用指定字符填充呢？答案是可以的, 直接在 &gt;、&lt;、^ 的左边写上用来填充的字符即可，但是只能写一个字符，多了报错。</p>
+<pre><code class="language-Python">print(f&quot;~{'a':1&gt;10}~&quot;)  # ~111111111a~
+print(f&quot;~{'a':1^10}~&quot;)  # ~1111a11111~
+# 使用空格填充，'a': &gt;10 等价于 'a':&gt;10
+print(f&quot;~{'a': &gt;10}~&quot;)  # ~         a~
+
+# 这里我们实现了 {1:03d} 的效果
+print(f&quot;{1:0&gt;3}&quot;)  # 001
+
+print(f&quot;{123:b}&quot;)  # 1111011
+print(f&quot;{123:b&lt;}&quot;)  # 123
+&quot;&quot;&quot;
+对于 f&quot;{123:b}&quot;，里面的 b 表示整数的进制转换
+此时只能作用于整数，不能是字符串
+
+但是对于 f&quot;{123:b&lt;}，由于里面出现了&lt;
+那么此时的 b 就不再代表进制了，而是代表填充字符
+
+只不过 &lt; 后面没有指定个数
+所以解释器不知道要填充多少个，因此就原本输出了
+&quot;&quot;&quot;
+
+# 但是 f&quot;{'aaa':b}&quot; 报错
+# 因为此时 b 代表进制，无法作用于字符串
+print(f&quot;{'aaa':b&lt;}&quot;)  # aaa
+print(f&quot;{'aaa':b&lt;4}&quot;)  # aaab
+</code></pre>
+<p>问题来了，如果我们希望整数在填充的时候，还能进制转化，该怎么做呢？</p>
+<pre><code class="language-Python"># 转成十六进制
+print(f&quot;{255:x}&quot;)
+&quot;&quot;&quot;
+ff
+&quot;&quot;&quot;
+# 转成十六进制，带前缀
+print(f&quot;{123:#x}&quot;)
+&quot;&quot;&quot;
+0x7b
+&quot;&quot;&quot;
+# 转成十六进制，占满10位
+# 不够使用字符 s 来左填充
+print(f&quot;{123:s&gt;#10x}&quot;)
+&quot;&quot;&quot;
+ssssss0x7b
+&quot;&quot;&quot;
+</code></pre>
+<p>浮点数也是类似的，在保留指定位数的同时，也可以进行填充。</p>
+<pre><code class="language-Python">num = 123.1234
+
+# 保留一位小数
+print(f&quot;{num:.1f}&quot;)
+&quot;&quot;&quot;
+123.1
+&quot;&quot;&quot;
+
+# 保留一位小数，同时占满 10 位，此时只能用 0 或 空格填充
+print(f&quot;{num:10.1f}&quot;)
+print(f&quot;{num:010.1f}&quot;)
+&quot;&quot;&quot;
+     123.1
+00000123.1
+&quot;&quot;&quot;
+
+# 如果想使用其它字符填充
+print(f&quot;{num:s&lt;10.1f}&quot;)
+print(f&quot;{num:s&gt;10.1f}&quot;)
+print(f&quot;{num:s^10.1f}&quot;)
+&quot;&quot;&quot;
+123.1sssss
+sssss123.1
+ss123.1sss
+&quot;&quot;&quot;
+
+# 填充的时候带上正负号
+print(f&quot;{num:s&lt;+10.1f}&quot;)
+print(f&quot;{num:s&gt;+10.1f}&quot;)
+print(f&quot;{num:s^+10.1f}&quot;)
+&quot;&quot;&quot;
++123.1ssss
+ssss+123.1
+ss+123.1ss
+&quot;&quot;&quot;
+
+# 填充的时候带上正负号和分隔符
+num = 123123123.1234
+print(f&quot;{num:s&lt;+20_.1f}&quot;)
+print(f&quot;{num:s&gt;+20_.1f}&quot;)
+print(f&quot;{num:s^+20_.1f}&quot;)
+&quot;&quot;&quot;
++123_123_123.1ssssss
+ssssss+123_123_123.1
+sss+123_123_123.1sss
+&quot;&quot;&quot;
+</code></pre>
+<p>总的来说，f-string 还是非常强大的，但说实话，工作中不会用到这么多花里胡哨的功能。基本上就是简单的填充、进制转换、保留小数。很少会有 <code>f&quot;{num:s&lt;+20_.1f}&quot;</code> 这种保留小数的同时，还要带正负号、以及填充位数的情况出现。</p>
+<h2 id="日期的截取"><a class="header" href="#日期的截取">日期的截取</a></h2>
+<p>很多小伙伴应该没想到 f-string 还可以操作日期，这也算是一大亮点吧。我们在格式化或者截取日期的时候，一般会使用 datetime 模块，这些也是可以使用 f-string 来实现的。</p>
+<pre><code class="language-Python">import datetime
+
+dt = datetime.datetime(
+    1995, 7, 5, 13, 30, 45, 100000)
+print(dt)
+&quot;&quot;&quot;
+1995-07-05 13:30:45.100000
+&quot;&quot;&quot;
+
+# %F: 返回年月日（使用 - 连接）
+print(f&quot;{dt:%F}&quot;)
+&quot;&quot;&quot;
+1995-07-05
+&quot;&quot;&quot;
+# %D: 返回日月年（使用 / 连接），但是年是两位的
+# 并且也不符合中国人的日期表达习惯，建议只用 %F
+print(f&quot;{dt:%D}&quot;)
+&quot;&quot;&quot;
+07/05/95
+&quot;&quot;&quot;
+
+# %X: 返回时间，精确到秒（小数点后面的会截断）
+# 这里注意的 X 要大写，如果是 %x 那么等价于 %D
+print(f&quot;{dt:%X}&quot;)
+&quot;&quot;&quot;
+13:30:45
+&quot;&quot;&quot;
+
+# 所以返回字符串格式的完整日期就可以这么写
+print(f&quot;{dt:%F %X}&quot;)
+&quot;&quot;&quot;
+1995-07-05 13:30:45
+&quot;&quot;&quot;
+
+# %Y: 返回年（四位）
+# %y: 返回年（两位）
+print(f&quot;{dt:%Y}&quot;)
+print(f&quot;{dt:%y}&quot;)
+&quot;&quot;&quot;
+1995
+95
+&quot;&quot;&quot;
+
+# %m: 返回月
+# %d: 返回天
+# 注意：会占满两位，不够补0
+print(f&quot;{dt:%m}&quot;)
+print(f&quot;{dt:%d}&quot;)
+&quot;&quot;&quot;
+07
+05
+&quot;&quot;&quot;
+
+# 所以 %F，我们还可以这么实现，这些符号是可以连用的
+print(f&quot;{dt:%Y-%m-%d}&quot;)
+&quot;&quot;&quot;
+1995-07-05
+&quot;&quot;&quot;
+
+# %H: 返回小时（24小时制度）
+# %I: 返回小时（12小时制度）
+# 注意：会占满两位，不够补0
+print(f&quot;{dt:%H}&quot;)
+print(f&quot;{dt:%I}&quot;)
+&quot;&quot;&quot;
+13
+01
+&quot;&quot;&quot;
+
+# %M: 返回分钟
+# %S: 返回秒
+# 注意：会占满两位，不够补0
+print(f&quot;{dt:%M}&quot;)
+print(f&quot;{dt:%S}&quot;)
+&quot;&quot;&quot;
+30
+45
+&quot;&quot;&quot;
+
+# 所以完整的 &quot;年-月-日 时:分:秒&quot;
+# 就可以这么实现
+print(f&quot;{dt:%Y-%m-%d %H:%M:%S}&quot;)
+&quot;&quot;&quot;
+1995-07-05 13:30:45
+&quot;&quot;&quot;
+
+# %f: 返回微妙
+# 注意：会占满六位，不够补0
+print(f&quot;{dt:%f}&quot;)
+&quot;&quot;&quot;
+100000
+&quot;&quot;&quot;
+
+# %p: 早上还是下午（本地时间）
+# 早上返回 AM、下午返回 PM
+print(f&quot;{dt:%p}&quot;)
+&quot;&quot;&quot;
+PM
+&quot;&quot;&quot;
+
+# %j: 一年中的第几天，从 1 开始，1月1号就是 1
+# 注意：会占满三位，不够补 0
+print(f&quot;{dt:%j}&quot;)
+&quot;&quot;&quot;
+186
+&quot;&quot;&quot;
+
+# %w: 星期几（0 是周日、1 到 6 是周一到周六）
+# %u: 星期几（1 到 7 是周一到周日）
+# 可以看到两种格式只有星期天不一样
+print(f&quot;{dt:%w}&quot;)
+print(f&quot;{dt:%u}&quot;)
+&quot;&quot;&quot;
+3
+3
+&quot;&quot;&quot;
+
+# %U: 一年中的第几周（以全年首个周日所在的星期为第 0 周）
+# %W: 一年中的第几周（以全年首个周一所在的星期为第 1 周）
+# %V: 一年中的第几周（以全年首个包含 1 月 4 日的星期为第 1 周）
+# 都是占满两位，不够补 0
+print(f&quot;{dt:%U}&quot;)
+print(f&quot;{dt:%W}&quot;)
+print(f&quot;{dt:%V}&quot;)
+&quot;&quot;&quot;
+27
+27
+27
+&quot;&quot;&quot;
+# 所以如果对应的年的第一天恰好是星期一，那么 %U 会比 %W 少 1。
+# 如果不是星期一，那么两者是相等的，比如 2007 年的 1 月 1 号恰好是星期一
+dt = datetime.datetime(2007, 10, 13)
+print(f&quot;{dt:%U}&quot;)
+print(f&quot;{dt:%W}&quot;)
+print(f&quot;{dt:%V}&quot;)
+&quot;&quot;&quot;
+40
+41
+41
+&quot;&quot;&quot;
+
+# %Z: 返回时区名，如果没有则返回空字符串
+print(f&quot;'{dt:%Z}'&quot;)  # ''
+from pytz import timezone
+dt = datetime.datetime(2007, 10, 13, tzinfo=timezone(&quot;UTC&quot;))
+print(f&quot;'{dt:%Z}'&quot;)  # 'UTC'
+</code></pre>
+<p>怎么样，是不是很方便呢？以后在做日期的格式化和解析的时候，不妨使用 f-string 试一下。</p>
+<h2 id="f-string-的注意事项"><a class="header" href="#f-string-的注意事项">f-string 的注意事项</a></h2>
+<p>使用 f-string 需要注意单双引号的问题，如果限定字符串使用的是双引号，那么 {} 里面出现的必须是单引号，反之亦然。</p>
+<pre><code class="language-Python">d = {&quot;a&quot;: 1}
+# 外面是双引号，{} 里面必须是单引号，不能是 d[&quot;a&quot;]
+print(f&quot;{d['a'] + 1}&quot;)  # 2
+</code></pre>
+<p>我们限定字符串的时候使用的是双引号，{} 里面必须是单引号。可能有人好奇，如果里面仍使用双引号，但通过反斜杠 \ 进行转义的话会怎么样呢？答案是不行的，因为 f-string 的 {} 里面不可以出现 \。注意：{} 是不可以出现 \，一个都不可以，所以也不要再想是不是可以使用两个 \ 进行转义啥的。</p>
+<pre><code class="language-Python">try:
+    print(f&quot;{\\}&quot;)
+except Exception as e:
+    pass
+# 我们即便使用异常捕获，也是无用的，依旧会抛出 SyntaxError
+# 因为 try except 是捕捉运行时的错误
+# 而 {} 里面出现反斜杠属于语法上的错误，在编译成字节码阶段就会检测出来
+&quot;&quot;&quot;
+    print(f&quot;{\\}&quot;)
+          ^
+SyntaxError: f-string expression part cannot include a backslash
+&quot;&quot;&quot;
+</code></pre>
+<p>因此：使用 f-string 同样需要注意单双引号的问题，并且 {} 里面不可以出现反斜杠。如果真的需要反斜杠，那么可以将反斜杠赋值给一个变量，然后将变量传递到 {} 里面去。</p>
+<pre><code class="language-Python">a = &quot;\\&quot;
+print(f&quot;{a}&quot;)  # \
+</code></pre>
+<p>另外，使用 f-string 时一定要注意：<strong>{</strong> 和 <strong>}</strong> 的个数要匹配。</p>
+<pre><code class="language-Python"># 如果不使用 f-string，没有任何问题
+# 但是使用了f-string，那么会报错
+# 因为里面出现了 { 但是却没有对应的 }
+# 这段代码不会通过编译
+print(f&quot;我永远喜欢{古明地觉&quot;)
+&quot;&quot;&quot;
+    print(f&quot;我永远喜欢{古明地觉&quot;)
+          ^
+SyntaxError: f-string: expecting '}'
+&quot;&quot;&quot;
+</code></pre>
+<p>可能有人好奇了，如果我只是想单纯地输入 <strong>{</strong> 这个字符呢？答案是用两个 <strong>{</strong> 进行转义。</p>
+<pre><code class="language-Python">print(f&quot;我永远喜欢{{古明地觉&quot;)
+&quot;&quot;&quot;
+我永远喜欢{古明地觉
+&quot;&quot;&quot;
+
+# } 也是同理，需要使用两个 }} 进行转义
+print(f&quot;我永远喜欢古明地觉}}&quot;)
+&quot;&quot;&quot;
+我永远喜欢古明地觉}
+&quot;&quot;&quot;
+
+print(f&quot;我永远喜欢{{古明地觉}}&quot;)
+&quot;&quot;&quot;
+我永远喜欢{古明地觉}
+&quot;&quot;&quot;
+</code></pre>
+<p>不过这就又产生了一个问题，如果我希望外面的 <strong>{}</strong> 表示限定符，里面的 <strong>{}</strong> 表示集合该怎么办？</p>
+<pre><code class="language-Python">name = &quot;古明地觉&quot;
+
+# 打印的不是我们想要的结果
+print(f&quot;{{name}}&quot;)
+&quot;&quot;&quot;
+{name}
+&quot;&quot;&quot;
+
+# 在内部的 {} 周围套上一层小括号即可
+print(f&quot;{({name})}&quot;)
+&quot;&quot;&quot;
+{'古明地觉'}
+&quot;&quot;&quot;
+
+# 字典也是同理
+print(f&quot;{{'name': name}}&quot;)
+print(f&quot;{({'name': name})}&quot;)
+&quot;&quot;&quot;
+{'name': name}
+{'name': '古明地觉'}
+&quot;&quot;&quot;
+</code></pre>
+<p>还有字符串的拼接：</p>
+<pre><code class="language-Python"># 等价于 &quot;你好世界&quot;
+s = &quot;你好&quot; &quot;世界&quot;
+print(s)  # 你好世界
+
+name = &quot;古明地觉&quot;
+address = &quot;地灵殿&quot;
+# 每一部分都要带上 f
+s = f&quot;{name}&quot; f&quot;{address}&quot;
+print(s)  # 古明地觉,地灵殿
+
+s = f&quot;{name}&quot; &quot;{address}&quot;
+print(s)  # 古明地觉{address}
+
+# 多行显示也是同理
+s = (f&quot;{name}&quot;
+     f&quot;{address}&quot;)
+print(s)  # 古明地觉地灵殿
+</code></pre>
+<p>最后则是 lambda 表达式的问题。</p>
+<pre><code class="language-Python"># 使用 lambda 表达式的时候一定要使用括号括起来
+# 否则会将 lambda 中的 : 解释成表达式与格式描述符之间的分隔符
+print(f&quot;{(lambda x: x + 123)(123)}&quot;)  # 246
+</code></pre>
+<h2 id="小结-1"><a class="header" href="#小结-1">小结</a></h2>
+<p>个人觉得 f-string 算是 Python3.6 新增的一大亮点，虽然有着一些限制，但是这都不是什么问题，毕竟在做分词解析的时候肯定是有一些限制的，但总体来说 f-string 是非常强大的一个工具了。因此在格式化字符串的时候，推荐使用f-string，相信它一定可以在格式化字符串的时候给你提供很大的帮助。</p>
+<p>对了，再补充一点，在 3.8 的时候给 f-string 增加了一个功能：</p>
+<pre><code class="language-Python">num = 123
+
+print(f&quot;{num=}&quot;)
+print(f&quot;{num =}&quot;)
+print(f&quot;{num = }&quot;)
+&quot;&quot;&quot;
+num=123
+num =123
+num = 123
+&quot;&quot;&quot;
+# 可以看到加上了 =，还会将 {} 里面的内容输出出来
+# 像我们之前的例子
+print(f&quot;sum([1, 2, 3]) = {sum([1, 2, 3])}&quot;)
+&quot;&quot;&quot;
+sum([1, 2, 3]) = 6
+&quot;&quot;&quot;
+# 加上 = 就会简洁很多
+print(f&quot;{sum([1, 2, 3]) = }&quot;)
+&quot;&quot;&quot;
+sum([1, 2, 3]) = 6
+&quot;&quot;&quot;
+
+print(f&quot;{1 + 1 = }&quot;)
+&quot;&quot;&quot;
+1 + 1 = 2
+&quot;&quot;&quot;
+
+print(f&quot;{len('古明地觉') = }&quot;)
+&quot;&quot;&quot;
+len('古明地觉') = 4
+&quot;&quot;&quot;
+</code></pre>
+<p>以上就是 f-string 相关的内容，这些用法你是不是都了如指掌呢？</p>
 
                     </main>
 
