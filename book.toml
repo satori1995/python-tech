@@ -1,0 +1,18 @@
+[book]
+authors = ["古明地觉"]
+language = "zh-cn"
+multilingual = false
+src = "src"
+title = "Python 实用技巧"
+
+[output.html]
+mathjax-support = true
+no-section-label = true
+git-repository-url = "https://github.com/satori1995/python-tech"
+site-url = "/python-tech/"
+
+fold.enable = false
+toc = { enable = true, levels = [2, 3] }
+copy-fonts = true
+additional-css = ["theme/custom.css"]
+additional-js = ["theme/custom.js"]
