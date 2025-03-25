@@ -1,0 +1,598 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>如何优雅地遍历可迭代对象？ - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>本篇文章来介绍如何优雅地遍历可迭代对象，举个例子：</p>
+<pre><code class="language-Python">data = [&quot;古明地觉&quot;, &quot;芙兰朵露&quot;, &quot;雾雨魔理沙&quot;]
+
+for item in data:
+    print(item)
+&quot;&quot;&quot;
+古明地觉
+芙兰朵露
+雾雨魔理沙
+&quot;&quot;&quot; 
+</code></pre>
+<p>遍历一个可迭代对象，可以使用 for 循环，每次会从可迭代对象中迭代出一个元素。当迭代完毕时，抛出 StopIteration，然后 for 循环捕获，终止循环。</p>
+<p>当然，可迭代对象对内部的元素没有要求，可以指向任意的对象。</p>
+<pre><code class="language-python">data = [(&quot;古明地觉&quot;, &quot;女&quot;, &quot;地灵殿&quot;),
+        (&quot;琪露诺&quot;, &quot;女&quot;, &quot;雾之湖&quot;),
+        (&quot;芙兰朵露&quot;, &quot;女&quot;, &quot;红魔馆&quot;)]
+
+for item in data:
+    print(item)
+&quot;&quot;&quot;
+('古明地觉', '女', '地灵殿')
+('琪露诺', '女', '雾之湖')
+('芙兰朵露', '女', '红魔馆')
+&quot;&quot;&quot;
+</code></pre>
+<p>此时迭代出来的元素就是一个个的元组，如果想获取元组里面的元素，那么可以通过索引的方式获取，比如 item[0]。但是基于索引的话，代码可读性不高，于是你可能会这么做。</p>
+<pre><code class="language-python">data = [(&quot;古明地觉&quot;, &quot;女&quot;, &quot;地灵殿&quot;),
+        (&quot;琪露诺&quot;, &quot;女&quot;, &quot;雾之湖&quot;),
+        (&quot;芙兰朵露&quot;, &quot;女&quot;, &quot;红魔馆&quot;)]
+
+for item in data:
+    name, gender, address = item
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+</code></pre>
+<p>通过这种方式，代码的可读性变得更高了一些。但实际上，这段代码有点冗余，我们可以简化一下：</p>
+<pre><code class="language-Python">data = [(&quot;古明地觉&quot;, &quot;女&quot;, &quot;地灵殿&quot;),
+        (&quot;琪露诺&quot;, &quot;女&quot;, &quot;雾之湖&quot;),
+        (&quot;芙兰朵露&quot;, &quot;女&quot;, &quot;红魔馆&quot;)]
+
+# name, gender, address 周围的小括号可以省略
+for (name, gender, address) in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+</code></pre>
+<p>for 后面可以跟一个循环变量，也可以跟多个循环变量组成的元组。如果 for 后面跟的是一个普通的变量，那么可迭代对象里面的元素迭代出来之后会直接赋值给该变量。</p>
+<p>如果 for 后面跟的是多个变量组成的元组，那么可迭代对象里迭代出来的元素必须仍是一个可迭代对象，并且迭代出来的每一个可迭代对象里面的元素个数，都必须和 for 后面的元组里的变量个数相同。最后进行解包，按照顺序将值分别赋给 for 后面的变量，这里就是 name, gender, address。</p>
+<p>那么问题来了，这两种迭代方式有什么不同呢？</p>
+<pre><code class="language-Python"># 第一种迭代方式
+for item in data:
+    name, gender, address = item
+    print(name, gender, address)
+
+# 第二种迭代方式
+for name, gender, address in data:
+    print(name, gender, address)
+</code></pre>
+<p>我们看一下字节码就清楚了，字节码面前没有秘密：</p>
+<pre><code class="language-Python"> # 第一种迭代方式对应的字节码
+ 
+ # 加载变量 data
+ 0 LOAD_NAME                0 (data)
+ # 获取可迭代对象对应的迭代器
+ 2 GET_ITER
+ # 将元素迭代出来
+ 4 FOR_ITER                13 (to 32)
+ # 赋值给变量 item
+ 6 STORE_NAME               1 (item)
+ # 加载变量 item，item 一定也指向一个可迭代对象
+ 8 LOAD_NAME                1 (item)
+ # 解包
+10 UNPACK_SEQUENCE          3
+ # 按照顺序将里面的值赋给变量 name, gender, address
+12 STORE_NAME               2 (name)
+14 STORE_NAME               3 (gender)
+16 STORE_NAME               4 (address)
+
+
+ # 第二种迭代方式对应的字节码
+
+ 0 LOAD_NAME                0 (data)
+ 2 GET_ITER
+ 4 FOR_ITER                11 (to 28)
+ 6 UNPACK_SEQUENCE          3
+ # 前面三条字节码没有区别
+ # 但是这里将元素迭代出来之后，直接就解包了
+ 8 STORE_NAME               1 (name)
+10 STORE_NAME               2 (gender)
+12 STORE_NAME               3 (address)
+</code></pre>
+<p>所以这两种方式没有本质上的区别，只是第一种方式在将元素迭代出来之后需要单独用一个变量保存，然后加载变量，最后进行解包；而第二种方式在将元素迭代出来之后，直接就解包了。因此虽然效果是一样的，但是第二种方式要稍微快一点点，因为它少执行了两条指令。</p>
+<p>另外，还有一种特殊情况：</p>
+<pre><code class="language-python">data = [[1], [2], [3], [4]]
+# for 后面是一个变量
+for item in data:
+    print(item)
+&quot;&quot;&quot;
+[1]
+[2]
+[3]
+[4]
+&quot;&quot;&quot;    
+
+# for 后面是包含一个变量的元组
+for item, in data:
+    print(item)
+&quot;&quot;&quot;
+1
+2
+3
+4
+&quot;&quot;&quot;
+</code></pre>
+<p>由于 data 里面的元素也是列表，所以 for 后面仍然可以跟一个元组，迭代的时候会自动解包。只是当元组里面只有一个元素的时候，需要在第一个元素的后面加上一个逗号，什么意思呢？举个例子：</p>
+<pre><code class="language-python">data = [[1], [2], [3], [4]]
+# 这里虽然给 item 加上了括号，但它仍然不是一个元组
+for (item) in data:
+    print(item)
+&quot;&quot;&quot;
+[1]
+[2]
+[3]
+[4]
+&quot;&quot;&quot;    
+
+# 如果元组里面只有一个元素
+# 那么第一个元素后面必须要有一个逗号
+# 否则解释器会认为这个括号只是起到一个限定优先级的作用
+for (item,) in data:
+    print(item)
+&quot;&quot;&quot;
+1
+2
+3
+4
+&quot;&quot;&quot;
+
+# 再举个栗子
+a, b, c = 3, 2, 4
+# 此时 a + b 周围的括号只是起到了一个限定作用
+# 用于提高 a + b 的优先级
+print((a + b) * c)  # 20
+
+# 但如果是这样的话，就不同了
+# 此时和 c 相乘的不再是整数，而是一个元组
+print((a + b,) * c)  # (5, 5, 5, 5)
+</code></pre>
+<p>当然啦，变量赋值也是同样的道理，因为每一次 for 循环本质上也是一次变量赋值。</p>
+<pre><code class="language-Python">numbers = (99, 96, 100)
+
+a, b, c = numbers
+print(a, b, c)  # 99 96 100
+
+# 也可以显式地使用括号括起来
+(a, b, c) = (99, 96, 100)
+print(a, b, c)  # 99 96 100
+
+# 如果变量名字比较长，那么还可以换行写
+(
+    a,
+    b,
+    c
+) = numbers
+print(a, b, c)  # 99 96 100
+
+# 当可迭代对象只包含一个元素时，也是同理
+numbers = (88,)
+(a,) = numbers
+print(a)  # 88
+# 赋值的时候，元组周围的小括号可以不要 
+a, = numbers
+print(a)  # 88
+</code></pre>
+<p>最后还有一个神奇的地方，在赋值的时候，多个变量不仅可以组成一个元组，还可以组成一个列表，举个例子：</p>
+<pre><code class="language-python">numbers = (99, 96, 100)
+
+[a, b, c] = numbers
+print(a, b, c)  # 99 96 100
+
+# 如果是列表的话，当只有一个元素的时候，就不需要逗号了
+numbers = [88]
+[a] = numbers
+print(a)  # 88
+
+# for 循环的时候也是同理
+data = [(&quot;古明地觉&quot;, &quot;女&quot;, &quot;地灵殿&quot;),
+        (&quot;琪露诺&quot;, &quot;女&quot;, &quot;雾之湖&quot;),
+        (&quot;芙兰朵露&quot;, &quot;女&quot;, &quot;红魔馆&quot;)]
+for [name, gender, place] in data:
+    print(name, gender, place)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+</code></pre>
+<p>当然啦，无论多个变量组成的是元组还是列表，字节码都没有区别。只是我们更习惯写成元组，并且将元组周围的小括号省略掉。</p>
+<p>另外可迭代对象也是可以嵌套的，举个例子：</p>
+<pre><code class="language-Python">data = [(&quot;古明地觉&quot;, (&quot;女&quot;, &quot;地灵殿&quot;)),
+        (&quot;琪露诺&quot;, (&quot;女&quot;, &quot;雾之湖&quot;)),
+        (&quot;芙兰朵露&quot;, (&quot;女&quot;, &quot;红魔馆&quot;))]
+
+# 每个可迭代对象内部只有两个元素，所以在迭代的时候
+# for 后面的元组或列表里面也只能有两个变量
+for name, gender_address in data:
+    print(name, gender_address)
+&quot;&quot;&quot;
+古明地觉 ('女', '地灵殿')
+琪露诺 ('女', '雾之湖')
+芙兰朵露 ('女', '红魔馆')
+&quot;&quot;&quot;
+
+# 于是聪明的你可能想到了
+for name, (gender, address) in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+
+# 使用列表也是可以的
+for [name, (gender, address)] in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;    
+
+# 以下几种方式也是可以的
+&quot;&quot;&quot;
+for [name, [gender, address]] in data:
+    print(name, gender, address)
+
+for (name, [gender, address]) in data:
+    print(name, gender, address)
+
+for (name, (gender, address)) in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+</code></pre>
+<p>并且嵌套的可迭代对象的数量也是任意的，举个例子：</p>
+<pre><code class="language-python">data = [(&quot;古明地觉&quot;, (&quot;女&quot;,), (&quot;地灵殿&quot;,)),
+        (&quot;琪露诺&quot;, (&quot;女&quot;,), (&quot;雾之湖&quot;,)),
+        (&quot;芙兰朵露&quot;, (&quot;女&quot;,), (&quot;红魔馆&quot;,))]
+
+for name, gender, address in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 ('女',) ('地灵殿',)
+琪露诺 ('女',) ('雾之湖',)
+芙兰朵露 ('女',) ('红魔馆',)
+&quot;&quot;&quot;
+
+for name, [gender], [address] in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+
+for name, (gender,), (address,) in data:
+    print(name, gender, address)
+&quot;&quot;&quot;
+古明地觉 女 地灵殿
+琪露诺 女 雾之湖
+芙兰朵露 女 红魔馆
+&quot;&quot;&quot;
+
+# 变量赋值也是同理
+numbers = [[[3]]]
+a = numbers
+print(a)  # [[[3]]]
+
+a, = numbers
+print(a)  # [[3]]
+
+((a,),) = numbers
+print(a)  # [3]
+
+(((a,),),) = numbers
+print(a)  # 3
+[[[a]]] = numbers
+print(a)  # 3
+
+# 再来一个恶心人的，当然啦，这个做法没啥意义
+# 只是想表明可迭代对象之间的嵌套是非常自由的
+numbers = [[[3], [[[[4]], 5], 6]], 7]
+(((a,), ((((b,),), c), d)), e) = numbers
+print(a, b, c, d, e)  # 3 4 5 6 7
+</code></pre>
+<p>最后再来介绍一个高级特性，不过介绍之前先来看看上面的迭代方式有什么缺陷：</p>
+<pre><code class="language-Python">data = [
+    (1, 2, 3, 4),
+    (5, 6),
+    (7, 8, 9)
+]
+</code></pre>
+<p>如果是这种情况的话，那么 for 循环在遍历的时候，要使用几个变量去遍历呢？两个、三个、还是四个呢？我们先用三个变量看看：</p>
+<pre><code class="language-Python">data = [
+    (1, 2, 3, 4),
+    (5, 6),
+    (7, 8, 9)
+]
+for a, b, c in data:
+    print(a, b, c)
+&quot;&quot;&quot;
+Traceback (most recent call last):
+  File &quot;...&quot;, line 6, in &lt;module&gt;
+    for a, b, c in data:
+ValueError: too many values to unpack (expected 3)
+&quot;&quot;&quot;
+</code></pre>
+<p>很明显它报错了，所以这种方式有一个缺陷，就是它除了要求可迭代对象里面的元素也是可迭代对象之外，还要满足它们内部的值的个数都相等，并且个数已知。</p>
+<p>但是问题来了，如果我在遍历的时候，只想拿到里面的第一个值和最后一个值，该怎么办呢？</p>
+<pre><code class="language-Python">data = [
+    (1, 2, 3, 4),
+    (5, 6),
+    (7, 8, 9)
+]
+for item in data:
+    print(item[0], item[-1])
+&quot;&quot;&quot;
+1 4
+5 6
+7 9
+&quot;&quot;&quot;
+</code></pre>
+<p>首先上面这种方式肯定是可以的，但还有没有另外的方式呢？显然是有的。</p>
+<pre><code class="language-Python">data = [
+    (1, 2, 3, 4),
+    (5, 6),
+    (7, 8, 9)
+]
+for first, *middle, last in data:
+    print(first, middle, last)
+&quot;&quot;&quot;
+1 [2, 3] 4
+5 [] 6
+7 [8] 9
+&quot;&quot;&quot;
+</code></pre>
+<p>在迭代的时候，第一个值会赋给 first，这没有问题。然后是 middle，它的前面加上了一个 *，那么 middle 就会变成一个列表，这个类似正则的贪婪匹配，会不断地匹配值。而 *middle 后面还有一个 last，因此 *middle 就会匹配到倒数第二个值为止，最后一个值留给 last。</p>
+<p>我们再举几个例子：</p>
+<pre><code class="language-python">data = [
+    (1, 2, 3, 4, 5),
+    (6, 7, 8, 9, 10),
+    (11, 12, 13, 14, 15)
+]
+
+# 第 1 个值给 a、剩余的 4 个值给 b
+for a, *b in data:
+    print(a, b)
+&quot;&quot;&quot;
+1 [2, 3, 4, 5]
+6 [7, 8, 9, 10]
+11 [12, 13, 14, 15]
+&quot;&quot;&quot;
+
+# 第 1 个值给 a、第 2 个值给 b，剩余的 3 个值给 c
+for a, b, *c in data:
+    print(a, b, c)
+&quot;&quot;&quot;
+1 2 [3, 4, 5]
+6 7 [8, 9, 10]
+11 12 [13, 14, 15]
+&quot;&quot;&quot;
+
+# 第 1 个值给 a、第 2 个值给 b
+# 倒数第 1 个值给 d，剩余的值给 c
+for a, b, *c, d in data:
+    print(a, b, c, d)
+&quot;&quot;&quot;
+1 2 [3, 4] 5
+6 7 [8, 9] 10
+11 12 [13, 14] 15
+&quot;&quot;&quot;
+
+# 倒数第 1 个值给 b，前面的值给 a
+for *a, b in data:
+    print(a, b)
+&quot;&quot;&quot;
+[1, 2, 3, 4] 5
+[6, 7, 8, 9] 10
+[11, 12, 13, 14] 15
+&quot;&quot;&quot;    
+
+# 每次迭代的元素内部只有 5 个值，所以 b 是一个空列表
+for a, *b, c, d, e, f in data:
+    print(a, b, c, d, e, f)
+&quot;&quot;&quot;
+1 [] 2 3 4 5
+6 [] 7 8 9 10
+11 [] 12 13 14 15
+&quot;&quot;&quot;
+
+# 所有的值都给 a，但是需要注意：
+# 如果出现了 *，那么 for 后面的变量必须组成一个元组或列表
+# 所以如果是 for *a in data: 会报出语法错误
+# 必须是 for *a, in data: 或者 for [*a] in data:
+for *a, in data:
+    print(a)
+&quot;&quot;&quot;
+[1, 2, 3, 4, 5]
+[6, 7, 8, 9, 10]
+[11, 12, 13, 14, 15]
+&quot;&quot;&quot;    
+</code></pre>
+<p>另外还有一个约定或者说规范，如果在遍历的时候，有一部分的值我们不需要，那么可以使用下划线代替。比如我们只需要第一个值和倒数第二个值，那么遍历的时候就可以像下面这么做：</p>
+<pre><code class="language-python">for a, *_, b, _ in data:
+    pass
+</code></pre>
+<p>当然啦，* 不仅可以在 for 循环的时候用，普通的变量赋值也是可以使用的，一样的道理。</p>
+<blockquote>
+<p>在赋值的时候， * 最多只能出现一次，否则会报出语法错误。</p>
+</blockquote>
+<p>以上就是可迭代对象的遍历，是不是很有趣呢？</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="theme/custom.js"></script>
+    </body>
+</html>
