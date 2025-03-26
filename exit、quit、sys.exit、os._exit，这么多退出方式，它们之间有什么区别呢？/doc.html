@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>如何优雅地对数据进行分组？ - Python 实用技巧</title>
+        <title>exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？ - Python 实用技巧</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -78,7 +78,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html" class="active">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html" class="active">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -140,143 +140,87 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>假设有这样一种数据：</p>
-<pre><code class="language-python">data = [
-    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
-    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
-]
+                        <p>如果想主动退出 Python 程序，那么可以使用 exit, quit, sys.exit, os._exit 这四个函数，而这些函数之间有什么区别呢？</p>
+<p>首先来说前三个，exit, quit, sys.exit 退出程序的原理是一样的，只不过 exit 和 quit 用在交互式环境中，sys.exit 用在非交互式环境中。当然啦，无论是交互式还是非交互式，这三个函数都是适用的。至于这个三个函数所做的事情，实际上就是 raise 一个 SystemExit 异常。如果没有捕获这个异常，那么程序就会退出。</p>
+<pre><code class="language-python">import sys
+sys.exit(100)
+print(&quot;程序退出，这里不会打印&quot;)
+</code></pre>
+<p>当执行 sys.exit 的时候，会抛出 SystemExit，这里我们没有捕获它，所以程序会退出。并且函数接收一个整数，表示程序退出时的状态码。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>这里我用的 Cursor，结尾会显示程序退出时的状态码，可以看到结果是我们设置的 100。一般来说，如果程序正常退出，那么状态码为 0；程序执行出错，状态码为 1。当然啦，如果是解释器执行时内部出问题了，那么会抛出一个乱七八糟的状态码，不过这种情况基本只有在写 C 扩展的时候才会遇到。。</p>
+<p>我们说 quit, exit, sys.exit 都可以接收一个整数，表示退出时的状态码。但如果接收的不是整数，那么会将参数作为打印信息输出到 stderr（标准错误输出）中，然后退出程序，并且状态码为 1。</p>
+<pre><code class="language-Python">import sys
+sys.exit(&quot;我退出啦&quot;)
+</code></pre>
+<p>执行一下看看。</p>
+<p><img src="./2.png" alt="" /></p>
+<p>这三个函数的工作原理是 raise 一个 SystemExit 异常，那如果将其捕获了，程序是不是就不退出了，答案是肯定的。</p>
+<pre><code class="language-Python">import sys
 
-# 我们需要变成如下格式
+try:
+    sys.exit(100)
+except SystemExit:
+    print(&quot;程序想要退出，但被捕获了&quot;)
+print(&quot;正常打印&quot;)
+</code></pre>
+<p>执行一下，看看结果。</p>
+<p><img src="./3.png" alt="" /></p>
+<p>结果确实如我们所料，将 sys.exit 引发的异常捕获掉之后，程序正常执行。所以最后状态码是 0，因为程序是正常结束的。那么问题来了，我们能不能手动抛一个 SystemExit 呢？</p>
+<pre><code class="language-Python">print(&quot;我要抛异常了&quot;)
+raise SystemExit(233)
+print(&quot;此处不会执行&quot;)
+</code></pre>
+<p>SystemExit 里面也可以接收一个整数，会作为状态码返回；如果接收的不是整数，那么会将参数作为打印信息输出到 stderr 当中，并且状态码为 1。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>和 sys.exit 的表现是一样的，因为 sys.exit 本质上就是 raise 一个 SystemExit。并且我们看到在 raise SystemExit 的时候，并没有出现异常回溯栈，或者说没有看到 Traceback (most recent call last): 这样的字眼。所以说 SystemExit 是不像异常的异常，因为没有任何的错误信息出现。并且注意：SystemExit 继承自 BaseException，不是 Exception。</p>
+<p>因此结论很清晰了，sys.exit 是通过引发 SystemExit 异常来退出程序的，我们可以捕获此异常做一些清理工作，甚至可以阻挠程序退出。当然，quit 和 exit 这两个内置函数也是同样的工作原理，只不过它们一般用在交互式环境中，但非交互式环境也能用。</p>
+<pre><code class="language-python">try:
+    exit(&quot;我想退出&quot;)
+except SystemExit:
+    print(&quot;exit，别做梦了&quot;)
+
+try:
+    quit(&quot;我想退出&quot;)
+except SystemExit:
+    print(&quot;quit，别做梦了&quot;)
+
+exit(&quot;这下我真的退出了&quot;)
+</code></pre>
+<p>前面三个退出函数我们就说完了，再来看看最后一个，也就是 os._exit。它就比较厉害了，在底层会调用 C 语言的 exit 函数，相当于强制退出。</p>
+<pre><code class="language-Python">import os
+
+try:
+    os._exit(233)
+except Exception:
+    print(&quot;会打印吗&quot;)
+print(&quot;会打印吗&quot;)
+</code></pre>
+<p>下面的 print 会打印吗？执行一下看看。</p>
+<p><img src="./5.png" alt="" /></p>
+<p>并没有执行，因此 os._exit 属于强制退出，无法被阻止。因此它一般用于子进程的退出，我们在主进程中退出的话一般使用 sys.exit。</p>
+<p>最后 os._exit 还有一个不同的地方，就是它必须接收一个整数作为退出时的状态码，否则报错。</p>
+<pre><code class="language-python">import os
+
+try:
+    os._exit(&quot;xx&quot;)
+except TypeError as e:
+    print(e)
+print(&quot;正常执行&quot;)
 &quot;&quot;&quot;
-[('apple', [30, 35, 32]),
- ('pear', [60, 32, 60]),
- ('banana', [102, 104])]
+an integer is required (got type str)
+正常执行
 &quot;&quot;&quot;
 </code></pre>
-<p>如果是你的话，你会怎么做呢？很容易想到的一种解决方案是构造一个字典：</p>
-<pre><code class="language-python">data = [
-    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
-    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
-]
-
-data_dict = {}
-for name, count in data:
-    if name not in data_dict:
-        data_dict[name] = []
-    data_dict[name].append(count)
-
-print(data_dict)
-&quot;&quot;&quot;
-{'apple': [30, 35, 32], 
- 'pear': [60, 32, 60], 
- 'banana': [102, 104]}
-&quot;&quot;&quot;
-print(list(data_dict.items()))
-&quot;&quot;&quot;
-[('apple', [30, 35, 32]), 
- ('pear', [60, 32, 60]), 
- ('banana', [102, 104])]
-&quot;&quot;&quot;
-</code></pre>
-<p>这种方案完全没有问题，不过我们还可以写的更优雅一些，也就是使用字典的 setdefault 方法：</p>
-<pre><code class="language-Python">data = [
-    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
-    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
-]
-
-data_dict = {}
-for name, count in data:
-    # setdefault(k, v) 含义如下
-    # 当 k 不存在时，将 k: v 设置在字典中，并返回 v
-    # 当 k 存在时，直接返回 k 对应值
-    data_dict.setdefault(name, []).append(count)
-
-print(list(data_dict.items()))
-&quot;&quot;&quot;
-[('apple', [30, 35, 32]), 
- ('pear', [60, 32, 60]), 
- ('banana', [102, 104])]
-&quot;&quot;&quot;
-</code></pre>
-<p>setdefault 是一个非常方便的方法，但是使用频率却不怎么高，或者说该方法不太让人喜欢。主要是每次调用都要给一个初始值，比如代码中的空列表 []。另外这里的初始值可以任意，如果你希望添加的时候还能实现去重效果，那么就将空列表换成空集合即可。</p>
-<p>或者我们还可以使用 defaultdict，它位于 collections 模块中。</p>
-<pre><code class="language-Python">from collections import defaultdict
-
-data = [
-    (&quot;apple&quot;, 30), (&quot;apple&quot;, 35),
-    (&quot;apple&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;pear&quot;, 32), (&quot;pear&quot;, 60),
-    (&quot;banana&quot;, 102), (&quot;banana&quot;, 104)
-]
-
-# 里面接收一个 callable
-# 当访问的 k 不存在时，返回 callable 调用之后的值
-data_dict1 = defaultdict(list)
-for name, count in data:
-    data_dict1[name].append(count)
-
-print(list(data_dict1.items()))
-&quot;&quot;&quot;
-[('apple', [30, 35, 32]),
- ('pear', [60, 32, 60]), 
- ('banana', [102, 104])]
-&quot;&quot;&quot;
-
-# 也可以指定为 set
-data_dict2 = defaultdict(set)
-for name, count in data:
-    data_dict2[name].add(count)
-
-print(list(data_dict2.items()))
-&quot;&quot;&quot;
-[('apple', {32, 35, 30}), 
- ('pear', {32, 60}), 
- ('banana', {104, 102})]
-&quot;&quot;&quot;
-</code></pre>
-<p>总的来说，defaultdict 和字典的 setdefault 方法非常类似，我们使用 setdefault 即可，因为 setdefault 其实更加方便。我们不妨再看个更复杂的例子。</p>
-<pre><code class="language-Python">data = [
-    (&quot;a&quot;, &quot;x&quot;, 1),
-    (&quot;a&quot;, &quot;x&quot;, 2),
-    (&quot;a&quot;, &quot;x&quot;, 3),
-    (&quot;a&quot;, &quot;y&quot;, 4),
-    (&quot;a&quot;, &quot;y&quot;, 5),
-    (&quot;a&quot;, &quot;z&quot;, 6),
-    
-    (&quot;b&quot;, &quot;x&quot;, 7),
-    (&quot;b&quot;, &quot;x&quot;, 8),
-    (&quot;b&quot;, &quot;y&quot;, 9),
-    (&quot;b&quot;, &quot;z&quot;, 10),
-]
-# 如果我想得到下面的结果，怎么做呢？
-&quot;&quot;&quot;
-{'a': {'x': [1, 2, 3], 'y': [4, 5], 'z': [6]}, 
- 'b': {'x': [7, 8], 'y': [9], 'z': [10]}}
-&quot;&quot;&quot;
-# 使用 setdefault 会非常方便
-data_dict = {}
-for first, second, value in data:
-    data_dict.setdefault(first, {}).setdefault(second, []).append(value)
-
-print(data_dict)
-</code></pre>
-<p>以上就是数据分组，比较简单，setdefault 这个方法非常方便，但总是容易被遗忘。</p>
+<p>此时程序是可以正常执行下去的，因为 os._exit 接收的参数类型不对，导致该函数并没有执行，而是直接抛出了 TypeError。</p>
+<p>以上就是这几个退出函数之间的区别。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../你知道创建模块都有哪些方式吗？/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="../全方位解析 f-string/doc.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -284,11 +228,8 @@ print(data_dict)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../你知道创建模块都有哪些方式吗？/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="../全方位解析 f-string/doc.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
