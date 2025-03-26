@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>自定义异常堆栈信息 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html" class="active">自定义异常堆栈信息</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>当我们的程序报错时，解释器会将整个异常的堆栈信息全部输出出来，举个例子：</p>
+<pre><code class="language-python">def foo():
+    raise RuntimeError(&quot;抛一个异常&quot;)
+
+def bar():
+    foo()
+
+def main():
+    bar()
+
+main()
+</code></pre>
+<p>如果执行这段代码，会得到以下报错信息：</p>
+<p><img src="./1.png" alt="" /></p>
+<p>解释器会将异常产生的整个调用链都给打印出来，那么问题来了，我们能不能自定义这些报错信息呢？答案是可以的，我们只要拿到这些报错信息，然后再进行修改即可。那么如何才能拿到呢？显然需要借助于 traceback 对象。</p>
+<pre><code class="language-python">import sys
+
+def foo():
+    raise RuntimeError(&quot;抛一个异常&quot;)
+
+def bar():
+    foo()
+
+def main():
+    bar()
+
+try:
+    main()
+except Exception:
+    # sys.exc_info() 返回一个元组，里面有三个元素
+    # 分别是：异常类型、异常值、异常的堆栈信息
+    exc_type, exc_val, exc_tb = sys.exc_info()
+
+    print(exc_type)
+    print(exc_val, type(exc_val))
+    print(exc_tb)
+    &quot;&quot;&quot;
+    &lt;class 'RuntimeError'&gt;
+    抛一个异常 &lt;class 'RuntimeError'&gt;
+    &lt;traceback object at 0x7fe35811de40&gt;
+    &quot;&quot;&quot;
+</code></pre>
+<p>每一个函数在运行时都会创建一个栈帧，栈帧在 CPython 里面由 PyFrameObject 结构体表示。同时每个栈帧都会对应一个 PyTracebackObject，也就是异常堆栈，即代码中的 exc_tb。</p>
+<p>上面的代码在执行函数 foo 的时候出现了异常，那么解释器会创建对应的 traceback 对象，由于 foo 内部没有异常捕获，因此会回退到上一级栈帧，继续寻找异常捕获逻辑。而 foo 的上一级栈帧是 bar 的栈帧，因此解释器同样会基于 bar 的栈帧创建 traceback 对象，并且 bar 的 traceback 对象的 tb_next 指向 foo 的 traceback 对象。</p>
+<p><img src="./2.png" alt="" /></p>
+<p>就这样栈帧一层层的回退，整个过程我们称之为栈帧展开。在栈帧展开的过程中，解释器不断地创建与各个栈帧对应的 traceback，并将其链接成链表。如果回退到最外层（模块）也没有找到异常捕获逻辑，那么解释器就要输出异常信息了，从模块对应的 traceback 开始不断遍历，将每一层信息都输出出来，就是我们看到的样子。</p>
+<p>而我们也可以在拿到 traceback 之后，手动输出出来。</p>
+<pre><code class="language-python">import sys
+import traceback
+
+def foo():
+    raise RuntimeError(&quot;抛一个异常&quot;)
+
+def bar():
+    foo()
+
+def main():
+    bar()
+
+try:
+    main()
+except Exception:
+    exc_type, exc_val, exc_tb = sys.exc_info()
+    error_msg = &quot;&quot;.join(
+        traceback.format_exception(exc_type, exc_val, exc_tb)
+    )
+    print(error_msg)
+&quot;&quot;&quot;
+Traceback (most recent call last):
+  File &quot;/Users/satori/Documents/testing_project/main.py&quot;, line 14, in &lt;module&gt;
+    main()
+  File &quot;/Users/satori/Documents/testing_project/main.py&quot;, line 11, in main
+    bar()
+  File &quot;/Users/satori/Documents/testing_project/main.py&quot;, line 8, in bar
+    foo()
+  File &quot;/Users/satori/Documents/testing_project/main.py&quot;, line 5, in foo
+    raise RuntimeError(&quot;抛一个异常&quot;)
+RuntimeError: 抛一个异常
+&quot;&quot;&quot;    
+</code></pre>
+<p>Python 有一个标准模块也叫 traceback，使用它的 format_exception 函数，我们可以拿到格式化后的异常堆栈信息，而该函数接收的参数正是 exc_type, exc_val, exc_tb。</p>
+<p>虽然目前拿到了异常的堆栈信息，但是还不够，因为这里是通过手动捕获异常的方式。而在生产上，很多时候我们并不知道哪里会抛出异常，所以我们需要在不使用异常捕获逻辑的前提下，自动捕获异常。是不是有点绕了呢？我们举个例子。</p>
+<pre><code class="language-python">import sys
+
+def catch(exc_type, exc_val, exc_tb):
+    &quot;&quot;&quot;
+    光看名字，就应该知道这三个参数的含义了
+    &quot;&quot;&quot;
+    print(&quot;报错啦&quot;)
+    print(exc_val)
+
+# 之后当出现异常的时候，如果没有异常捕获逻辑
+# 就会执行 catch 函数
+sys.excepthook = catch
+
+raise ZeroDivisionError(&quot;除零错误&quot;)
+&quot;&quot;&quot;
+报错啦
+除零错误
+&quot;&quot;&quot;
+</code></pre>
+<p>代码中 raise 了一个异常，默认情况下解释器应该将异常输出到 stderr 当中，然后中止运行。但是我们替换了 sys.excepthook，那么在出现异常的时候，解释器会去执行我们这里替换之后的 catch 函数，并自动将 exc_type, exc_val, exc_tb 作为参数传进去。而一旦 cache 函数执行完毕，程序就结束了。</p>
+<p>那么接下来我们就可以对异常输出进行改造了，至于怎么改，完全由你来决定，这里给个示例。</p>
+<pre><code class="language-python">import sys
+from io import StringIO
+import re
+import traceback
+from rich import print
+
+def catch(exc_type, exc_val, exc_tb):
+    buf = StringIO()
+    # 得到一个列表
+    errors = traceback.format_exception(exc_type, exc_val, exc_tb)
+    buf.write(f&quot;[blue]程序出现异常啦, 客官请看下面:\n\n&quot;)
+    # 遍历
+    i = 1
+    while i &lt; len(errors):
+        match = re.search(r'File &quot;(.+?)&quot;, line (\d+), in (.+)\s*(.*)', errors[i].strip())
+        if match is not None:
+            file_path, lineno, where, reason = match.groups()
+            buf.write(
+                f&quot;在文件 [red bold]{file_path}[/red bold] &quot;
+                f&quot;[green bold]{where}[/green bold] 的&quot;
+                f&quot;第 [yellow bold]{lineno}[/yellow bold] 行\n&quot;
+            )
+            buf.write(f&quot;执行了 {reason.strip()}\n\n&quot;)
+        i += 1
+    buf.write(f&quot;[cyan bold]{errors[-1].strip()}&quot;)
+    print(buf.getvalue())
+
+sys.excepthook = catch
+
+def foo():
+    # raise a exception
+    {} + ()
+
+def bar():
+    foo()
+
+def main():
+    bar()
+
+main()
+</code></pre>
+<p>我们执行这段代码，看看它的错误输出是什么样子。</p>
+<p><img src="./3.png" alt="" /></p>
+<p>怎么样，是不是很好玩呢？只要把 sys.excepthook = cache 这段逻辑加载到程序中，我们就可以自定义异常显示信息了。</p>
+<p>当然啦，根据异常的不同，解释器可能输出更复杂的信息，所以我们上面的代码并不完善，但你可以根据实际情况进行修改。只要知道如何获取解释器输出的异常信息，以及 sys.excepthook 的用法就足够了。</p>
+<p>最后再强调一下，解释器在发现异常的时候，会立即调用 sys.excepthook。而一旦调用结束，整个程序就结束了。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../使用 contextvars 管理上下文变量/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../使用 contextvars 管理上下文变量/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
