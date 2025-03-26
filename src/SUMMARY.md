@@ -15,3 +15,4 @@
 + [使用 contextvars 管理上下文变量](./使用%20contextvars%20管理上下文变量/doc.md)
 + [自定义异常堆栈信息](./自定义异常堆栈信息/doc.md)
 + [prettytable：像数据库一样格式化输出内容](./prettytable：像数据库一样格式化输出内容/doc.md)
++ [轻松绘制动态条形图](./轻松绘制动态条形图/doc.md)
