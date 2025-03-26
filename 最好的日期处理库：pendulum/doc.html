@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>最好的日期处理库：pendulum - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html" class="active">最好的日期处理库：pendulum</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>关于日期处理，Python 提供了很多的库，比如标准库 datetime、第三方库 dateutil、arrow 等等。这里介绍一个我个人最喜欢的库 pendulum，用起来可以说非常的方便，任何对日期的操作它都能满足。</p>
+<p>在使用之前需要先安装，直接 pip install pendulum 即可。</p>
+<p>下面来看一下用法，首先是 datetime, date, time 的创建。</p>
+<pre><code class="language-python">import pendulum
+
+dt = pendulum.datetime(
+    2022, 3, 28, 20, 10, 30)
+print(dt.__class__)
+print(dt)
+&quot;&quot;&quot;
+&lt;class 'pendulum.datetime.DateTime'&gt;
+2022-03-28T20:10:30+00:00
+&quot;&quot;&quot;
+# 创建的对象是 DateTime 类型，并且带有时区，默认是 UTC
+# 我们可以换一个时区
+dt = pendulum.datetime(2022, 3, 28, 20, 10, 30, tz=&quot;Asia/Shanghai&quot;)
+print(dt)
+&quot;&quot;&quot;
+2022-03-28T20:10:30+08:00
+&quot;&quot;&quot;
+
+# 如果不想要时区，那么指定 tz=None
+dt = pendulum.datetime(2022, 3, 28, 20, 10, 30, tz=None)
+print(dt)
+&quot;&quot;&quot;
+2022-03-28T20:10:30
+&quot;&quot;&quot;
+
+# 然后是 date 的创建
+d = pendulum.date(2022, 3, 28)
+print(d.__class__)
+print(d)
+&quot;&quot;&quot;
+&lt;class 'pendulum.date.Date'&gt;
+2022-03-28
+&quot;&quot;&quot;
+
+# time 的创建
+t = pendulum.time(20, 10, 30)
+print(t.__class__)
+print(t)
+&quot;&quot;&quot;
+&lt;class 'pendulum.time.Time'&gt;
+20:10:30
+&quot;&quot;&quot;
+</code></pre>
+<p>创建 datetime 时，时区默认是 UTC。如果不想要时区，或者希望时区是本地时区，那么 pendulum 还专门提供了两个方法。</p>
+<pre><code class="language-Python">import pendulum
+
+# 创建 datetime 时设置为本地时区
+# 还是调用了 pendulum.datetime 函数
+# 但是 tz 被设置成了 pendulum.local_timezone()
+dt = pendulum.local(2022, 3, 28, 20, 10, 30)
+print(dt)
+&quot;&quot;&quot;
+2022-03-28T20:10:30+08:00
+&quot;&quot;&quot;
+print(pendulum.local_timezone())
+&quot;&quot;&quot;
+Timezone('Asia/Shanghai')
+&quot;&quot;&quot;
+
+# 创建 datetime 时不设置时区
+# 内部也是调用了 pendulum.datetime 函数
+# 但是 tz 为 None
+dt = pendulum.naive(2022, 3, 28, 20, 10, 30)
+print(dt)
+&quot;&quot;&quot;
+2022-03-28T20:10:30
+&quot;&quot;&quot;
+</code></pre>
+<p>然后 pendulum 还提供了几个方法，比如创建当前的 datetime，date 等等。</p>
+<pre><code class="language-Python">import pendulum
+
+# 创建当前的 datetime，默认是本地时区，但时区可以指定
+dt = pendulum.now()
+print(dt)
+&quot;&quot;&quot;
+2022-05-29T20:40:49.632182+08:00
+&quot;&quot;&quot;
+
+# 创建当前的 date，但返回的仍是 datetime
+# 只不过时分秒均为 0，同样可以指定时区
+dt = pendulum.today()
+print(dt)
+&quot;&quot;&quot;
+2022-05-29T00:00:00+08:00
+&quot;&quot;&quot;
+
+# 获取明天对应的 date，返回的是 datetime，时分秒为 0
+# 时区可以指定，默认是本地时区
+dt = pendulum.tomorrow()
+print(dt)
+&quot;&quot;&quot;
+2022-05-30T00:00:00+08:00
+&quot;&quot;&quot;
+
+# 获取昨天对应的 date
+dt = pendulum.yesterday()
+print(dt)
+&quot;&quot;&quot;
+2022-05-28T00:00:00+08:00
+&quot;&quot;&quot;
+</code></pre>
+<p>我们还可以根据时间戳或者字符串来创建：</p>
+<pre><code class="language-Python">import pendulum
+
+# 根据时间戳创建
+dt1 = pendulum.from_timestamp(1653828466)
+dt2 = pendulum.from_timestamp(1653828466, tz=pendulum.local_timezone())
+print(dt1)
+print(dt2)
+&quot;&quot;&quot;
+2022-05-29T12:47:46+00:00
+2022-05-29T20:47:46+08:00
+&quot;&quot;&quot;
+
+# 根据字符串创建
+dt1 = pendulum.parse(&quot;2020-05-03 12:11:33&quot;)
+dt2 = pendulum.parse(&quot;2020-05-03 12:11:33&quot;, tz=pendulum.local_timezone())
+print(dt1)
+print(dt2)
+&quot;&quot;&quot;
+2020-05-03T12:11:33+00:00
+2020-05-03T12:11:33+08:00
+&quot;&quot;&quot;
+</code></pre>
+<p>datetime、date、time 的创建我们说完了，然后再来看看它们支持的操作，这也是最核心的部分。</p>
+<pre><code class="language-Python">import pendulum
+
+dt = pendulum.local(2022, 3, 28, 20, 10, 30)
+
+# 获取 date 部分和 time 部分
+print(dt.date())
+print(dt.time())
+&quot;&quot;&quot;
+2022-03-28
+20:10:30
+&quot;&quot;&quot;
+
+# 替换掉 dt 的某部分，返回新的 datetime
+# 年月日时分秒、以及时区都可以替换
+print(dt.replace(year=9999))
+&quot;&quot;&quot;
+9999-03-28T20:10:30+08:00
+&quot;&quot;&quot;
+
+# 转成时间戳
+print(dt.timestamp())
+&quot;&quot;&quot;
+1648469430.0
+&quot;&quot;&quot;
+
+# 返回年、月、日、时、分、秒、时区
+print(dt.year, dt.month, dt.day)
+print(dt.hour, dt.minute, dt.second)
+print(dt.tz)
+&quot;&quot;&quot;
+2022 3 28
+20 10 30
+Timezone('Asia/Shanghai')
+&quot;&quot;&quot;
+</code></pre>
+<p>然后是生成字符串，pendulum.DateTime 对象可以转成各种格式的日期字符串。</p>
+<pre><code class="language-Python">import pendulum
+
+dt = pendulum.local(2022, 3, 28, 20, 10, 30)
+
+# 下面四个最为常用
+print(&quot;datetime:&quot;, dt.to_datetime_string())
+print(&quot;date:&quot;, dt.to_date_string())
+print(&quot;time:&quot;, dt.to_time_string())
+print(&quot;iso8601:&quot;, dt.to_iso8601_string())
+&quot;&quot;&quot;
+datetime: 2022-03-28 20:10:30
+date: 2022-03-28
+time: 20:10:30
+iso8601: 2022-03-28T20:10:30+08:00
+&quot;&quot;&quot;
+# 当然还支持很多其它格式，不过用的不多，随便挑几个吧
+print(&quot;atom:&quot;, dt.to_atom_string())
+print(&quot;rss:&quot;, dt.to_rss_string())
+print(&quot;w3c:&quot;, dt.to_w3c_string())
+print(&quot;cookie:&quot;, dt.to_cookie_string())
+print(&quot;rfc822:&quot;, dt.to_rfc822_string())
+&quot;&quot;&quot;
+atom: 2022-03-28T20:10:30+08:00
+rss: Mon, 28 Mar 2022 20:10:30 +0800
+w3c: 2022-03-28T20:10:30+08:00
+rfc822: Mon, 28 Mar 22 20:10:30 +0800
+&quot;&quot;&quot;
+</code></pre>
+<p>我们有时也需要判断当前日期是星期几、在当前这一年是第几天等等，pendulum 也已经帮我们封装好了。</p>
+<pre><code class="language-Python">import pendulum
+
+dt = pendulum.local(2022, 3, 28, 20, 10, 30)
+
+# 返回星期几
+# 注意：星期一到星期天分别对应 1 到 7
+print(dt.isoweekday())  # 1
+
+# 返回一年当中的第几天
+# 范围是 1 到 366
+print(dt.day_of_year)  # 87
+
+# 返回一个月当中的第几天
+print(dt.days_in_month)  # 31
+
+# 返回一个月当中的第几周
+print(dt.week_of_month)  # 5
+
+# 返回一年当中的第几周
+print(dt.week_of_year)  # 13
+
+# 是否是闰年
+print(dt.is_leap_year())  # False
+</code></pre>
+<p>最后就是日期的运算，这是 pendulum 最为强大的地方，至于为什么强大，我们演示一下就知道了。</p>
+<pre><code class="language-Python">import pendulum
+
+dt = pendulum.local(2022, 3, 30, 20, 10, 30)
+
+# 返回下一个月的今天
+print(dt.add(months=1))
+&quot;&quot;&quot;
+2022-04-30T20:10:30+08:00
+&quot;&quot;&quot;
+
+# 返回上一个月的今天
+# 但是上一个月是 2 月，并且是平年，所以最多 28 天
+print(dt.add(months=-1))
+&quot;&quot;&quot;
+2022-02-28T20:10:30+08:00
+&quot;&quot;&quot;
+# 我们看到处理的非常完美
+# 该方法的原型如下，年月日时分秒都是支持的，当然还有星期也支持
+&quot;&quot;&quot;
+def add(
+    self,
+    years=0,
+    months=0,
+    weeks=0,
+    days=0,
+    hours=0,
+    minutes=0,
+    seconds=0,
+    microseconds=0,
+):
+&quot;&quot;&quot;
+</code></pre>
+<p>像 Python 的内置模块 datetime 在将日期相加的时候，最多支持到天，我们无法计算下一周、下一个月、下一年的日期。而 pendulum 则可以很方便地处理，这也是我最喜欢的一点。当然啦，add 里面的值为正，相当于日期往后退；值为负，相当于日期往前推。</p>
+<p>然后是两个日期还可以做减法：</p>
+<pre><code class="language-Python">import pendulum
+
+dt1 = pendulum.local(2021, 1, 20, 11, 22, 33)
+
+dt2 = pendulum.local(2022, 3, 30, 20, 10, 30)
+
+period = dt2 - dt1
+# 返回的是 Period 对象，相当于 datetime 模块里面的 timedelta
+print(period.__class__)
+&quot;&quot;&quot;
+&lt;class 'pendulum.period.Period'&gt;
+&quot;&quot;&quot;
+
+# 但是功能方面，Period 要强大很多
+# 两者差了多少年
+print(period.in_years())  # 1
+# 两者差了多少个月
+print(period.in_months())  # 14
+# 两者差了多少个星期
+print(period.in_weeks())  # 62
+# 两者差了多少天
+print(period.in_days())  # 434
+# 两者差了多少个小时
+print(period.in_hours())  # 10424
+# 两者差了多少分钟
+print(period.in_minutes())  # 625487
+# 两者差了多少秒
+print(period.in_seconds())  # 37529277
+</code></pre>
+<p>功能非常强大，Python 的 datetime 模块里面的 timedelta 最多只能计算两个日期差了多少天，而这里年月日时分秒均可。</p>
+<p>以上就是本文的内容，当然 pendulum 的功能其实不止我们上面说的那些，有兴趣的话可以参考官网，但常用的差不多就这些东西。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../全方位解析 f-string/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../全方位解析 f-string/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
