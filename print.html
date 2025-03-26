@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -5283,6 +5283,197 @@ main()
 <p>怎么样，是不是很好玩呢？只要把 sys.excepthook = cache 这段逻辑加载到程序中，我们就可以自定义异常显示信息了。</p>
 <p>当然啦，根据异常的不同，解释器可能输出更复杂的信息，所以我们上面的代码并不完善，但你可以根据实际情况进行修改。只要知道如何获取解释器输出的异常信息，以及 sys.excepthook 的用法就足够了。</p>
 <p>最后再强调一下，解释器在发现异常的时候，会立即调用 sys.excepthook。而一旦调用结束，整个程序就结束了。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="楔子-7"><a class="header" href="#楔子-7">楔子</a></h2>
+<p>我们用 MySQL 客户端查询数据的时候，会以表格的形式进行展示。而 Python 有一个第三方模块叫 prettytable，专门用来将数据以这种格式输出，我们来看一下用法。</p>
+<h2 id="添加表头添加行添加列"><a class="header" href="#添加表头添加行添加列">添加表头、添加行、添加列</a></h2>
+<p>类似于数据库中的表，由表头（或者说字段名），以及每一行的内容组成。</p>
+<pre><code class="language-python">from prettytable import PrettyTable
+
+# 传入的 name、age、country 相当于表头
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;])
+# 调用 add_row 添加行记录
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;])
+
+print(tb)
+&quot;&quot;&quot;
++----------------+-----+-------------+
+|      name      | age |   country   |
++----------------+-----+-------------+
+| Jack Morrison  |  49 |   America   |
+| Shimada Genji  |  35 |    Japan    |
+| Shimada Hanzo  |  38 |    Japan    |
+| Angela Ziegler |  37 | Switzerland |
++----------------+-----+-------------+
+&quot;&quot;&quot;
+</code></pre>
+<p>如果在编写的过程中，我们需要临时添加一列，prettytable 也是支持的。</p>
+<pre><code class="language-python">from prettytable import PrettyTable
+
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;])
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;])
+
+# 调用 add_column 添加一列
+tb.add_column(&quot;gender&quot;, [&quot;male&quot;, &quot;male&quot;, &quot;male&quot;, &quot;female&quot;])
+print(tb)
+&quot;&quot;&quot;
++----------------+-----+-------------+--------+
+|      name      | age |   country   | gender |
++----------------+-----+-------------+--------+
+| Jack Morrison  |  49 |   America   |  male  |
+| Shimada Genji  |  35 |    Japan    |  male  |
+| Shimada Hanzo  |  38 |    Japan    |  male  |
+| Angela Ziegler |  37 | Switzerland | female |
++----------------+-----+-------------+--------+
+&quot;&quot;&quot;
+</code></pre>
+<p>输出内容是不是和 MySQL数据库类似呢。</p>
+<p>此外 prettytable 还支持从 csv、数据库、html 等数据源中导入数据，但说实话，从数据源读取数据我们一般使用 pandas，并且还会伴随着数据处理。而使用 prettytable 只是为了让程序中产生的信息，能够以结构化的形式打印，很少会从文件或数据库里面读数据。</p>
+<h2 id="输出指定行指定列"><a class="header" href="#输出指定行指定列">输出指定行、指定列</a></h2>
+<p>我们也可以输出 table 的指定行、指定列。</p>
+<pre><code class="language-python">from prettytable import PrettyTable
+
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;, &quot;gender&quot;])
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;, &quot;female&quot;])
+# 只输出 name 和 age 两列
+# start 和 end 表示开始和结束的行数（从 0 开始）
+print(tb.get_string(fields=[&quot;name&quot;, &quot;age&quot;], start=1, end=3))
+&quot;&quot;&quot;
++---------------+-----+
+|      name     | age |
++---------------+-----+
+| Shimada Genji |  35 |
+| Shimada Hanzo |  38 |
++---------------+-----+
+&quot;&quot;&quot;
+
+# 此外可以用来进行排序
+print(tb.get_string(sortby=&quot;age&quot;, reversesort=True))
+&quot;&quot;&quot;
++----------------+-----+-------------+--------+
+|      name      | age |   country   | gender |
++----------------+-----+-------------+--------+
+| Jack Morrison  |  49 |   America   |  male  |
+| Shimada Hanzo  |  38 |    Japan    |  male  |
+| Angela Ziegler |  37 | Switzerland | female |
+| Shimada Genji  |  35 |    Japan    |  male  |
++----------------+-----+-------------+--------+
+&quot;&quot;&quot;
+</code></pre>
+<h2 id="设置表格样式"><a class="header" href="#设置表格样式">设置表格样式</a></h2>
+<p>表格也支持几种不同的样式，供我们选择。</p>
+<pre><code class="language-python">from prettytable import *
+
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;, &quot;gender&quot;])
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;, &quot;female&quot;])
+
+# 样式支持以下几种：
+# DEFAULT、MSWORD_FRIENDLY、PLAIN_COLUMNS、RANDOM
+# 之前的样式就是 DEFAULT
+tb.set_style(MSWORD_FRIENDLY)
+print(tb)
+&quot;&quot;&quot;
+|      name      | age |   country   | gender |
+| Jack Morrison  |  49 |   America   |  male  |
+| Shimada Genji  |  35 |    Japan    |  male  |
+| Shimada Hanzo  |  38 |    Japan    |  male  |
+| Angela Ziegler |  37 | Switzerland | female |
+&quot;&quot;&quot;
+
+tb.set_style(PLAIN_COLUMNS)
+print(tb)
+&quot;&quot;&quot;
+     name             age          country          gender        
+Jack Morrison          49          America           male         
+Shimada Genji          35           Japan            male         
+Shimada Hanzo          38           Japan            male         
+Angela Ziegler         37        Switzerland        female     
+&quot;&quot;&quot;
+
+tb.set_style(RANDOM)
+print(tb)
+&quot;&quot;&quot;
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++;
+.        name              age           country           gender     .
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++;
+.   Jack Morrison           49           America            male      .
+.   Shimada Genji           35            Japan             male      .
+.   Shimada Hanzo           38            Japan             male      .
+.   Angela Ziegler          37         Switzerland         female     .
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++;
+&quot;&quot;&quot;
+</code></pre>
+<p>说实话，还是默认的 DEFAULT 样式最好看。</p>
+<h2 id="设置对齐方式"><a class="header" href="#设置对齐方式">设置对齐方式</a></h2>
+<pre><code class="language-python">from prettytable import *
+
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;, &quot;gender&quot;])
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;, &quot;female&quot;])
+
+# l 代表左对齐，c 代表居中，r 代表右对齐
+# 默认居中
+tb.align[&quot;name&quot;] = &quot;l&quot;
+tb.align[&quot;age&quot;] = &quot;c&quot;
+tb.align[&quot;country&quot;] = &quot;r&quot;
+print(tb)
+&quot;&quot;&quot;
++----------------+-----+-------------+--------+
+| name           | age |     country | gender |
++----------------+-----+-------------+--------+
+| Jack Morrison  |  49 |     America |  male  |
+| Shimada Genji  |  35 |       Japan |  male  |
+| Shimada Hanzo  |  38 |       Japan |  male  |
+| Angela Ziegler |  37 | Switzerland | female |
++----------------+-----+-------------+--------+
+&quot;&quot;&quot;
+</code></pre>
+<h2 id="设置边框样式"><a class="header" href="#设置边框样式">设置边框样式</a></h2>
+<p>在 PrettyTable 中，边框由三个部分组成：横边框，竖边框，和边框连接符，我们都可以修改。</p>
+<pre><code class="language-python">from prettytable import *
+
+tb = PrettyTable([&quot;name&quot;, &quot;age&quot;, &quot;country&quot;, &quot;gender&quot;])
+tb.add_row([&quot;Jack Morrison&quot;, 49, &quot;America&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Genji&quot;, 35, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Shimada Hanzo&quot;, 38, &quot;Japan&quot;, &quot;male&quot;])
+tb.add_row([&quot;Angela Ziegler&quot;, 37, &quot;Switzerland&quot;, &quot;female&quot;])
+
+# 是否显示边框，默认为True
+tb.border = True
+# 横边框
+tb.horizontal_char = '^'
+# 竖边框
+tb.vertical_char = '&gt;'
+# 边框连接符
+tb.junction_char='~'
+
+print(tb)
+&quot;&quot;&quot;
+~^^^^^^^^^^^^^^^^~^^^^^~^^^^^^^^^^^^^~^^^^^^^^~
+&gt;      name      &gt; age &gt;   country   &gt; gender &gt;
+~^^^^^^^^^^^^^^^^~^^^^^~^^^^^^^^^^^^^~^^^^^^^^~
+&gt; Jack Morrison  &gt;  49 &gt;   America   &gt;  male  &gt;
+&gt; Shimada Genji  &gt;  35 &gt;    Japan    &gt;  male  &gt;
+&gt; Shimada Hanzo  &gt;  38 &gt;    Japan    &gt;  male  &gt;
+&gt; Angela Ziegler &gt;  37 &gt; Switzerland &gt; female &gt;
+~^^^^^^^^^^^^^^^^~^^^^^~^^^^^^^^^^^^^~^^^^^^^^~
+&quot;&quot;&quot;
+</code></pre>
+<h2 id="小结-6"><a class="header" href="#小结-6">小结</a></h2>
+<p>以上就是 PrettyTable 相关的内容，大部分情况下我们使用默认的样式即可。</p>
 
                     </main>
 
