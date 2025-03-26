@@ -1,0 +1,559 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>文件处理的一些最佳实践 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html" class="active">文件处理的一些最佳实践</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="楔子"><a class="header" href="#楔子">楔子</a></h2>
+<p>文件处理是程序开发中经常会遇到的一个问题，比如文件是否存在，是否可读、可写、可执行，查看文件的状态，文件的读写操作等等。</p>
+<p>本篇文章将会介绍一些最佳实践，让你在处理文件的时候更加得心应手。另外我们知道 Linux 一切皆文件，大致有以下七种。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>而本篇文章所说的文件并不单单指普通文件，而是指所有类型的文件。</p>
+<h2 id="文件是否存在是否可读可写可执行"><a class="header" href="#文件是否存在是否可读可写可执行">文件是否存在、是否可读可写可执行</a></h2>
+<p>针对这个需求，我推荐使用 os.access 函数。使用该函数一般传递两个参数即可，参数一是文件路径，参数二是模式，而模式有以下四种：</p>
+<ul>
+<li>os.F_OK：判断文件是否存在；</li>
+<li>os.R_OK：判断文件是否可读；</li>
+<li>os.W_OK：判断文件是否可写；</li>
+<li>os.X_OK：判断文件是否可执行；</li>
+</ul>
+<p>我们测试一下：</p>
+<pre><code class="language-python">import os
+
+# 文件是否存在
+os.access(&quot;main.c&quot;, os.F_OK)
+# 文件是否可读
+os.access(&quot;main.c&quot;, os.R_OK)
+# 文件是否可写
+os.access(&quot;main.c&quot;, os.W_OK)
+# 文件是否可执行
+os.access(&quot;main.c&quot;, os.X_OK)
+
+# 返回的都是布尔值
+</code></pre>
+<p>可读、可写、可执行在工作中遇到的不是很多，更多的还是判断是否存在。</p>
+<h2 id="文件的状态"><a class="header" href="#文件的状态">文件的状态</a></h2>
+<p>文件的状态一般包含以下几种：</p>
+<ul>
+<li>文件的类型，比如普通文件、目录文件等等；</li>
+<li>文件的访问权限；</li>
+<li>文件的最后访问时间、修改时间等等；</li>
+<li>文件的大小（普通文件）；</li>
+</ul>
+<p>在 Python 里面要如何获取文件状态呢？实际上获取文件状态都是通过系统调用来完成的，而 os.stat 函数可以帮我们实现这一点。</p>
+<pre><code class="language-Python">import os
+
+# 接收一个路径，或者文件描述符
+stat = os.stat(&quot;main.c&quot;)
+# 返回一个 os.stat_result 对象
+print(stat)
+&quot;&quot;&quot;
+os.stat_result(
+st_mode=33206, st_ino=37999121855938744, 
+st_dev=2993193685, st_nlink=1, st_uid=0, 
+st_gid=0, st_size=3375, st_atime=1652539604, 
+st_mtime=1652539604, st_ctime=1652537628)
+&quot;&quot;&quot;
+print(stat.st_mode)
+print(stat.st_ino)
+print(stat.st_dev)
+print(stat.st_nlink)
+print(stat.st_uid)
+print(stat.st_gid)
+print(stat.st_size)
+print(stat.st_atime)
+print(stat.st_mtime)
+print(stat.st_ctime)
+</code></pre>
+<p>里面的字段包含了文件的全部信息，我们来介绍常用的。</p>
+<h3 id="st_mode"><a class="header" href="#st_mode">st_mode</a></h3>
+<p>我们先在 CentOS 上使用 ll 命令查看某个文件，观察它的输出信息：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>注意红色框框里面的部分，总共十个字符，首先是第一个字符，表示文件类型。<strong>-</strong> 代表普通文件，<strong>d</strong> 代表目录文件，<strong>b</strong> 代表块设备文件，<strong>c</strong> 代表字符设备文件，<strong>p</strong> 代表管道文件，<strong>l</strong> 代表链接文件。显然这里是普通文件。</p>
+<p>然后是剩余的九个字符，分为三组，分别代表 文件所有者、文件所属组、其它用户 的操作权限，顺序都是 rwx，即是否可读、可写、可执行。如果显示的是 <strong>-</strong>，那么代表不具备相应的权限；如果显示的是具体的字符，那么代表具备相应的权限。</p>
+<p>比如 main.c 的文件所有者具备对 main.c 的可读可写权限，而其它用户则只有可读权限。好了，前置知识介绍完毕，下面看 st_mode。</p>
+<pre><code class="language-Python">import os
+
+stat = os.stat(&quot;main.c&quot;)
+print(
+    bin(stat.st_mode)
+)  # 0b1000000110100100
+</code></pre>
+<p>需要转成二进制观察，我们先看后九位，110_100_100，分别对应 文件所有者、文件所属组、其它用户 的操作权限。每三位对应的都是 rwx，为 1 表示具有相关权限，为 0 表示不具有，所以它们都具有可读权限，没有可执行权限。</p>
+<ul>
+<li>100：具备可读权限，转成十进制（八进制）结果为 4；</li>
+<li>010：具备可写权限，转成十进制（八进制）结果为 2；</li>
+<li>001：具备可执行权限，转成十进制（八进制）结果为 1；</li>
+<li>110：具备可读可写权限，转成十进制（八进制）结果为 6；</li>
+<li>011：具备可写可执行权限，转成十进制（八进制）结果为 3；</li>
+<li>101：具备可读可执行权限，转成十进制（八进制）结果为 5；</li>
+<li>111：具备可读可写可执行权限，转成十进制（八进制）结果为 7；</li>
+</ul>
+<pre><code class="language-python">import os
+
+stat = os.stat(&quot;main.c&quot;)
+# 右移 6 位，然后和 0b111 做按位与
+# 可以计算出文件所有者的权限
+print(stat.st_mode &gt;&gt; 6 &amp; 0b111)  # 6
+# 右移 3 位，然后和 0b111 做按位与
+# 可以计算出文件所属组的权限
+print(stat.st_mode &gt;&gt; 3 &amp; 0b111)  # 4
+# 计算其它用户的权限
+print(stat.st_mode &amp; 0b111)  # 4
+</code></pre>
+<p>当然了，这种情况更建议使用 os.access 进行判断，会更方便一些。</p>
+<p>好，后九位我们看完了，它代表的是三个权限。而前面的位，也就是 st_mode 右移 9 位之后的结果，则代表文件的类型。</p>
+<pre><code class="language-Python">import os
+import stat
+
+st_mode = os.stat(&quot;main.c&quot;).st_mode
+# 是否是普通文件
+# 如果是返回非 0，否则返回 0
+print(st_mode &amp; stat.S_IFREG)  # 32768
+# 不过上面的方式比较麻烦
+# stat 模块已经帮我们封装好了相应的函数
+print(stat.S_ISREG(st_mode))  # True
+# 是否是目录文件
+print(stat.S_ISDIR(st_mode))  # False
+# 是否是块设备
+print(stat.S_ISBLK(st_mode))  # False
+# 是否是字符设备文件
+print(stat.S_ISCHR(st_mode))  # False
+# 是否是套接字文件
+print(stat.S_ISSOCK(st_mode))  # False
+# 是否是管道文件
+print(stat.S_ISFIFO(st_mode))  # False
+# 是否是链接文件
+print(stat.S_ISLNK(st_mode))  # False
+</code></pre>
+<h3 id="st_uid-和-st_gid"><a class="header" href="#st_uid-和-st_gid">st_uid 和 st_gid</a></h3>
+<p>文件所有者和所属组的 id，这个在 Windows 上一般都是 0，无需太关注。</p>
+<h3 id="st_size"><a class="header" href="#st_size">st_size</a></h3>
+<p>文件的大小，这个也是比较常用的。每个文件有多大，操作系统帮我们记录好了，直接获取即可。</p>
+<pre><code class="language-Python">import os
+
+stat = os.stat(r&quot;main.c&quot;)
+print(stat.st_size)  # 35
+</code></pre>
+<h3 id="st_atimest_mtimest_ctime"><a class="header" href="#st_atimest_mtimest_ctime">st_atime、st_mtime、st_ctime</a></h3>
+<p>分别表示访问时间、修改时间、创建时间，都是时间戳。</p>
+<h2 id="如何设置文件的缓冲区"><a class="header" href="#如何设置文件的缓冲区">如何设置文件的缓冲区</a></h2>
+<p>像磁盘、网卡之类的硬件设备只有操作系统的内核才有权限操作，我们开发的应用程序是没有权限的。于是操作系统把对磁盘、网卡之类的硬件相关的操作封装成了一个个的系统调用，应用程序通过这些系统调用便可借助内核来操作硬件设备。</p>
+<p>而将内存中的数据写入到磁盘也不例外，它也会触发相应的系统调用，而系统调用的 I/O 是比较耗时的。还有磁盘，磁盘属于块设备，它写入数据时，不是以字节为单位、而是以块为单位写入的。假设一个块是 4096 个字节，那么写 1 个字节和写 4096 个字节耗时是一样的。</p>
+<p>所以在写入数据的时候，不能来一个字节就触发一次系统调用，而是应该有一个缓冲区，这个缓冲区和块大小是一致的。当缓冲区满了，那么再一次性写入，这样能够提高效率。</p>
+<p>在 Python 里面，缓冲区的大小是多大呢？又要如何设置呢？</p>
+<pre><code class="language-Python"># 以二进制模式打开
+f = open(&quot;main.c&quot;, &quot;wb&quot;)
+</code></pre>
+<p>首先解释器会从内核中读取磁盘的块大小，然后让缓冲区大小和磁盘的块大小保持一致。要是找不到磁盘的块大小（基本都能找到），则使用 io.DEFAULT_BUFFER_SIZE，这个值等于 8192。</p>
+<p>一般来说，磁盘的块大小都是可以读出来的，大小为 4096。假设已经写了 4096 个字节，此时缓冲区已满，那么当写入第 4097 个字节时，缓冲区的 4096 个字节就会刷到磁盘上。然后写入的第 4097 个字节，就会成为缓冲区里面的第一个字节，这种模式也被称为<strong>全缓冲</strong>。</p>
+<p>如果以二进制模式打开，缓冲区就是当前描述的这样，但如果是以文本模式打开呢？</p>
+<pre><code class="language-Python">binary_write = open(&quot;main.c&quot;, &quot;wb&quot;)
+print(binary_write)
+&quot;&quot;&quot;
+&lt;_io.BufferedWriter name='main.c'&gt;
+&quot;&quot;&quot;
+
+text_write = open(&quot;main.c&quot;, &quot;w&quot;)
+print(text_write)
+print(text_write.buffer)
+&quot;&quot;&quot;
+&lt;_io.TextIOWrapper name='main.c' mode='w' encoding='cp936'&gt;
+&lt;_io.BufferedWriter name='main.c'&gt;
+&quot;&quot;&quot;
+
+binary_read = open(&quot;main.c&quot;, &quot;rb&quot;)
+print(binary_read)
+&quot;&quot;&quot;
+&lt;_io.BufferedReader name='main.c'&gt;
+&quot;&quot;&quot;
+
+text_read = open(&quot;main.c&quot;, &quot;r&quot;)
+print(text_read)
+print(text_read.buffer)
+&quot;&quot;&quot;
+&lt;_io.TextIOWrapper name='main.c' mode='r' encoding='cp936'&gt;
+&lt;_io.BufferedReader name='main.c'&gt;
+&quot;&quot;&quot;
+</code></pre>
+<ul>
+<li>如果以二进制模式写入（wb），那么文件句柄的类型为 BufferedWriter；以文本模式写入（w），那么文件句柄的类型为 TextIOWrapper；</li>
+<li>如果以二进制模式读取（rb），那么文件句柄的类型为 BufferedReader；以文本模式读取（r），那么文件句柄的类型仍为 TextIOWrapper；</li>
+</ul>
+<p>但是需要注意 TextIOWrapper 有一个属性叫 buffer，对应的正是以二进制模式打开时的文件句柄。所以文本模式打开（包含读取和写入），实际上还是基于二进制打开进行的一层封装。</p>
+<pre><code class="language-Python">f = open(&quot;main.c&quot;, &quot;w&quot;)
+# 可以通过如下方式写入
+f.write(&quot;abc&quot;)
+# 也可以使用如下方式写入
+f.buffer.write(b&quot;abc&quot;)
+</code></pre>
+<p>而 TextIOWrapper 这一层也是有缓冲区的，它的大小一般是 8192 个字节。如果缓冲区满了，再写入 BufferedWriter 的缓冲区，BufferWriter 的缓冲区满了，再写入到磁盘。所以从这个角度看，二进制模式打开比文本模式打开要更快一些，因为计算机存储的数据就是二进制格式的。</p>
+<p>另外我们说 TextIOWrapper 是基于 BufferedWriter（读取的话是 BufferedReader，这里以写入为例）进行的封装，但其实 BufferedWriter 下面还有一层，叫 raw，而 raw 这一层是无缓冲的。</p>
+<pre><code class="language-Python"># 以二进制模式打开，缓冲区为 4096
+f = open(&quot;main.c&quot;, &quot;wb&quot;)
+# 会立即写入磁盘，因为这一层没有缓冲区
+# 它可以看做是调用操作系统提供的原生接口
+f.raw.write(b&quot;abc&quot;)
+
+# 缓冲区大小为 4096，刚好满
+f.write(b&quot;a&quot; * 4096)
+# 但是到这里为止，缓冲区的数据还没有进入磁盘
+# 如果你在此处 sleep 一会，然后查看文件
+# 你会发现文件里面只有 abc 这三个字符
+
+# 好，此时又来一个字符，缓冲区容不下了
+# 必须先将已有的 4096 个字节写入磁盘
+# 而写入是通过调用 f.raw 写入的
+f.write(b&quot;b&quot;)
+</code></pre>
+<p>文本模式也是同理，它是在二进制模式的基础之上又构建了一层。</p>
+<pre><code class="language-python"># 以文本模式打开，缓冲区为 8192
+f = open(&quot;main.c&quot;, &quot;w&quot;)
+# TextIOWrapper -&gt; BufferedWriter -&gt; raw
+# 此时缓冲区刚好满
+f.write(&quot;a&quot; * 8192)
+# 再写入一个字符
+f.write(&quot;b&quot;)
+
+# 缓冲区容不下了，于是会将已有的 8192 字节写入 f.buffer 的缓冲区
+# f.buffer 是以二进制模式打开的文件句柄
+# 因为文本模式打开是构建在二进制模式打开的基础之上的
+# 然后再通过 f.buffer.raw 将数据写入磁盘
+</code></pre>
+<p>因此，如果你希望写入的内容立刻刷到磁盘上，除了使用 flush 之外，还可以这么做。</p>
+<pre><code class="language-Python"># 以文本模式打开
+f = open(&quot;main.c&quot;, &quot;w&quot;)
+
+# TextIOWrapper 没有 raw，只有 buffer，因为它是构建在 BufferedWriter 之上的
+# raw 这一层没有缓冲区，调用它的 write，会直接写入文件
+f.buffer.raw.write(b&quot;abc&quot;)
+
+# 或者还可以调用 flush 方法
+f.write(&quot;abc&quot;)
+# 该方法的本质也是强制调用 raw 的 write 操作，将内容写入磁盘
+f.flush()
+</code></pre>
+<p>因此这三层的关系如下：</p>
+<p><img src="./3.png" alt="" /></p>
+<p>所以这就是三者之间的关系，最终实际负责写入数据的肯定还是 raw 这一层，只不过它没有缓冲区，只要有数据，就立刻写入。所以为了保证效率，在 raw 这一层之上又构建了带缓冲区的两层。</p>
+<p>那么如何指定缓冲区的大小呢？</p>
+<pre><code class="language-python">f = open(&quot;main.c&quot;, &quot;wb&quot;, buffering=1024)
+</code></pre>
+<p>通过 buffering 参数即可设置缓冲区大小，注意：不管是文本模式打开、还是二进制模式打开，这里的 buffering 参数设置的都是二进制这一层的缓冲区。在设置的时候 buffering 必须大于 1，如果等于 1，那么就不再是全缓冲了，而是行缓冲，意思就是遇到换行会立即写入磁盘。不过问题来了， 要是一直都没有写入换行呢？如果一直没有换行，那么缓冲区满了会写入磁盘，所以此时相当于全缓冲。</p>
+<p>另外，行缓冲只支持文本模式。</p>
+<pre><code class="language-python">import time
+
+f = open(&quot;main.c&quot;, &quot;w&quot;)
+f.write(&quot;abc\n&quot;)
+time.sleep(30)
+</code></pre>
+<p>执行，然后查看文件，会发现里面啥也没有，因为数据都在缓冲区里面。默认是全缓冲，第一层的缓冲区大小是 8192，第二层的缓冲区大小是 4096，只有缓冲区满了，才会写入磁盘。</p>
+<pre><code class="language-Python">import time
+
+f = open(&quot;main.c&quot;, &quot;w&quot;, buffering=1)
+f.write(&quot;abc\n&quot;)
+time.sleep(30)
+</code></pre>
+<p>如果指定 buffering=1，那么就变成了行缓冲，在遇到换行的时候会直接写入磁盘，而不管缓冲区有没有满。如果一直没有换行，那么等价于全缓冲。</p>
+<p>最后，还有一个无缓冲，也就是指定 buffering 为 0，但只支持二进制模式。</p>
+<pre><code class="language-Python">f = open(&quot;main.c&quot;, &quot;wb&quot;, buffering=0)
+# 立即写入缓冲区
+f.write(b&quot;abc&quot;)
+</code></pre>
+<p>实际上，如果指定 buffering=0，那么会直接得到 raw 这一层的文件句柄。</p>
+<pre><code class="language-Python">import time
+
+f = open(&quot;main.c&quot;, &quot;wb&quot;, buffering=1024)
+print(f)
+print(f.raw)
+&quot;&quot;&quot;
+&lt;_io.BufferedWriter name='main.c'&gt;
+&lt;_io.FileIO name='main.c' mode='wb' closefd=True&gt;
+&quot;&quot;&quot;
+# raw 这一层对应的文件句柄类型是 FileIO
+# 它可以看做是调用操作系统的原生接口，这一层没有缓冲区
+
+# 如果指定 buffering=0
+f = open(&quot;main.c&quot;, &quot;wb&quot;, buffering=0)
+# 我们看到直接返回第三层
+print(f)
+&quot;&quot;&quot;
+&lt;_io.FileIO name='main.c' mode='wb' closefd=True&gt;
+&quot;&quot;&quot;
+# 所以 buffering=0 表示无缓冲
+# 因为它返回的不是 BufferedWriter，而是 raw 这一层的句柄
+</code></pre>
+<p>我们总结一下，缓冲模式分为全缓冲、行缓冲、无缓冲。</p>
+<ul>
+<li>buffering 大于 1：全缓冲；</li>
+<li>buffering 等于 1：行缓冲，只适用于文本模式；</li>
+<li>buffering 等于 0：无缓冲，只适用于二进制模式，并且返回的句柄类型是 FileIO；</li>
+</ul>
+<h2 id="优雅地遍历一个目录"><a class="header" href="#优雅地遍历一个目录">优雅地遍历一个目录</a></h2>
+<p>在工作中，有时我们需要读取一个目录，然后遍历里面所有的文件。我们可以使用 os.listdir 来实现，但是 Python 从 3.4 开始引入了一个 pathlib 模块，更加的方便。</p>
+<pre><code class="language-python">from pathlib import Path
+
+p = Path(r&quot;C:\python38\Lib\asyncio&quot;)
+
+for file in p.glob(&quot;b*.py&quot;):
+    print(file)
+&quot;&quot;&quot;
+C:\python38\Lib\asyncio\base_events.py
+C:\python38\Lib\asyncio\base_futures.py
+C:\python38\Lib\asyncio\base_subprocess.py
+C:\python38\Lib\asyncio\base_tasks.py
+&quot;&quot;&quot;
+</code></pre>
+<p>Path 接收一个文件路径，然后调用它的 glob 方法，即可遍历内部所有的文件。并且 glob 方法接收一个模式，在遍历的时候会选择名称和模式匹配的文件。</p>
+<ul>
+<li>?：匹配一个任意字符；</li>
+<li>*：匹配任意个任意字符；</li>
+<li>[sequence]：匹配出现在 sequence 里面的一个字符；</li>
+<li>[!sequence]：匹配没有出现在 sequence 里面的一个字符；</li>
+<li>[a-z]：匹配出现在 abcdef...z 中的一个字符；</li>
+<li>[A-Z]：匹配出现在 ABCDEF...Z 中的一个字符；</li>
+<li>[0-9]：匹配出现在 0123...9 中的一个字符；</li>
+</ul>
+<p>如果想匹配所有文件，那么直接 <strong>.glob(&quot;*&quot;)</strong> 即可，并且遍历得到的仍是一个 Path 对象。当然啦，如果只是 glob，那么可以用 os.listdir 代替。Path 对象还有一个方法叫 rglob，用法和 glob 一样，但是它可以递归遍历子目录，而 glob 只能遍历一层。</p>
+<pre><code class="language-Python">from pathlib import Path
+
+p = Path(r&quot;C:\python38\Lib\site-packages\numpy&quot;)
+
+# 只能遍历一层
+for file in p.glob(&quot;*.py&quot;):
+    # 拿到文件名
+    # 直接 p.glob(&quot;__init__.py&quot;) 也是可以的
+    if file.name == &quot;__init__.py&quot;:
+        print(file)
+&quot;&quot;&quot;
+C:\python38\Lib\site-packages\pnumpy\__init__.py
+&quot;&quot;&quot;
+
+# 递归遍历
+for file in p.rglob(&quot;*.py&quot;):
+    if file.name == &quot;__init__.py&quot;:
+        print(file)
+&quot;&quot;&quot;
+C:\python38\Lib\site-packages\numpy\__init__.py
+C:\python38\Lib\site-packages\numpy\compat\__init__.py
+C:\python38\Lib\site-packages\numpy\compat\tests\__init__.py
+C:\python38\Lib\site-packages\numpy\core\__init__.py
+C:\python38\Lib\site-packages\numpy\core\tests\__init__.py
+C:\python38\Lib\site-packages\numpy\distutils\__init__.py
+......
+......
+&quot;&quot;&quot;
+</code></pre>
+<p>因此在遍历目录的时候，强烈推荐使用 pathlib 模块，非常的方便。其实不光是遍历目录，pathlib 还有其它的功能，这里也补充一下。</p>
+<pre><code class="language-Python">from pathlib import Path
+
+p = Path(__file__)
+print(p)
+&quot;&quot;&quot;
+D:\satori\main.py
+&quot;&quot;&quot;
+
+# 如果想拿到它的上一级目录，该怎么做呢？
+# 是不是比 os.path.dirname 要方便呢？
+print(p.parent)  # D:\satori
+# 上一级目录的上一级目录
+print(p.parent.parent)  # D:\
+
+# 目录的拼接，直接使用 / 即可
+# 或者调用 joinpath
+print(p.parent / &quot;koishi&quot; / &quot;main.py&quot;)
+print(p.parent.joinpath(&quot;koishi&quot;, &quot;main.py&quot;))
+&quot;&quot;&quot;
+D:\satori\koishi\main.py
+D:\satori\koishi\main.py
+&quot;&quot;&quot;
+
+# 所以 Path 在路径拼接上面也是一把好手
+# 另外以上返回的都是 Path 对象
+# 如果想当成字符串来用，需要调用 str 转化一下
+
+# Path 还有一些其它方法
+# 返回文件名，字符串格式
+print(p.name)  # main.py
+
+# 返回不带后缀的文件名
+print(p.stem)  # main
+
+# 文件重命名
+p.rename(&quot;main2.py&quot;)
+</code></pre>
+<p>此外 Path 还有一些方法可以用来判断文件类型，比如是普通文件、目录文件等等。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>这些方法内部在判断的时候也是基于 os 和 stat 模块实现的，我们上面已经介绍过了，先通过 os.stat 函数获取 st_mode，再使用 stat 模块里面函数判断类型。</p>
+<p>总之在拼接路径和遍历目录的时候，首推 pathlib。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
