@@ -12,3 +12,4 @@
 + [使用 psutil 获取硬件、网络以及进程信息](./使用%20psutil%20获取硬件、网络以及进程信息/doc.md)
 + [使用临时文件保存数据](./使用临时文件保存数据/doc.md)
 + [shutil：更优雅地拷贝文件](./shutil：更优雅地拷贝文件/doc.md)
++ [使用 contextvars 管理上下文变量](./使用%20contextvars%20管理上下文变量/doc.md)
