@@ -1,0 +1,467 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 os 模块更高效地读写文件 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html" class="active">使用 os 模块更高效地读写文件</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="使用-osopen-打开文件"><a class="header" href="#使用-osopen-打开文件">使用 os.open 打开文件</a></h2>
+<p>无论是读文件还是写文件，都要先打开文件。说到打开文件，估计首先想到的就是内置函数 open（即 io.open），那么它和 os.open 有什么关系呢？</p>
+<p>内置函数 open 实际上是对 os.open 的封装，在 os.open 基础上增加了相关访问方法。因此为了操作方便，应该调用内置函数 open 进行文件操作，但如果对效率要求较高的话，则可以考虑使用 os.open。此外 open 函数返回的是一个文件对象，我们可以在此基础上进行任意操作；而 os.open 返回的是一个文件描述符，说白了就是一个整数，因为每一个文件对象都会对应一个文件描述符。</p>
+<pre><code class="language-python">import os
+
+f1 = open(&quot;main.c&quot;, &quot;r&quot;)
+f2 = os.open(&quot;main.c&quot;, os.O_RDONLY)
+
+print(f1.__class__)
+print(f2.__class__)
+&quot;&quot;&quot;
+&lt;class '_io.TextIOWrapper'&gt;
+&lt;class 'int'&gt;
+&quot;&quot;&quot;
+</code></pre>
+<p>Python 的 open 函数实际上是封装了 C 的 fopen，C 的 fopen 又封装了系统调用提供的 open。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>操作系统提供了很多的系统调用，打开文件则是 open，我们看到它返回一个整数，这个整数就是对应的文件描述符。C 的 fopen 封装了系统调用的 open，返回的是一个文件指针。</p>
+<p>所以内置函数 open 和 os.open 的区别就更加清晰了，内置函数 open 在底层会使用 C 的 fopen，得到的是一个封装好的文件对象，在此基础上可以直接操作。至于 os.open 在底层则不走 C 的 fopen，而是直接使用系统调用提供的 open，得到的是文件描述符。</p>
+<blockquote>
+<p>os 模块内部的函数基本上都是直接走的系统调用，所以模块名才叫 os。</p>
+</blockquote>
+<p>然后我们使用 os.open 一般需要传递两个参数，第一个参数是文件名，第二个参数是模式，举个栗子：</p>
+<pre><code class="language-python">import os
+
+# 以只读方式打开，要求文件必须存在
+# 打开时光标处于文件的起始位置
+os.open(&quot;main.c&quot;, os.O_RDONLY)
+
+# 以只写方式打开，要求文件必须存在
+# 打开时光标处于文件的起始位置
+os.open(&quot;main.c&quot;, os.O_WRONLY)
+
+# 以可读可写方式打开，要求文件必须存在
+# 打开时光标处于文件的起始位置
+os.open(&quot;main.c&quot;, os.O_RDWR)
+
+# 如果希望文件不存在时能够自动创建，那么可以使用 os.O_CREAT
+os.open(&quot;main.c&quot;, os.O_RDONLY | os.O_CREAT)
+os.open(&quot;main.c&quot;, os.O_WRONLY | os.O_CREAT)
+os.open(&quot;main.c&quot;, os.O_RDWR | os.O_CREAT)
+
+# 文件不存在时创建，存在时清空
+# 打开时光标处于文件的起始位置
+os.open(&quot;main.c&quot;, os.O_WRONLY | os.O_CREAT | os.O_TRUNC)
+# 当然读取文件也是可以的
+# 比如 os.O_RDONLY | os.O_CREAT | os.O_TRUNC
+# 也是文件存在时清空内容，但是这没有任何意义
+# 因为读取的时候将文件清空了，那还读什么？
+
+# 文件不存在时创建，存在时追加
+# 打开时光标处于文件的末尾
+os.open(&quot;main.c&quot;, os.O_WRONLY | os.O_CREAT | os.O_APPEND)
+
+# 所以
+&quot;&quot;&quot;
+open 里面的读模式等价于这里的 os.O_RDONLY
+open 里面的写模式等价于这里的 os.O_WRONLY | os.O_CREATE | os.O_TRUNC
+open 里面的追加模式等价于这里的 os.O_WRONLY | os.O_CREATE | os.O_APPEND
+&quot;&quot;&quot;
+</code></pre>
+<p>好，打开方式介绍完了，那么怎么读取和写入呢？很简单，读取使用 os.read，写入使用 os.write。</p>
+<h2 id="使用-osread-读取文件"><a class="header" href="#使用-osread-读取文件">使用 os.read 读取文件</a></h2>
+<p>先来看读取，os.read 接收两个参数，第一个参数是文件描述符，第二个参数是要读取多少个字节。</p>
+<pre><code class="language-Python">import os
+
+fd = os.open(&quot;main.c&quot;, os.O_RDONLY)
+# 使用 os.read 进行读取，这里读取 20 个字节
+data = os.read(fd, 20)
+print(data)
+&quot;&quot;&quot;
+b'#include &lt;Python.h&gt;'
+&quot;&quot;&quot;
+
+# 再读取 20 个字节
+data = os.read(fd, 20)
+print(data)
+&quot;&quot;&quot;
+b'\n#include &lt;ctype.h&gt;'
+&quot;&quot;&quot;
+
+# 继续读取
+data = os.read(fd, 20)
+# 由于只剩下一个字节，所以就读取了一个字节
+# 显然此时文件已经读完了
+print(data)
+&quot;&quot;&quot;
+b'\n'
+&quot;&quot;&quot;
+
+# 文件读取完毕之后
+# 再读取的话会返回空字节串
+print(os.read(fd, 20))  # b''
+print(os.read(fd, 20))  # b''
+print(os.read(fd, 20))  # b''
+</code></pre>
+<p>所以这就是文件的读取方式，还是很简单的。然后在读取的过程中，我们还可以移动光标，通过 os.lseek 函数。</p>
+<ul>
+<li>os.lseek(fd, m, 0)：将光标从文件的起始位置向后移动 m 个字节；</li>
+<li>os.lseek(fd, m, 1)：将光标从当前所在的位置向后移动 m 个字节；</li>
+<li>os.lseek(fd, m, 2)：将光标从文件的结束位置向后移动 m 个字节；</li>
+</ul>
+<p>如果 m 大于 0，表示向后移动，m 小于 0，表示向前移动。所以当第三个参数为 2 的时候，也就是结束位置，那么 m 一般为负数。因为相对于结束位置，肯定要向前移动，当然向后移动也可以，不过没啥意义；同理当第三个参数为 0 时，m 一般为正数，相对于起始位置，肯定要向后移动。</p>
+<pre><code class="language-Python">import os
+
+fd = os.open(&quot;main.c&quot;, os.O_RDONLY)
+data = os.read(fd, 20)
+print(data)
+&quot;&quot;&quot;
+b'#include &lt;Python.h&gt;'
+&quot;&quot;&quot;
+
+# 从文件的起始位置向后移动 0 个字节
+# 相当于将光标设置在文件的起始位置
+os.lseek(fd, 0, 0)
+data = os.read(fd, 20)
+print(data)
+&quot;&quot;&quot;
+b'#include &lt;Python.h&gt;'
+&quot;&quot;&quot;
+
+# 设置在结束位置
+os.lseek(fd, 0, 2)
+print(os.read(fd, 20))  # b''
+
+# 此时就什么也读不出来了
+</code></pre>
+<p>然后我们提一下 stdin, stdout, stderr，含义应该不需要解释了，重点是它们对应的文件描述符分别为 0, 1, 2。</p>
+<pre><code class="language-Python">import os
+
+# 从标准输入里面读取 10 个字节
+# 没错，此时作用类似于 input
+while True:
+    data = os.read(0, 10).strip()
+    print(f&quot;你输入了:&quot;, data)
+    if data == b&quot;exit&quot;:
+        break
+</code></pre>
+<p>我们测试一下：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>os.read 可以实现 input 的效果，并且效率更高。另外当按下回车时，换行符也会被读进去，所以需要 strip 一下。然后我们这里读的是 10 个字节，如果一次读不完，那么会分多次读取。在读取文件的时候，也是同理。</p>
+<pre><code class="language-Python">from io import BytesIO
+import os
+
+fd = os.open(&quot;main.c&quot;, os.O_RDONLY)
+buf = BytesIO()
+
+while True:
+    data = os.read(fd, 10)
+    if data != b&quot;&quot;:
+        buf.write(data)
+    else:
+        break
+print(buf.getvalue().decode(&quot;utf-8&quot;))
+&quot;&quot;&quot;
+#include &lt;Python.h&gt;
+#include &lt;ctype.h&gt;
+
+&quot;&quot;&quot;
+</code></pre>
+<p>然后 os.read 还可以和内置函数 open 结合，举个栗子：</p>
+<pre><code class="language-Python">import os
+import io
+
+f = open(&quot;main.c&quot;, &quot;r&quot;)
+# 通过 f.fileno() 即可拿到对应的文件描述符
+# 虽然这里是以文本模式打开的文件，但只要拿到文件描述符，都可以交给 os.read
+print(os.read(f.fileno(), 10))  # b'#include &lt;'
+
+# 查看光标位置
+print(f.tell())  # 10
+
+# 移动光标位置，从文件开头向后移动 5 字节
+f.seek(5, 0)
+print(f.tell())  # 5
+# os.lseek 也可以实现
+os.lseek(f.fileno(), 3, 0)
+print(f.tell())  # 3
+# 此时会从第 4 个字节开始读取
+print(f.read())
+&quot;&quot;&quot;
+clude &lt;Python.h&gt;
+#include &lt;ctype.h&gt;
+
+&quot;&quot;&quot;
+
+# os.lseek 比 f.seek 要强大一些
+# 移动到文件末尾，此时没问题
+f.seek(0, 2)
+print(f.tell())  # 41
+
+try:
+    f.seek(-1, 2)
+except io.UnsupportedOperation as e:
+    print(e)
+&quot;&quot;&quot;
+can't do nonzero end-relative seeks
+&quot;&quot;&quot;
+# 但如果要相对文件末尾移动具体的字节数
+# 那么 f.seek 不支持，而 os.lseek 是可以的
+print(f.tell())  # 41
+os.lseek(f.fileno(), -1, 2)
+print(f.tell())  # 40
+# 最后只剩下一个换行符
+print(os.read(f.fileno(), 10))  # b'\n'
+</code></pre>
+<p>是不是很好玩呢？</p>
+<h2 id="使用-oswrite-写入文件"><a class="header" href="#使用-oswrite-写入文件">使用 os.write 写入文件</a></h2>
+<p>然后是写入文件，调用 os.write 即可写入。</p>
+<pre><code class="language-Python">import os
+
+# 此时可读可写，文件不存在时自动创建，存在则清空
+fd = os.open(&quot;1.txt&quot;, os.O_RDWR | os.O_CREAT | os.O_TRUNC)
+# 写入内容，接收两个参数
+# 参数一：文件描述符；参数二：bytes 对象
+os.write(fd, b&quot;hello, &quot;)
+os.write(fd, &quot;古明地觉&quot;.encode(&quot;utf-8&quot;))
+# 读取内容
+data = os.read(fd, 1024)
+print(data)  # b''
+# 问题来了，为啥读取不到内容呢？
+# 很简单，因为光标会伴随着数据的写入而不断后移，这样的话，数据才能不断地写入
+# 因此，现在的光标位于文件的结尾处，想要查看写入的内容需要移动到开头
+os.lseek(fd, 0, 0)
+print(os.read(fd, 1024).decode(&quot;utf-8&quot;))
+&quot;&quot;&quot;
+hello, 古明地觉
+&quot;&quot;&quot;
+# 从后往前移动 3 字节
+os.lseek(fd, -3, 2)
+print(os.read(fd, 1024).decode(&quot;utf-8&quot;))
+&quot;&quot;&quot;
+觉
+&quot;&quot;&quot;
+</code></pre>
+<p>以上就是文件的写入，当然它也可以和内置函数 open 结合，通过 <strong>os.write(f.fileno(), b&quot;xxx&quot;)</strong> 进行写入。但是不建议 os.open 和 open 混用，其实工作中使用 open 就足够了。</p>
+<p>然后是 stdout 和 stderr，和 os.write 结合可以实现 print 的效果。</p>
+<pre><code class="language-Python">import os
+
+os.write(1, &quot;往 stdout 里面写入\n&quot;.encode(&quot;utf-8&quot;))
+os.write(2, &quot;往 stderr 里面写入\n&quot;.encode(&quot;utf-8&quot;))
+</code></pre>
+<p>以上就是 os.write 的用法。</p>
+<h2 id="使用-osclose-关闭文件"><a class="header" href="#使用-osclose-关闭文件">使用 os.close 关闭文件</a></h2>
+<p>最后是关闭文件，使用 os.close 即可。</p>
+<pre><code class="language-Python">import os
+import io
+
+fd = os.open(&quot;1.txt&quot;, os.O_RDWR | os.O_CREAT | os.O_TRUNC)
+# 关闭文件
+os.close(fd)
+
+# 文件对象也是可以的
+f = open(r&quot;1.txt&quot;, &quot;r&quot;)
+os.close(f.fileno())
+try:
+    f.read()
+except OSError as e:
+    print(e)
+&quot;&quot;&quot;
+[Errno 9] Bad file descriptor
+&quot;&quot;&quot;
+</code></pre>
+<p>如果是调用 f.close() 关闭文件，再进行读取的话，会抛出一个 ValueError，提示 I/O operation on closed file。这个报错信息比较明显，不应该在关闭的文件上执行 IO 操作，因为文件对象知道文件已经关闭了，毕竟调用的是自己的 close 方法，所以这个报错是解释器给出的。当然啦，调用 f.close 也会触发 os.close，因为关闭文件最终还是要交给操作系统负责的。</p>
+<p>但如果是直接关闭底层的文件描述符，文件对象是不知道的，再使用 f.read() 依旧会触发系统调用，也就是 os.read。而操作系统发现文件已经关闭了，所以会报错：文件描述符有问题，此时就是一个 OSError，报错信息是操作系统给出的。</p>
+<pre><code class="language-Python">import os
+
+f = open(r&quot;1.txt&quot;, &quot;r&quot;)
+# 文件是否关闭
+print(f.closed)  # False
+os.close(f.fileno())
+print(f.closed)  # False
+
+# 所以调用 os.close，文件对象 f 并不知道
+# f.read 依旧会触发系统调用
+</code></pre>
+<p>如果是使用 f.close()。</p>
+<pre><code class="language-Python">f = open(r&quot;1.txt&quot;, &quot;r&quot;)
+f.close()
+print(f.closed)  # True
+</code></pre>
+<p>后续执行 IO 操作，就不会再走系统调用了，而是直接抛出 ValueError，原因是文件对象知道文件已经关闭了。</p>
+<p>除了 os.close 之外，还有一个 os.closerange，可以关闭多个文件描述符对应的文件。</p>
+<pre><code class="language-Python">import os
+
+# 关闭文件描述符为 1、2、3、4 的文件 
+os.closerange(1, 5)
+</code></pre>
+<p>该方法不是很常用，了解一下即可。</p>
+<p>以上就是使用 os 模块操作文件，它是直接使用操作系统提供的系统调用，所以效率上会比内置函数 open 要高一些。但是工作中还是不太建议使用 os 模块操作文件，使用内置函数 open 就好。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../文件处理的一些最佳实践/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../文件处理的一些最佳实践/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
