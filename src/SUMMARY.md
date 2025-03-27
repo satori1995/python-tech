@@ -18,3 +18,4 @@
 + [轻松绘制动态条形图](./轻松绘制动态条形图/doc.md)
 + [自定义 jupyter 魔法命令](./自定义%20jupyter%20魔法命令/doc.md)
 + [解析 ini、yaml、toml 配置文件](./解析%20ini、yaml、toml%20配置文件/doc.md)
++ [使用 fuzzywuzzy 模块计算两个字符串之间的相似度](./使用%20fuzzywuzzy%20模块计算两个字符串之间的相似度/doc.md)
