@@ -17,3 +17,4 @@
 + [prettytable：像数据库一样格式化输出内容](./prettytable：像数据库一样格式化输出内容/doc.md)
 + [轻松绘制动态条形图](./轻松绘制动态条形图/doc.md)
 + [自定义 jupyter 魔法命令](./自定义%20jupyter%20魔法命令/doc.md)
++ [解析 ini、yaml、toml 配置文件](./解析%20ini、yaml、toml%20配置文件/doc.md)
