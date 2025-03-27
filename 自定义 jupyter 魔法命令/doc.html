@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>自定义 jupyter 魔法命令 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html" class="active">自定义 jupyter 魔法命令</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>相信大家都用过 jupyter，也用过里面的魔法命令，这些魔法命令都以 % 或者 %% 开头，我们举个例子。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>用法还是比较简单的，但是我们能不能自定义魔法命令呢？毫无疑问是可以的，因为上面的 %%cython 就是 Cython 模块自定义的。</p>
+<p>所以命令可以是 jupyter 内置的，比如 %time，直接拿来就能用；还可以是第三方模块里面的，在 jupyter 通过 %load_ext 加载之后，再嵌入进来。下面就来看看如何自定义魔法命令。</p>
+<pre><code class="language-python">from IPython.core.magic import (
+    magics_class,
+    Magics,
+    line_magic,
+    cell_magic
+)
+
+
+@magics_class
+class MagicOrder(Magics):
+    &quot;&quot;&quot;
+    自定义一个类，类名叫什么无所谓
+    但要继承 Magics，并且要被 magics_class 装饰
+    &quot;&quot;&quot;
+
+    @line_magic
+    def hello(self, line):
+        &quot;&quot;&quot;
+        在 jupyter 中就可以使用如下命令，比如：
+        %hello &lt;Your Code&gt;，然后就会调用这个 hello 方法
+        参数 line 就是 %hello 后面的代码
+        &quot;&quot;&quot;
+        print(f&quot;line: {line}&quot;)
+
+    @cell_magic
+    def world(self, line, cell):
+        &quot;&quot;&quot;
+        在 jupyter 中就可以使用如下命令，比如：
+        %%world
+        &lt;Your Code&gt;
+        &lt;Your Code&gt;
+        ...
+
+        然后就会调用这个 world 方法
+        参数 cell 就是 %%world 下面整个单元格的代码
+
+        然后还有一个参数 line，它表示 %%world 所在行后面的代码
+        但对于 %% 开头的命令来说，我们一般都会新起一行，然后写代码
+        所以 line 这个参数暂时用不到
+        &quot;&quot;&quot;
+        print(f&quot;line: \n{line}&quot;)
+        print(&quot;-----------------&quot;)
+        print(f&quot;cell: \n{cell}&quot;)
+
+
+# 必须定义 load_ipython_extension 函数
+# %load_ext 本质上也是加载一个模块，但它会自动调用该函数
+def load_ipython_extension(ip):
+    # 在函数内部，我们将类 MagicOrder 注册进去
+    # 然后就可以使用它内部的魔法命令了
+    ip.register_magics(MagicOrder)
+
+# 如果不定义此函数，那么使用 %load_ext 加载时会报错
+# The xxx module is not an IPython extension.
+</code></pre>
+<p>当前模块叫 main.py，我们来测试一下：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>结果没有问题，但说实话对于 %% 开头的命令来说，我们很少会在它后面写代码，基本都是新起一行，就像下面这个样子。</p>
+<p><img src="./3.png" alt="" /></p>
+<p>自定义命令我们已经实现了，并且也知道怎么获取输入的代码了，下面要做的就是执行它。而将字符串当成代码执行，我们可以使用内置函数 exec。</p>
+<pre><code class="language-python">@magics_class
+class MagicOrder(Magics):
+
+    @line_magic
+    def hello(self, line):
+        exec(line)
+
+    @cell_magic
+    def world(self, line, cell):
+        exec(cell)
+</code></pre>
+<p>代码的其它部分不变，然后你觉得接下来调用魔法命令会执行成功吗？我们测试一下。注意：要重启内核。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>神奇的地方出现了，虽然命令执行成功了，但执行完之后，告诉我们变量未定义。其实原因很好想，我们调用 exec 的时候没有指定名字空间，那么默认会影响 exec 函数所在的名字空间，即 hello 和 world 函数的名字空间。</p>
+<p>当打开一个 jupyter 的时候，内部相当于启动了一个 shell，所以在调用 exec 的时候，应该将整个 shell 的名字空间传进去。</p>
+<pre><code class="language-python">from IPython.core.magic import (
+    magics_class,
+    Magics,
+    line_magic,
+    cell_magic,
+    needs_local_scope
+)
+
+
+@magics_class
+class MagicOrder(Magics):
+
+    @line_magic
+    def hello(self, line):
+        # 通过 self.shell.user_ns，可以拿到当前 shell 的名字空间
+        # 注意：包含所有的单元格
+        local_ns = self.shell.user_ns
+        # 在 local_ns 当中执行代码
+        exec(line, local_ns, local_ns)
+
+    @needs_local_scope
+    @cell_magic
+    def world(self, line, cell, local_ns):
+        # 或者通过 needs_local_scope 装饰器
+        # 这样在调用函数的时候，会额外传递一个 local_ns 参数
+        # 该参数和 self.shell.user_ns 等价
+        exec(cell, local_ns, local_ns)
+
+def load_ipython_extension(ip):
+    ip.register_magics(MagicOrder)
+</code></pre>
+<p>然后再来测试一下：</p>
+<p><img src="./5.png" alt="" /></p>
+<p>此时就没有任何问题了。</p>
+<p>下面我们模仿 jupyter 的 %time 命令，实现一个 %my_time，来加深一遍印象。</p>
+<pre><code class="language-python">@magics_class
+class MagicOrder(Magics):
+
+    @needs_local_scope
+    @line_magic
+    def my_time(self, line, local_ns):
+        start = time.perf_counter()
+        exec(line, local_ns, local_ns)
+        end = time.perf_counter()
+        print(f&quot;总耗时: {round(end - start, 3)}&quot;)
+</code></pre>
+<p>测试一下：</p>
+<p><img src="./6.png" alt="" /></p>
+<p>结果没有问题，是我们想要的结果。</p>
+<p>最后再来看看如何设置可选参数，举一个 Cython 的例子：</p>
+<p><img src="./7.png" alt="" /></p>
+<p>我们说对于以 %% 开头的命令，应该新起一行，在它的下面写代码。而之所以新起一行，是因为命令所在的行，要用于设置可选参数。那么问题来了，如何设置指定的可选参数呢？</p>
+<pre><code class="language-python">from IPython.core.magic import (
+    magics_class,
+    Magics,
+    cell_magic,
+    needs_local_scope
+)
+from IPython.core import magic_arguments
+
+
+@magics_class
+class MagicOrder(Magics):
+    @magic_arguments.magic_arguments()
+    # 在 jupyter 中可以通过 -n=xxx 或者 --name=xxx
+    # 然后是 dest=&quot;name&quot;，用于指定参数的名字
+    # 后续便可以通过 name 字段来获取该参数的值
+    @magic_arguments.argument(
+        &quot;-n&quot;, &quot;--name&quot;, dest=&quot;name&quot;, default=&quot;satori&quot;
+    )
+    # &quot;-&quot; 和 &quot;--&quot; 可以只出现一个，并且默认解析得到的是字符串
+    # 而 age 我们希望是整数，所以指定 type 为 int
+    # 解析完参数之后，会自动调用 int 进行转化
+    # 如果不指定该参数，则使用 default
+    # 而这里没有 default，那么结果就是 None
+    @magic_arguments.argument(
+        &quot;--age&quot;, dest=&quot;age&quot;, type=int
+    )
+    @magic_arguments.argument(
+        &quot;-h&quot;, &quot;--hobby&quot;, dest=&quot;hobby&quot;, default=[],
+        action=&quot;append&quot;
+    )
+    @needs_local_scope
+    @cell_magic
+    def order(self, line, cell, local_ns):
+        # 显然 line 就是可选参数，cell 就是代码块
+        exec(cell, local_ns, local_ns)
+        # 解析参数
+        args = magic_arguments.parse_argstring(self.order, line)
+        # 打印
+        print(args)
+
+
+def load_ipython_extension(ip):
+    ip.register_magics(MagicOrder)
+</code></pre>
+<p>我们测试一下：</p>
+<p><img src="./8.png" alt="" /></p>
+<p>还是很简单的，而且这里的参数解析和 argparse 模块非常类似，可以自己看一下。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../轻松绘制动态条形图/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../轻松绘制动态条形图/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
