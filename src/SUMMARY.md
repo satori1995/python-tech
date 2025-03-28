@@ -28,3 +28,4 @@
 + [详解新一代 HTTP 请求库：httpx](./详解新一代%20HTTP%20请求库：httpx/doc.md)
 + [通过 contextlib 模块详细复习一下 with 语句的用法](./通过%20contextlib%20模块详细复习一下%20with%20语句的用法/doc.md)
 + [使用 collections 模块扩展你的数据类](./使用%20collections%20模块扩展你的数据类/doc.md)
++ [使用 unicodedata 模块对字符串标准化](./使用%20unicodedata%20模块对字符串标准化/doc.md)
