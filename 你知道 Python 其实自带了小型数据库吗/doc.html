@@ -1,0 +1,401 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>你知道 Python 其实自带了小型数据库吗 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html">通过 contextlib 模块详细复习一下 with 语句的用法</a></li><li class="chapter-item expanded "><a href="../使用 collections 模块扩展你的数据类/doc.html">使用 collections 模块扩展你的数据类</a></li><li class="chapter-item expanded "><a href="../使用 unicodedata 模块对字符串标准化/doc.html">使用 unicodedata 模块对字符串标准化</a></li><li class="chapter-item expanded "><a href="../使用 struct 模块打包、解包二进制数据/doc.html">使用 struct 模块打包、解包二进制数据</a></li><li class="chapter-item expanded "><a href="../使用 watchfiles 模块监控目录变更/doc.html">使用 watchfiles 模块监控目录变更</a></li><li class="chapter-item expanded "><a href="../读取照片的 Exif 信息/doc.html">读取照片的 Exif 信息</a></li><li class="chapter-item expanded "><a href="../模拟 TLS 指纹实现反反爬/doc.html">模拟 TLS 指纹实现反反爬</a></li><li class="chapter-item expanded "><a href="../生成词云/doc.html">生成词云</a></li><li class="chapter-item expanded "><a href="../你知道 Python 其实自带了小型数据库吗/doc.html" class="active">你知道 Python 其实自带了小型数据库吗</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="dbm"><a class="header" href="#dbm">dbm</a></h2>
+<p>DBM（DataBase Manager）是一种文件系统，专门用于键值对的存储，最初是在 Unix 平台实现，现在其它平台也可以用。对于 KV 模型，DBM 提供了一个轻量级、高效的存储解决方案。</p>
+<p>总的来说，DBM 具有如下特点：</p>
+<ul>
+<li>简单快速：非常简单易用，读取和写入操作都很快，适合存储少量数据。</li>
+<li>键值对存储：数据是以键值对形式存储的，你可以像操作 Python 字典一样。</li>
+<li>文件存储：数据存在具体的文件中，可以轻松地备份和转移。</li>
+<li>不支持复杂查询：如果需要执行复杂查询或需要关系型数据库的功能，DBM 可能不是一个好选择。</li>
+</ul>
+<p>而 Python 标准库提供了一个 dbm 模块，它实现了 DBM 文件系统的功能，来看一下它的用法。</p>
+<pre><code class="language-python">import dbm
+
+# 第一个参数是文件名
+# 第二个参数是模式，有以下几种
+#     r：只读，要求文件必须存在，默认就是这个模式
+#     w：可读可写，要求文件必须存在
+#     c：可读可写，文件不存在会创建，存在则追加
+#     n：可读可写，文件不存在会创建，存在则清空
+# 第三个参数是权限，用八进制数字表示，默认 0o666，即可读可写不可执行
+db = dbm.open(&quot;store&quot;, &quot;c&quot;)
+
+# 打开文件就可以存储值了，key 和 value 必须是字符串或 bytes 对象
+db[&quot;name&quot;] = &quot;S せんせい&quot;
+db[&quot;age&quot;] = &quot;18&quot;
+db[b&quot;corporation&quot;] = &quot;小摩&quot;.encode(&quot;utf-8&quot;)
+
+# 关闭文件，将内容写到磁盘上
+db.close()
+</code></pre>
+<p>非常简单，就像操作字典一样，并且 key 是唯一的，如果存在则替换。执行完后，当前目录会多出一个 store.db 文件。我们打开它，然后读取刚才写入的键值对。</p>
+<pre><code class="language-python">import dbm
+
+db = dbm.open(&quot;store&quot;, &quot;c&quot;)
+
+# 获取所有的 key，直接返回一个列表
+print(db.keys())
+&quot;&quot;&quot;
+[b'corporation', b'name', b'age']
+&quot;&quot;&quot;
+# 判断一个 key 是否存在，key 可以是字符串或 bytes 对象
+print(&quot;name&quot; in db, &quot;NAME&quot; in db)
+&quot;&quot;&quot;
+True False
+&quot;&quot;&quot;
+# 获取一个 key 对应的 value，得到的是 bytes 对象
+print(db[&quot;name&quot;].decode(&quot;utf-8&quot;))
+print(db[b&quot;corporation&quot;].decode(&quot;utf-8&quot;))
+&quot;&quot;&quot;
+S せんせい
+小摩
+&quot;&quot;&quot;
+# key 如果不存在，会抛出 KeyError，我们可以使用 get 方法
+print(db.get(&quot;NAME&quot;, b&quot;unknown&quot;))
+&quot;&quot;&quot;
+b'unknown'
+&quot;&quot;&quot;
+# 当然也可以使用 setdefault 方法，key 不存在时，自动写进去
+print(db.setdefault(&quot;gender&quot;, b&quot;female&quot;))
+&quot;&quot;&quot;
+b'female'
+&quot;&quot;&quot;
+print(db[&quot;gender&quot;])
+&quot;&quot;&quot;
+b'female'
+&quot;&quot;&quot;
+</code></pre>
+<p>非常简单，当你需要存储的数据量不适合放在内存中，但又没必要引入数据库，那么不妨试试使用 dbm 模块吧。</p>
+<p>当然啦，dbm 虽然很方便，但它只能持久化 bytes 对象，字符串也是转成 bytes 对象之后再存储的。所以除了 dbm 之外，还有一个标准库模块 shelve，它可以持久化任意对象。</p>
+<h2 id="shelve"><a class="header" href="#shelve">shelve</a></h2>
+<p>shelve 的使用方式和 dbm 几乎是一致的，区别就是 shelve 的序列化能力要更强，当然速度自然也就慢一些。</p>
+<pre><code class="language-python">import shelve
+
+# 第二个参数表示模式，默认是 c
+# 因此文件不存在会创建，存在则追加
+sh = shelve.open(&quot;shelve&quot;)
+
+sh[&quot;name&quot;] = [&quot;S 老师&quot;, &quot;高老师&quot;, &quot;电烤🐔架&quot;]
+sh[&quot;age&quot;] = {18}
+sh[&quot;job&quot;] = {&quot;tutu&quot;: &quot;大学生&quot;, &quot;xueer&quot;: &quot;医生&quot;}
+
+# 关闭文件，刷到磁盘中
+sh.close()
+</code></pre>
+<p>执行完之后，本地会多出一个 shelve.db 文件，下面来读取它。</p>
+<pre><code class="language-python">import shelve
+
+sh = shelve.open(&quot;shelve&quot;)
+
+print(sh[&quot;name&quot;])
+print(sh[&quot;name&quot;][2] == &quot;电烤🐔架&quot;)
+&quot;&quot;&quot;
+['S 老师', '高老师', '电烤🐔架']
+True
+&quot;&quot;&quot;
+print(sh[&quot;age&quot;])
+&quot;&quot;&quot;
+{18}
+&quot;&quot;&quot;
+print(sh[&quot;job&quot;])
+&quot;&quot;&quot;
+{'tutu': '大学生', 'xueer': '医生'}
+&quot;&quot;&quot;
+
+sh.close()
+</code></pre>
+<p>读取出来的就是原始的对象，我们可以直接操作它。然后自定义类的实例对象也是可以的。</p>
+<pre><code class="language-python">import shelve
+
+class People:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @property
+    def print_info(self):
+        return f&quot;name is {self.name}, age is {self.age}&quot;
+
+sh = shelve.open(&quot;shelve&quot;)
+
+p = People(&quot;群主&quot;, 58)
+# 将类、和该类的实例对象存储进去
+sh[&quot;People&quot;] = People
+sh[&quot;p&quot;] = p
+sh.close()
+</code></pre>
+<p>执行完之后，我们打开它。</p>
+<pre><code class="language-python">import shelve
+
+sh = shelve.open(&quot;shelve&quot;)
+
+# 需要注意的是，People 是我们自己定义的类
+# 如果你想要将其还原出来，那么该类必须要出现在当前的命名空间中
+try:
+    sh[&quot;People&quot;]
+except AttributeError as e:
+    print(e)
+    &quot;&quot;&quot;
+    Can't get attribute 'People' on &lt;module ...&gt;
+    &quot;&quot;&quot;
+
+class People:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    @property
+    def print_info(self):
+        return f&quot;name is {self.name}, age is {self.age}&quot;
+
+print(sh[&quot;People&quot;] is People)
+&quot;&quot;&quot;
+True
+&quot;&quot;&quot;
+print(sh[&quot;p&quot;].print_info)
+&quot;&quot;&quot;
+name is 群主, age is 58
+&quot;&quot;&quot;
+print(sh[&quot;People&quot;](&quot;群主&quot;, 38).print_info)
+&quot;&quot;&quot;
+name is 群主, age is 38
+&quot;&quot;&quot;
+</code></pre>
+<p>这就是 shelve 模块，非常强大，当然它底层也是基于 pickle 实现的。如果你不需要存储复杂的 Python 对象，只需要存储字符串的话，那么还是推荐 dbm。</p>
+<p>然后在使用 shelve 的时候，需要注意里面的一个坑。</p>
+<pre><code class="language-python">import shelve
+
+# 打开文件，设置键值对
+sh = shelve.open(&quot;shelve&quot;)
+sh[&quot;name&quot;] = &quot;古明地觉&quot;
+sh[&quot;score&quot;] = [80, 80, 80]
+sh.close()
+
+# 重新打开文件，修改键值对
+sh = shelve.open(&quot;shelve&quot;)
+sh[&quot;name&quot;] = &quot;芙兰朵露&quot;
+sh[&quot;score&quot;].append(90)
+sh.close()
+
+# 再次重新打开文件，查看键值对
+sh = shelve.open(&quot;shelve&quot;)
+print(sh[&quot;name&quot;])
+print(sh[&quot;score&quot;])
+&quot;&quot;&quot;
+芙兰朵露
+[80, 80, 80]
+&quot;&quot;&quot;
+sh.close()
+</code></pre>
+<p>第一次打开文件创建两个键值对，第二次打开文件将键值对修改，第三次打开文件查看键值对。但是我们发现 sh[&quot;name&quot;] 变了，而 sh[&quot;score&quot;] 却没变，这是什么原因？</p>
+<p>当我们修改 name 时，采用的是直接赋值的方式，会将原本内存里的值给替换掉。而修改 score 时，是在原有值的基础上做 append 操作，它的内存地址并没有变。所以可变对象在本地进行修改，shelve 默认是不会记录的，除非创建新的对象，并把原有的对象给替换掉。所以sh[&quot;score&quot;].append(90) 之后，sh[&quot;score&quot;] 仍是 [80, 80, 80]，而不是 [80, 80, 80, 90]。</p>
+<p>因为 shelve 没有记录对象自身的修改，如果想得到期望的结果，一种方法是把对象整体换掉。也就是让 sh[&quot;score&quot;] = [80, 80, 80, 90]，这样等于是创建了一个新的对象并重新赋值，是可行的。</p>
+<p>或者你在打开文件的时候，多指定一个参数 writeback。</p>
+<pre><code class="language-python">import shelve
+
+# 打开文件，设置键值对
+sh = shelve.open(&quot;shelve&quot;)
+sh[&quot;name&quot;] = &quot;古明地觉&quot;
+sh[&quot;score&quot;] = [80, 80, 80]
+sh.close()
+
+# 重新打开文件，修改键值对
+sh = shelve.open(&quot;shelve&quot;, writeback=True)
+sh[&quot;name&quot;] = &quot;芙兰朵露&quot;
+sh[&quot;score&quot;].append(90)
+sh.close()
+
+# 再次重新打开文件，查看键值对
+sh = shelve.open(&quot;shelve&quot;)
+print(sh[&quot;name&quot;])
+print(sh[&quot;score&quot;])
+&quot;&quot;&quot;
+芙兰朵露
+[80, 80, 80, 90]
+&quot;&quot;&quot;
+sh.close()
+</code></pre>
+<p>可以看到都发生改变了，但这个参数会导致额外的内存消耗。当指定 writeback=True 的时候，shelve 会将读取的对象都放到一个内存缓存当中。比如我们操作了 20 个持久化的对象，但只修改了一个，剩余的 19 个只是查看并没有做修改，但当 sh.close() 的时候，会将这 20 个对象都写回去。</p>
+<p>因为 shelve 不知道你会对哪个对象做修改，所以不管你是查看还是修改，都会放到缓存当中，然后再一次性都写回去。这样就会造成两点影响：</p>
+<ul>
+<li>shelve 会把我们使用的对象放到内存的另一片空间中，等于是额外拷贝了一份。</li>
+<li>虽然操作了 N 个对象，但只修改了 1 个，而 shelve 会把 N 个对象都重新写回去，从而造成性能上的问题，导致效率降低。</li>
+</ul>
+<p>因此加不加这个参数，由具体情况决定。</p>
+<p>综上所述，Python 算是自带了小型数据库，看看能不能在合适的场景中把它用上。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../生成词云/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../生成词云/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
