@@ -1,0 +1,417 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>聊一聊 Python 的换行以及转义 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html">通过 contextlib 模块详细复习一下 with 语句的用法</a></li><li class="chapter-item expanded "><a href="../使用 collections 模块扩展你的数据类/doc.html">使用 collections 模块扩展你的数据类</a></li><li class="chapter-item expanded "><a href="../使用 unicodedata 模块对字符串标准化/doc.html">使用 unicodedata 模块对字符串标准化</a></li><li class="chapter-item expanded "><a href="../使用 struct 模块打包、解包二进制数据/doc.html">使用 struct 模块打包、解包二进制数据</a></li><li class="chapter-item expanded "><a href="../使用 watchfiles 模块监控目录变更/doc.html">使用 watchfiles 模块监控目录变更</a></li><li class="chapter-item expanded "><a href="../读取照片的 Exif 信息/doc.html">读取照片的 Exif 信息</a></li><li class="chapter-item expanded "><a href="../模拟 TLS 指纹实现反反爬/doc.html">模拟 TLS 指纹实现反反爬</a></li><li class="chapter-item expanded "><a href="../生成词云/doc.html">生成词云</a></li><li class="chapter-item expanded "><a href="../你知道 Python 其实自带了小型数据库吗/doc.html">你知道 Python 其实自带了小型数据库吗</a></li><li class="chapter-item expanded "><a href="../聊一聊 Python 的换行以及转义/doc.html" class="active">聊一聊 Python 的换行以及转义</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>Python 里面可以通过换行来标识一行语句的结束，当你在一行的末尾敲击 Enter 键时，便可开始新的一行语句。</p>
+<pre><code class="language-python">name = &quot;高老师&quot;
+print(name)  # 高老师
+</code></pre>
+<p>这段代码很简单，因为 <code>name = &quot;高老师&quot;</code> 后面已经没有内容了，是一个换行，那么就代表这个语句结束了。但是在 Python 中我们还可以指定分号，表示该语句结束了。</p>
+<pre><code class="language-python">name = &quot;高老师&quot;; print(name); age = 18; print(age)
+&quot;&quot;&quot;
+高老师
+18
+&quot;&quot;&quot;
+</code></pre>
+<p>可以看到当我们在 <code>name = &quot;高老师&quot;</code> 后面指定了分号之后，就代表该语句结束了。但是 Python 的语法解析并不会直接跳到下一行，而是继续向后寻找，即便当中出现了空格。由于都在一行，所以解释器会找到 print(name)，然后继续向后寻找。尽管这么做是可以的，但不推荐这种写法，这种写法纯属在恶作剧，当然我们这里演示就不算了。</p>
+<p>再比如 if 语句，有时候会出现写在一行的情况。</p>
+<pre><code class="language-python">a = 123
+if a &gt; 100: print(&quot;a &gt; 100&quot;); print(&quot;两个 print 具有相同的缩进&quot;)
+&quot;&quot;&quot;
+a &gt; 100
+两个 print 具有相同的缩进
+&quot;&quot;&quot;
+</code></pre>
+<p>如果 if 语句写在了一行，那么语句块的代码就应该只有一句，像我们这里的两个 print 就不应该写在同一行。并且这两个 print 的缩进层级是一样的，即：</p>
+<pre><code class="language-python">a = 123
+
+if a &gt; 100: print(&quot;a &gt; 100&quot;); print(&quot;两个 print 具有相同的缩进&quot;)
+# 等价于
+if a &gt; 100:
+    print(&quot;a &gt; 100&quot;)
+    print(&quot;两个 print 具有相同的缩进&quot;)
+</code></pre>
+<p>关于 Python 中的语句，根据交互式界面的表现形式我们可以分为两种：</p>
+<p><img src="./1.png" alt="" /></p>
+<p>我们看到当输入 num = 123 按下回车的时候，下一行的开始出现的是 &gt;&gt;&gt;，这表示上一行语句已经结束了。但是当输入 <code>if num &gt; 100:</code> 按下回车的时候，下一行出现的是 ...，这表示这行语句还没有结束。</p>
+<p>像 <code>if xx:</code>，<code>for xx:</code>，<code>while xx:</code>，<code>def xx():</code>，<code>class xx:</code> 等等这样带有 <strong>:</strong> 的语句，一般是需要多行来表达的，一旦按下回车，就意味着下面肯定还有内容，而且还会带有缩进，在交互式界面中就会出现 <strong>...</strong>。而这样的语句我们在一行中只能出现一次，比如：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>这样写是无法通过语法检测的，因为当中出现了两个 <strong>:</strong>，我们说这样的语句一行只能出现一次。当然肯定也不会有人这么做，所以这些知道就好。</p>
+<p><strong>说完了换行，我们再来聊一聊反斜杠。</strong></p>
+<p>如果一行代码比较长，我们需要分开多行来写该怎么办呢？答案是使用反斜杠 \，反斜杠在 Python 中表示转义。</p>
+<pre><code class="language-python">a = \
+    123456
+# \ 表示转义，意思就是使后面的换行符失去效果
+# 这样 Python 就不会认为这条语句结束了
+# 因为 123456 前面还有一些空格，因此等价于 a =     123456
+
+a = \
+123456
+# 这行代码就等价于 a = 123456 了
+</code></pre>
+<p>再比如字符串：</p>
+<pre><code class="language-python">s = &quot;这是一段很&quot;   &quot;长的字符串&quot;  &quot;具体有多长我也不知道&quot;
+print(s)  # 这是一段很长的字符串具体有多长我也不知道
+</code></pre>
+<p>Python 的字符串比较特别的是，不需要显式的使用加号。如果使用了加号，像这段代码就会先创建 3 个字符串，然后再拼接在一起。如果不使用加号，那么 Python 在语法解析的时候就会知道这是一个字符串，只不过分开写了。</p>
+<pre><code class="language-python">s = &quot;这是一段很&quot; \
+    &quot;长的字符串&quot; \
+    &quot;具体有多长我也不知道&quot;
+</code></pre>
+<p>当然我们也可以分开写，但是要使用 \ 将换行符转义掉。但是下面的做法则不行：</p>
+<p><img src="./3.png" alt="" /></p>
+<p>如果把 <strong>\</strong> 改成 <strong>+</strong> 号就不行了，这个在 Go 里面可以，但是不同语言的语法检测不一样。因为 <strong>+</strong> 后面没有内容了，直接换行语句结束，那么这是无法通过语法检测的，所以 <strong>+</strong> 后面出现了红色波浪线。而且我们看到第三行字符串两边也出现了红色波浪线，这是缩进不对造成的，因为上面的语句已经结束，所以这是一条单独的语句，应该靠左对齐。这里显然没有对齐，而是出现了缩进。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>这样写是可以的，此时就等价于<code>&quot;这是一段很长的字符串&quot; + &quot;具体有多长我也不知道&quot;</code>。</p>
+<p>但是还有一个特殊情况，那就是出现了括号。</p>
+<p><img src="./5.png" alt="" /></p>
+<p>这样写也是没有问题的，因为 Python 在检测代码的时候发现了小括号的左半部分，那么即便出现了换行，Python 也不会认为语句结束了。只有当再找到小括号的右半部分，Python 才会认为语句结束，所以此时我们是不需要 <strong>\</strong> 的。</p>
+<p>再来看几个需要动点脑筋的：</p>
+<pre><code class="language-python">s = &quot;这是一段很&quot;
+&quot;长的字符串&quot;
+&quot;具体有多长我也不知道&quot;
+print(s)
+# 会打印什么呢？
+</code></pre>
+<p>只会打印<code>这是一段很</code>，因为遇到换行符语句结束了，下面两行只是创建两个字符串对象，而且还没有赋值，因此创建完之后就被销毁了。</p>
+<pre><code class="language-python">s = &quot;这是一段很&quot; \
+    &quot;长的字符串&quot;; \
+    &quot;具体有多长我也不知道&quot;
+print(s)
+# 会打印什么呢？注意第二行出现了;
+</code></pre>
+<p>会打印<code>这是一段很长的字符串</code>，因为我们手动指定了 <code>;</code>，表示结束这段语句。后面出现的<code>&quot;具体有多长我也不知道&quot;</code>只是创建了一个字符串对象，没有赋值，创建完毕直接销毁。</p>
+<p>因此上面的代码就等价于：</p>
+<pre><code class="language-python">s = &quot;这是一段很长的字符串&quot;; &quot;具体有多长我也不知道&quot;
+
+# 或者等价于
+
+s = &quot;这是一段很长的字符串&quot;
+&quot;具体有多长我也不知道&quot;
+</code></pre>
+<p>要是我们将第二行结尾的 <strong>\</strong> 给去掉，会怎么样？</p>
+<p><img src="./6.png" alt="" /></p>
+<p>可以看到如果把第二行的 <strong>\</strong> 去掉了，这里又出现了红色波浪线，这个问题我们上面说过了。因为第二行出现了 <strong>;</strong>，那么第三行就是单独的语句，所以应该要靠在左边。</p>
+<p><img src="./7.png" alt="" /></p>
+<p>这样写是没问题的，但第三行还是如我们之前所说，只是创建了一个字符串对象。</p>
+<hr />
+<p>再来说说 Python 的转义，这也是一个老生常谈的问题了，它是通过反斜杠来实现的。但 <strong>\</strong> 有两个作用：</p>
+<ul>
+<li>和一些特定的字符组合，从而具备特殊意义（\n, \t, \r 等等）</li>
+<li>使 Python 的一些本来就具有特殊意义的字符失去其意义。</li>
+</ul>
+<pre><code class="language-python">s = &quot;my name is \nVan&quot;
+print(s)
+&quot;&quot;&quot;
+my name is 
+Van
+&quot;&quot;&quot;
+
+s = &quot;my name is \&quot;Van&quot;
+print(s)
+&quot;&quot;&quot;
+my name is &quot;Van
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到 <code>\</code> 和字符 <code>n</code> 组合，整体形成了换行。而 <code>\</code> 和 <code>&quot;</code> 组合则并不是变成新的什么东西，而是使 <code>&quot;</code> 失去其本来的意义。因为遇到 <code>&quot;</code> 表示字符串结束了，但是前面出现了 <code>\</code>，使得 <code>&quot;</code> 失去了其具有的意义，遇到下一个 <code>&quot;</code> 才表示字符串结束。而中间那个 <code>&quot;</code> 则是正常输出了出来，但是 <code>\</code> 却不见了，因为 <code>\</code> 和 <code>&quot;</code> 组合就等于 <code>&quot;</code>。</p>
+<p>说到这儿，再补充一下 Python 字符串的几种表示方式：</p>
+<pre><code class="language-python">print(hex(97), hex(98), hex(99))
+&quot;&quot;&quot;
+0x61 0x62 0x63
+&quot;&quot;&quot;
+# 在字符串中，每个字符还可以使用 \x 加两个 16 进制数字表示
+print(&quot;\x61\x62\x63&quot;)
+&quot;&quot;&quot;
+abc
+&quot;&quot;&quot;
+# 或者使用 \ 加上三个 8 进制数字表示
+print(oct(97), oct(98), oct(99))
+&quot;&quot;&quot;
+0o141 0o142 0o143
+&quot;&quot;&quot;
+print(&quot;\141\142\143&quot;)
+&quot;&quot;&quot;
+abc
+&quot;&quot;&quot;
+
+# 不过上面只能表示 ASCII 字符串，因为一个汉字占三个字节
+# 所以当包含一个字节无法表示的字符时，解析就会出现乱码
+print(&quot;\xe9\xab\x98\xe8\x80\x81\xe5\xb8\x88&quot;)
+&quot;&quot;&quot;
+é«èå¸
+&quot;&quot;&quot;
+print(b&quot;\xe9\xab\x98\xe8\x80\x81\xe5\xb8\x88&quot;.decode(&quot;utf-8&quot;))
+&quot;&quot;&quot;
+高老师
+&quot;&quot;&quot;
+</code></pre>
+<p>当然，在 Python 里面每个字符还可以使用 \u 或者 \U 来表示。</p>
+<pre><code class="language-python"># \u 表示 unicode，后面跟 4 个十六进制数表示的 unicode 码点
+print(hex(97), hex(98), hex(99))
+&quot;&quot;&quot;
+0x61 0x62 0x63
+&quot;&quot;&quot;
+print(&quot;\u0061 \u0062 \u0063&quot;)
+&quot;&quot;&quot;
+a b c
+&quot;&quot;&quot;
+
+print(ord(&quot;高&quot;), ord(&quot;老&quot;), ord(&quot;师&quot;))
+&quot;&quot;&quot;
+39640 32769 24072
+&quot;&quot;&quot;
+print(hex(39640), hex(32769), hex(24072))
+&quot;&quot;&quot;
+0x9ad8 0x8001 0x5e08
+&quot;&quot;&quot;
+print(&quot;\u9ad8 \u8001 \u5e08&quot;)
+&quot;&quot;&quot;
+高 老 师
+&quot;&quot;&quot;
+
+# 如果是 emoji，它的码点超出了 FFFF
+# 此时 4 个 16 进制数无法表示，因此需要 8 个十六进制数
+print(hex(ord(&quot;🤣&quot;)), hex(ord(&quot;🤡&quot;)))
+&quot;&quot;&quot;
+0x1f923 0x1f921
+&quot;&quot;&quot;
+# 如果是 4 个十六进制数，那么可以使用 \u 或者 \U
+# 如果是 8 个十六进制数，那么只能使用 \U
+print(f&quot;\U0001f923 -&gt; \U0001f921&quot;)
+&quot;&quot;&quot;
+🤣 -&gt; 🤡
+&quot;&quot;&quot;
+</code></pre>
+<p>还是蛮有趣的，Python 字符串的表示方式还挺丰富。</p>
+<hr />
+<p>最后是Python 的 r 前缀，如果字符串的开头出现了 r，会是什么情况呢？</p>
+<pre><code class="language-python">s1 = &quot;my name is \nVan&quot;
+s2 = r&quot;my name is \nVan&quot;
+print(s1)
+&quot;&quot;&quot;
+my name is 
+Van
+&quot;&quot;&quot;
+print(s2)
+&quot;&quot;&quot;
+my name is \nVan
+&quot;&quot;&quot;
+</code></pre>
+<p>如果是 <strong>r&quot;&quot;</strong> 这种形式，表示的是这个字符串是原生的，这里的 r 表示 raw。里面出现的任何东西都当成普通字符串，什么 \n 啊，\t 啊，就是普通的字符串。但是我们说过，<strong>\</strong> 具有两个作用：</p>
+<ul>
+<li>和某些特殊字符组合，从而具备一些特殊意义</li>
+<li>使得某些本来就具有特殊意义的字符，失去其意义</li>
+</ul>
+<p>而 <strong>r&quot;&quot;</strong> 这种形式，只会限制 <strong>\</strong> 的第一个作用，却不会限制其第二个作用。</p>
+<p><img src="./8.png" alt="" /></p>
+<p>我们看到即使加上了前缀 r，第一行语句还是不合法的，因为 <strong>&quot;</strong> 表示字符串的边界，即使加上了 r，对于 <strong>&quot;</strong> 依旧是无能为力的，这时候还是需要 <strong>\</strong> 进行转义。</p>
+<pre><code class="language-python">s1 = &quot;my name is \&quot;Van&quot;
+s2 = r&quot;my name is \&quot;Van&quot;
+print(s1)
+print(s2)
+&quot;&quot;&quot;
+my name is &quot;Van
+my name is \&quot;Van
+&quot;&quot;&quot;
+</code></pre>
+<p>然后我们又观察到了一个奇特的现象，当不加 r 的时候，<strong>\&quot;</strong> 就表示 <strong>&quot;</strong>，而加上了 r，<strong>\&quot;</strong> 则表示 <strong>\&quot;</strong>，因为 r 表示原生的，<strong>\</strong> 会原原本本的输出出来。但我们说了，r 不会限制 <strong>\</strong> 的第二个作用，所以 <strong>\</strong> 不仅输出了出来，还使得 <strong>&quot;</strong> 失去了其原本的意义。</p>
+<p>最后引出 Python 中一个比较让人费解的问题，估计已经有人猜到了，那就是字符串结尾出现了 <strong>\</strong>。</p>
+<p><img src="./9.png" alt="" /></p>
+<p>两行代码都是不合法的。</p>
+<p>第一行代码不合法是因为右边的 <strong>&quot;</strong> 表示字符串的结尾，现在我们使用 <strong>\</strong> 让其失去了本来的意义，而后面又是空行导致相当于写了一半的语句结束了，所以不合法能够理解。第二行同样不合法，因为 r 限制不了 <strong>\</strong> 的第二个作用，也就是第二行的 <strong>\</strong> 依旧会使得 <strong>&quot;</strong> 失去其意义，导致同样是写了一半的语句强行结束了。因此解决办法就是再来一个 <strong>\</strong>，形成 <strong>\\</strong>。</p>
+<pre><code class="language-python">s1 = &quot;my name is Van\\&quot;
+s2 = r&quot;my name is Van\\&quot;
+print(s1)
+print(s2)
+&quot;&quot;&quot;
+my name is Van\
+my name is Van\\
+&quot;&quot;&quot;
+</code></pre>
+<p>第二行代码的输出多了一个 <strong>\</strong>，因为不加 r 的话，<strong>\\</strong> 等价于 <strong>\</strong>，因为第一个 <strong>\</strong> 在使第二个 <strong>\</strong> 失去意义的时候，其使命也就结束了，因此只会输出一个 <strong>\</strong>。</p>
+<p>但是对于有 r 前缀的字符串来说，<strong>\</strong> 就表示普通的字符，所以是什么就输出什么，只不过即便它是普通字符，依旧具备第二个功能。因此对于第二行有前缀 r 的字符串来说，第一个 <strong>\</strong> 不仅让第二个 <strong>\</strong> 失去了意义，使得它不能再干扰结尾的 <strong>&quot;</strong>，而且两个 <strong>\</strong> 都会原本的输出出来。</p>
+<p>如果 \ 出现在其他位置呢？</p>
+<pre><code class="language-python">s1 = &quot;my nam\e is Van&quot;
+s2 = r&quot;my nam\e is Van&quot;
+print(s1)
+print(s2)
+&quot;&quot;&quot;
+my nam\e is Van
+my nam\e is Van
+&quot;&quot;&quot;
+</code></pre>
+<p>输出是一样的，因为 <strong>\</strong> 和字符 <strong>e</strong> 无法形成具有特殊意义的字符，而且 <strong>e</strong> 也是一个普通的字符，不具备什么特殊意义。所以对于 s1 来说，就直接把 <strong>\</strong> 完整的输出了，但是不推荐这种写法。</p>
+<p>对于 s1 来说，应该指定两个 <strong>\</strong>。如果就只想写一个 <strong>\</strong> 的话，那么应该指定前缀 r，所以 s2 是没问题的。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../你知道 Python 其实自带了小型数据库吗/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../你知道 Python 其实自带了小型数据库吗/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
