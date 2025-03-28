@@ -23,3 +23,4 @@
 + [使用 urllib.parse 模块优雅地处理 URL](./使用%20urllib.parse%20模块优雅地处理%20URL/doc.md)
 + [Python 实现复制粘贴](./Python%20实现复制粘贴/doc.md)
 + [Python 生成、解析二维码](./Python%20生成、解析二维码/doc.md)
++ [解密 __getattr__ 和 __getattribute__ 的用法与区别](./解密%20__getattr__ 和%20__getattribute__ 的用法与区别/doc.md)
