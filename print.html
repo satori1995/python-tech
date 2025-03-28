@@ -11303,7 +11303,7 @@ my name is &quot;Van
 my name is \&quot;Van
 &quot;&quot;&quot;
 </code></pre>
-<p>然后我们又观察到了一个奇特的现象，当不加 r 的时候，<strong>\&quot;</strong> 就表示 <strong>&quot;</strong>，而加上了 r，<strong>\&quot;</strong> 则表示 <strong>\&quot;</strong>，因为 r 表示原生的，<strong>\</strong> 会原原本本的输出出来。但我们说了，r 不会限制 <strong>\</strong> 的第二个作用，所以 <strong>\</strong> 不仅输出了出来，还使得 <strong>&quot;</strong> 失去了其原本的意义。</p>
+<p>然后我们又观察到了一个奇特的现象，当不加 r 的时候，<strong>\&quot;</strong> 会表示 <strong>&quot;</strong>，而加上了 r，<strong>\&quot;</strong> 则表示 <strong>\&quot;</strong>，因为 r 表示原生的，<strong>\</strong> 会原原本本的输出出来。但我们说了，r 不会限制 <strong>\</strong> 的第二个作用，所以 <strong>\</strong> 不仅输出了出来，还使得 <strong>&quot;</strong> 失去了其原本的意义。</p>
 <p>最后引出 Python 中一个比较让人费解的问题，估计已经有人猜到了，那就是字符串结尾出现了 <strong>\</strong>。</p>
 <p><img src="%E8%81%8A%E4%B8%80%E8%81%8A%20Python%20%E7%9A%84%E6%8D%A2%E8%A1%8C%E4%BB%A5%E5%8F%8A%E8%BD%AC%E4%B9%89/./9.png" alt="" /></p>
 <p>两行代码都是不合法的。</p>
