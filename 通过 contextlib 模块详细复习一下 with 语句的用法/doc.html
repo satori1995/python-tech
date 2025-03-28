@@ -1,0 +1,605 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>通过 contextlib 模块详细复习一下 with 语句的用法 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html" class="active">通过 contextlib 模块详细复习一下 with 语句的用法</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="楔子"><a class="header" href="#楔子">楔子</a></h2>
+<p>本篇文章来聊一下 Python 的 with 语句，它用于实现上下文管理器。我们使用 with 语句最多的场景，应该就是操作文件了，比如打开一个文件的时候会通过类似于 <font color="blue">with open() as f:</font> 这种形式打开，而这么做好处就是当 with 语句结束后会自动关闭文件。</p>
+<p>那么 with 语句的原理是什么呢？我们怎么样才能使用 with 语句呢？这次就全方位地剖析一下。并且 Python 的标准库里面有一个模块叫做 contextlib，从名字上也能看出来这是一个用于上下文管理的模块。我们后面也会通过分析 contextlib 的源码，来手动实现一下 contextlib 的功能。</p>
+<h2 id="上下文管理器-api"><a class="header" href="#上下文管理器-api">上下文管理器 API</a></h2>
+<p>上下文管理器（context manager）负责管理一个代码块的资源，会在进入代码块时创建资源，在退出代码块时清理资源。比如文件就支持上下文管理器 API，可以确保文件读写后自动关闭。</p>
+<p><strong>我们来模拟一下文件的读取：</strong></p>
+<pre><code class="language-python">class Open:
+
+    def __init__(self, filename, mode='r', encoding=None):
+        self.filename = filename
+        self.mode = mode
+        self.encoding = encoding
+
+    def __enter__(self):
+        print(&quot;开始执行 __enter__&quot;)
+        return self
+
+    def read(self):
+        print(f&quot;以 `{self.mode}` 模式打开文件 `{self.filename}`&quot;)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(&quot;最后执行 __exit__，用于清理资源&quot;)
+
+
+with Open(&quot;1.txt&quot;) as f:
+    f.read()
+&quot;&quot;&quot;
+开始执行 __enter__
+以 `r` 模式打开文件 `1.txt`
+最后执行 __exit__，用于清理资源
+&quot;&quot;&quot;
+</code></pre>
+<p>with Open() as f: 的整个流程就是先实例化一个 Open 对象，然后通过实例对象来调用 __enter__ 方法，将其返回值赋给 with 语句中的 f，接着执行 with 语句块内的代码，最后执行 __exit__ 方法。</p>
+<p>因此需要注意：with Open() as f 里面的 f，不一定是 Open 的实例对象，它到底是什么，取决于 __enter__ 方法返回了什么。</p>
+<pre><code class="language-python">class Open:
+
+    def __enter__(self):
+        return &quot;古明地觉&quot;
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
+# 如果是 f = Open(), 那么毫无疑问 f 就是类 Open 的实例对象
+# 但是对于 with Open() as f 而言，则不一样
+# 我们说这个 f 到底是什么, 它取决于 __enter__ 中返回了什么
+with Open() as f:
+    print(f)
+&quot;&quot;&quot;
+古明地觉
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到 print(f) 打印的是一个字符串，这是因为 __enter__ 返回的就是一个字符串。首先 with Open() as f: 这一行代码所做的事情就是先实例化一个 Open 对象，虽然这个实例对象我们无法用变量进行接收，但它确实存在。然后该实例对象再调用 __enter__，将 __enter__ 的返回值赋给 f，所以在 with 代码块中打印 f 得到的是一个字符串。</p>
+<p>因此要记住：f 是由 __enter__ 的返回值决定的，只不过大多数情况下，__enter__ 里面返回的都是 self 本身，所以 f 指向的也是该类的实例对象。</p>
+<p><strong>当然，我们先实例化一个对象，再使用 with 也是可以的。</strong></p>
+<pre><code class="language-python">class Open:
+
+    def __enter__(self):
+        return &quot;古明地觉&quot;
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
+o = Open()
+# 会将 o.__enter__() 赋值给 f
+with o as f:
+    print(f&quot;{f}, 世界第一可爱&quot;)
+&quot;&quot;&quot;
+古明地觉, 世界第一可爱
+&quot;&quot;&quot;
+
+# with Open() as f: 相当于将实例化和调用 __enter__ 放在一起执行
+# 但也可以先实例化，然后对实例对象单独使用 with 语句
+# 比如 with o as f:, 那么会执行 o.__enter__(), 将其返回值赋值给 f
+# 当 with 语句结束，再通过实例对象 o 来调用 __exit__，进行资源的释放等操作
+
+# 当然 with 也可以不搭配 as，即独立存在
+with o:
+    pass
+</code></pre>
+<p>因此 with 语句的流程我们就很清晰了，以 with A() as a: 为例，总共分为三步：</p>
+<ul>
+<li>创建 A 的实例对象，然后调用 __enter__ 方法，将其返回值交给 a；</li>
+<li>执行 with 语句块的代码；</li>
+<li>最后由该实例对象再调用 __exit__ 进行一些收尾工作；</li>
+</ul>
+<blockquote>
+<p>因此一个对象能否使用 with 语句，取决于实例化该对象的类（或者继承的基类）是否同时实现了 __enter__ 和 __exit__ 两个魔法函数，两者缺一不可。</p>
+</blockquote>
+<p>__enter__ 我们清楚了，然后再来看看 __exit__。我们看到它的参数除了 self 之外，还有三个参数，分别是 exc_type, exc_val, exc_tb。显然这三个参数分别是异常类型、异常值、异常的回溯栈， 从名字上也能看出来。</p>
+<pre><code class="language-python">class Open:
+
+    def __enter__(self):
+        return &quot;古明地觉&quot;
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(&quot;__exit__执行:&quot;)
+        print(exc_type)
+        print(exc_val)
+        print(exc_tb)
+        return True
+
+with Open() as f:
+    print(f)
+&quot;&quot;&quot;
+古明地觉
+__exit__执行:
+None
+None
+None
+&quot;&quot;&quot;
+# 我们看到 exc_type, exc_val, exc_tb 三者全部为 None
+# 因为它们是和异常有关的，而当前没有出现异常，所以为 None
+
+# 但如果出现异常了呢？
+with Open() as f:
+    print(f)
+    1 / 0
+    print(123)
+    print(456)
+    print(789)
+print(&quot;你猜我会被执行吗？&quot;)
+&quot;&quot;&quot;
+古明地觉
+__exit__执行:
+&lt;class 'ZeroDivisionError'&gt;
+division by zero
+&lt;traceback object at 0x0000024CD4E4C080&gt;
+你猜我会被执行吗？
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到在没有出现异常的时候，exc_type, exc_val, exc_tb 打印的值全部是 None。然而一旦 with 语句里面出现了异常，那么会立即执行 __exit__，并将异常的类型，异常的值，异常的回溯栈传入到 __exit__ 中。</p>
+<p>因此：当 with 语句正常结束之后会调用 __exit__，如果 with 语句里面出现了异常则会立即调用 __exit__。</p>
+<p>但是 __exit__ 方法返回了个 True 是什么意思呢？当 with 语句里面出现了异常，理论上是会报错的，但由于要执行 __exit__ 方法，所以相当于暂时把异常塞进了嘴里。如果 __exit__ 方法最后返回了一个布尔类型为 True 的值，那么会把塞进嘴里的异常吞下去，程序不报错正常执行。如果返回布尔类型为 False 的值，则会在执行完 __exit__ 方法之后再把异常吐出来，引发程序崩溃。</p>
+<p>这里我们返回了 True，因此程序正常执行，最后一句话被打印了出来。但是 1 / 0 这行代码后面的几个 print 却没有打印，为什么呢？</p>
+<p>因为我们说上下文管理执行是有顺序的：</p>
+<ul>
+<li>先实例化 Open 的实例对象，调用 __enter__ 方法，将返回值交给 f；</li>
+<li>执行 with 语句块的代码；</li>
+<li>最后调用 __exit__；</li>
+</ul>
+<p>只要 __exit__ 方法执行结束，那么这个 with 语句就算结束了。而 with 语句里面如果有异常，那么会立即进入 __exit__，因此异常下面的代码是无论如何都不会被执行的。</p>
+<p>但当 __exit__ 返回 True 时，整个 with 语句块下面的代码是不受影响的。</p>
+<blockquote>
+<p>另外，如果是 __enter__ 和 __exit__ 里面出现了异常，那么 with 语句肯定是会报错的。</p>
+</blockquote>
+<p>目前我们就把 with 语句说完了，下面进行 contextlib 的分析。contextlib 是一个专门用于上下文管理的内置模块，我们来分析一下它内部是怎么实现的。</p>
+<h2 id="上下文管理器作为函数修饰符"><a class="header" href="#上下文管理器作为函数修饰符">上下文管理器作为函数修饰符</a></h2>
+<p>contextlib 有一个类 ContextDecorator，增加了对常规上下文管理器类的支持，使得上下文管理器，也可以作为函数的装饰器，我们来看一下。</p>
+<pre><code class="language-python">import contextlib
+
+class Context(contextlib.ContextDecorator):
+    def __init__(self, how):
+        self.how = how
+
+    def __enter__(self):
+        print(f&quot;__enter__, {self.how}&quot;)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f&quot;__exit__, {self.how}&quot;)
+        return True
+
+
+@Context(&quot;我要去装饰了&quot;)
+def foo(name):
+    print(&quot;执行函数 foo&quot;)
+    return f&quot;我的名字叫: {name}&quot;
+
+ret = foo(&quot;古明地觉&quot;)
+&quot;&quot;&quot;
+__enter__, 我要去装饰了
+执行函数 foo
+__exit__, 我要去装饰了
+&quot;&quot;&quot;
+print(ret)
+&quot;&quot;&quot;
+我的名字叫: 古明地觉
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到上下文管理器还可以作为函数的装饰器，先执行了__enter__，然后执行 foo 函数内部的代码，最后执行 __exit__，而打印返回值也没有问题。</p>
+<p>那么内部是如何实现的呢？首先我们装饰 foo 的时候，是使用 Context 的实例对象去装饰的，相当于给这个实例对象加上了括号，并把 foo 函数作为参数传进去了。既然实例对象加上了括号（调用），这就意味着该实例对象对应的类一定实现了 __call__，但我们定义的类没有，所以继承的父类肯定有。</p>
+<p>我们看一下父类的 __call__ 函数的逻辑：</p>
+<p><img src="./1.png" alt="" /></p>
+<p>当 Context 实例对象在对 foo 装饰的时候，会执行这里（父类）的 __call__，函数 foo 会被传给参数 func，然后返回 inner。所以 foo 在被装饰完之后就变成了这里的 inner，只不过由于有 @wraps(func) 这个装饰器在，所以装饰之后的函数名、__doc__ 等元信息没有改变。</p>
+<p>那么当调用 foo(&quot;古明地觉&quot;) 的时候，就等价于调用这里的 inner(&quot;古明地觉&quot;)，而里面 <code>with self: 中的 self</code>，显然就是 Context 的实例对象。所以就很清晰了，with self 会先执行 Context 实例的 __enter__，然后执行 func、也就是原本的 foo，最后执行 __exit__。</p>
+<p>当然也可以把父类中 __call__ 的实现放在自己定义的类中，这样直接用就可以了，就不用再继承 contextlib 里面的父类了。</p>
+<p>整体的逻辑就是上面分析的那样，可以仔细理一遍这里的流程。但是有一点需要注意，就是返回值问题，虽然 __exit__ 是最后执行的，但返回的仍是函数 foo 的返回值。</p>
+<pre><code class="language-python">@Context(&quot;我要去装饰了&quot;)
+def foo(name):
+    print(&quot;执行函数 foo&quot;)
+    1 / 0
+    return f&quot;我的名字叫: {name}&quot;
+
+
+ret = foo(&quot;古明地觉&quot;)
+&quot;&quot;&quot;
+__enter__, 我要去装饰了
+执行函数 foo
+__exit__, 我要去装饰了
+&quot;&quot;&quot;
+print(ret)
+&quot;&quot;&quot;
+None
+&quot;&quot;&quot;
+</code></pre>
+<p>我们看到返回值是 None，因为执行 foo 时出现了异常，导致立刻执行了 __exit__。既然函数返回之前出现异常了，那么就相当于返回了 None，而不是 __exit__ 里面的 True。</p>
+<h2 id="从生成器到上下文管理器"><a class="header" href="#从生成器到上下文管理器">从生成器到上下文管理器</a></h2>
+<p>采用传统方式创建上下文管理器并不难，只需要创建一个包含 __enter__ 和 __exit__ 的类即可。不过某些时候，如果只有很少的上下文需要管理，那么定义一个类便会有些麻烦。在这些情况下，可以使用 contextmanager 修饰符将一个生成器函数转换为上下文管理器。</p>
+<pre><code class="language-python">import contextlib
+
+@contextlib.contextmanager
+def foo(name, where):
+    print(f&quot;我的名字是: {name}, 居住在: {where}&quot;)
+    yield &quot;baka⑨&quot;
+    print(f&quot;{where}是一个很美的地方&quot;)
+
+
+with foo(&quot;古明地觉&quot;, &quot;地灵殿&quot;) as f:
+    print(f.upper())
+&quot;&quot;&quot;
+我的名字是: 古明地觉, 居住在: 地灵殿
+BAKA⑨
+地灵殿是一个很美的地方
+&quot;&quot;&quot;
+</code></pre>
+<p>只要给函数加上这个装饰器，那么调用函数的时候便可以使用 with 语句。函数里面的 yield 相当于将函数分隔为两个战场：通过 with 调用函数时，yield 和它上面的代码相当于 __enter__ 会先执行，然后将 yield 后面的值交给 f，接着执行 with 语句块；最后执行 yield 下面的代码块，相当于 __exit__。</p>
+<blockquote>
+<p>注意：如果使用 contextmanager 装饰的话，函数中只能出现、且必须出现一个 yield。</p>
+</blockquote>
+<p>下面来手动实现 contextmanager 函数，contextlib 中实现的比较复杂，主要是最后对异常进行了很多的检测。我们可以适当简化，把主要的逻辑实现一下。</p>
+<pre><code class="language-python">from functools import wraps
+
+def contextmanager(func):
+
+    class GeneratorContextManager:
+
+        def __init__(self, func, *args, **kwargs):
+            self.gen = func(*args, **kwargs)
+
+        def __enter__(self):
+            try:
+                assert hasattr(self.gen, &quot;__next__&quot;)
+                return next(self.gen)
+            except AssertionError:
+                raise RuntimeError(&quot;函数中必须出现、且只能出现一个yield&quot;)
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            try:
+                next(self.gen)
+            except StopIteration:
+                return False
+            else:
+                raise RuntimeError(&quot;函数中必须出现、且只能出现一个yield&quot;)
+
+    @wraps(func)
+    def inner(*args, **kwargs):
+        return GeneratorContextManager(func, *args, **kwargs)
+    return inner
+
+@contextmanager
+def foo(name, where):
+    print(f&quot;我的名字是: {name}, 居住在: {where}&quot;)
+    yield &quot;baka⑨&quot;
+    print(f&quot;{where}是一个很美的地方&quot;)
+
+with foo(&quot;古明地觉&quot;, &quot;地灵殿&quot;) as f:
+    print(f.upper())
+&quot;&quot;&quot;
+我的名字是: 古明地觉, 居住在: 地灵殿
+BAKA⑨
+地灵殿是一个很美的地方
+&quot;&quot;&quot;
+</code></pre>
+<p>结果没有问题，以上我们就手动实现了一个 contextmanager，下面还是分析一下整体的流程。</p>
+<p>当使用 contextmanager 装饰的时候，foo 函数就变成了内层函数 inner。然后通过 with 语句调用的时候：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>最终会创建一个 GeneratorContextManager 对象，而 self.gen 显然是基于生成器函数 foo 创建的生成器。因为是在 with 语句里面，实例对象创建完之后要执行 __enter__。然后在里面通过 next(self.gen) 驱动生成器执行，此时 foo 里面 yield 上半部分的代码就开始执行了。当执行到 yield 时，生成器暂停，然后 __enter__ 会将 yield 后面的值赋给变量 f。</p>
+<p>接着就开始执行 with 代码块了，因为 yield 返回的是一个字符串，所以 f 也是一个字符串，我们转成大写并打印。</p>
+<p>with 语句块结束之后，跳转到 __exit__，在里面通过 next(self.gen) 继续驱动生成器执行。此时 foo 里面 yield 下半部分的代码开始执行，当出现 StopIteration 时代表执行完毕。如果没有出现 StopIteration，那么说明 yield 的下面还有 yield，此时程序会报错。</p>
+<p>以上就是整个流程，本质上还是转成了类的上下文管理。</p>
+<p>最后，由于 contextlib 中的 contextmanager 返回的上下文管理器继承自 ContextDecorator，所以它也可被用作函数修饰符。</p>
+<pre><code class="language-python">import contextlib
+
+@contextlib.contextmanager
+def foo(name, where):
+    print(f&quot;我的名字是: {name}, 居住在: {where}&quot;)
+    yield &quot;baka⑨&quot;
+    print(f&quot;{where}是一个很美的地方&quot;)
+
+@foo(&quot;古明地觉&quot;, &quot;地灵殿&quot;)
+def bar():
+    print(&quot;猜猜我会在什么地方输出&quot;)
+
+bar()
+&quot;&quot;&quot;
+我的名字是: 古明地觉, 居住在: 地灵殿
+猜猜我会在什么地方输出
+地灵殿是一个很美的地方
+&quot;&quot;&quot;
+</code></pre>
+<p>当执行 bar 的时候，还是会先执行 foo 里面 yield 的上半部分，然后执行 bar 函数，最后执行 foo 里面 yield 的下半部分。并且此时 yield 后面的内容是什么也已经无关紧要了，因为根本用不到了。</p>
+<p>当然我们也可以手动实现上面的功能，建议当做练习自己尝试一下，并不难。</p>
+<h2 id="关闭打开的句柄"><a class="header" href="#关闭打开的句柄">关闭打开的句柄</a></h2>
+<p>诸如文件之类的 io 流，都会有一个 close 操作。因此为了确保关闭，可以使用 contextlib 中的一个叫做 closing 的类。</p>
+<pre><code class="language-python">import contextlib
+
+class Open:
+
+    def __init__(self):
+        self.status = &quot;open&quot;
+
+    def main(self):
+        return &quot;执行了很复杂的逻辑&quot;
+
+    def close(self):
+        self.status = &quot;closed&quot;
+
+
+with contextlib.closing(Open()) as f:
+    print(f.main())  # 执行了很复杂的逻辑
+    print(f&quot;状态: {f.status}&quot;)  # 状态: open
+
+# with 语句结束后
+print(f&quot;状态: {f.status}&quot;)  # 状态: closed
+</code></pre>
+<p>contextlib.closing 接收一个类的实例对象，其实主要就帮我们做了两件事：一个是可以通过 with 语句的方式来执行，另一个是执行完毕之后自动帮我们调用 close 方法。这里我们不手动实现了，非常简单，感觉没啥卵用，直接看源码中是如何实现的吧。</p>
+<pre><code class="language-python">class closing(AbstractContextManager):
+
+    def __init__(self, thing):
+        # 这里的 thing 显然是我们之前传入的 Open 的实例对象 f
+        self.thing = thing
+    def __enter__(self):
+        # 先调用 __enter__ 返回之前的实例
+        return self.thing
+    def __exit__(self, *exc_info):
+        # 最后调用我们实例的 close 方法
+        self.thing.close()
+</code></pre>
+<p>因此当使用 closing 的时候，我们的类必须定义 close。</p>
+<h2 id="忽略异常"><a class="header" href="#忽略异常">忽略异常</a></h2>
+<p>很多情况下，忽略产生的异常很有用，如果这个异常无法百分百避免、并且该异常又没啥卵用，那么就可以忽略掉。而要忽略异常，最常用的办法就是利用一个 try except 语句。</p>
+<p>但在我们当前的主题中，try except 也可以被替换成 contextlib.suppress()，以更显示地抑制 with 块中产生的异常。</p>
+<pre><code class="language-python">import contextlib
+
+def foo():
+    print(123)
+    1 / 0
+    print(456)
+
+
+with contextlib.suppress(ZeroDivisionError, TypeError):
+    foo()
+    print(789)
+&quot;&quot;&quot;
+123
+&quot;&quot;&quot;
+</code></pre>
+<p>在 foo 中出现了除零错误，但是程序并没有报错，相当于异常被镇压了。注意：如果 with 块中出现的异常，无法匹配 suppress 接收的异常，那么异常还是会抛出来的。但是对于当前的例子来说，除零错误显然是被成功捕获了，最终只输出了 123。并且不仅 1/0 下面的 456 没有打印，连 foo() 下面的 789 也没有打印。</p>
+<p>因为只要出现了异常，就会进入到 __exit__ 中，我们看一下源码是如何实现的。</p>
+<pre><code class="language-python">class suppress(AbstractContextManager):
+    def __init__(self, *exceptions):
+        self._exceptions = exceptions
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exctype, excinst, exctb):
+        return exctype is not None and issubclass(exctype, self._exceptions)
+</code></pre>
+<p>非常简单，没有发生异常就不说了。如果发生异常，但只要能和给定的异常相匹配的话，程序也不会报错。</p>
+<h2 id="异步上下文管理器的实现"><a class="header" href="#异步上下文管理器的实现">异步上下文管理器的实现</a></h2>
+<p>Python 在 3.5 的时候引入了 async 和 await，可以通过 async def 定义一个原生的协程函数，通过 await 驱动一个协程执行。</p>
+<p><strong>而异步上下文则可以通过 async with 来实现。</strong></p>
+<pre><code class="language-python">import asyncio
+
+class A:
+
+    def __init__(self, name):
+        self.name = name
+
+    async def __aenter__(self):
+        print(&quot;__aenter__&quot;)
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        print(&quot;__aexit__&quot;)
+        return True
+
+
+# 必须定义一个协程函数，然后通过事件循环驱动协程执行
+async def main():
+    async with A(&quot;古明地觉&quot;) as f:
+        print(f.name)
+
+
+asyncio.run(main())
+&quot;&quot;&quot;
+__aenter__
+古明地觉
+__aexit__
+&quot;&quot;&quot;
+</code></pre>
+<p>异步上下文管理需要定义 __aenter__ 和 __aexit__。</p>
+<pre><code class="language-python">import contextlib
+import asyncio
+
+@contextlib.asynccontextmanager
+async def foo():
+    print(123)
+    yield 456
+    print(789)
+
+async def main():
+    async with foo() as f:
+        print(f == 456)
+
+asyncio.run(main())
+&quot;&quot;&quot;
+123
+True
+789
+&quot;&quot;&quot;
+</code></pre>
+<p>关于异步上下文管理，其实和普通的同步上下文管理是类似的，其它相关内容有兴趣可以自己实现一下。</p>
+<h2 id="小结"><a class="header" href="#小结">小结</a></h2>
+<p>以上就是 with 语句的用法，非常基础的内容了，当然我们还介绍了一个模块 contextlib，在工作中也可以多多使用它。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../详解新一代 HTTP 请求库：httpx/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../详解新一代 HTTP 请求库：httpx/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
