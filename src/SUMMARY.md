@@ -30,3 +30,4 @@
 + [使用 collections 模块扩展你的数据类](./使用%20collections%20模块扩展你的数据类/doc.md)
 + [使用 unicodedata 模块对字符串标准化](./使用%20unicodedata%20模块对字符串标准化/doc.md)
 + [使用 struct 模块打包、解包二进制数据](./使用%20struct%20模块打包、解包二进制数据/doc.md)
++ [使用 watchfiles 模块监控目录变更](./使用%20watchfiles%20模块监控目录变更/doc.md)
