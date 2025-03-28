@@ -1,0 +1,309 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>生成词云 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html">通过 contextlib 模块详细复习一下 with 语句的用法</a></li><li class="chapter-item expanded "><a href="../使用 collections 模块扩展你的数据类/doc.html">使用 collections 模块扩展你的数据类</a></li><li class="chapter-item expanded "><a href="../使用 unicodedata 模块对字符串标准化/doc.html">使用 unicodedata 模块对字符串标准化</a></li><li class="chapter-item expanded "><a href="../使用 struct 模块打包、解包二进制数据/doc.html">使用 struct 模块打包、解包二进制数据</a></li><li class="chapter-item expanded "><a href="../使用 watchfiles 模块监控目录变更/doc.html">使用 watchfiles 模块监控目录变更</a></li><li class="chapter-item expanded "><a href="../读取照片的 Exif 信息/doc.html">读取照片的 Exif 信息</a></li><li class="chapter-item expanded "><a href="../模拟 TLS 指纹实现反反爬/doc.html">模拟 TLS 指纹实现反反爬</a></li><li class="chapter-item expanded "><a href="../生成词云/doc.html" class="active">生成词云</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>什么是词云？在网络上我们经常可以看到一张图片，上面有一大堆大小不一的文字，这便是词云。词云一般是根据输入的大量词语生成的，如果某个词语出现的次数越多，那么相应的大小就会越大。</p>
+<p>Python 中有一个专门用来生成词云的模块：wordcloud，直接 pip 安装即可，然后我们来看看它的用法。</p>
+<pre><code class="language-python"># 导入模块
+from wordcloud import WordCloud
+# 准备文本数据，是一个字符串，单词之间用空格分隔
+sentence = &quot;hello satori hello mashiro hello satori&quot;
+# 创建词云对象
+wc = WordCloud()
+# 根据文本生成词云
+wc.generate(sentence)
+# 保存为图片
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>打开图片看看效果：</p>
+<p><img src="./1.png" alt="" /></p>
+<p>我们看到单词就显示在了图片上，如果单词一多就像天空的云彩一样漂浮着，并且单词出现的频率越高，那么该单词在图片上大小就越大。</p>
+<p>虽然词云生成了，但是风格是固定的，我们可不可以调整呢，显然是可以的。WordCloud 里面支持很多参数用来调整风格，我们看一下这些参数。</p>
+<ul>
+<li>width：词云的宽，默认是400像素；</li>
+<li>height：词云的高，默认是200像素；</li>
+<li>background_color：词云的背景颜色，默认是黑色；</li>
+<li>font_path：生成的词云所使用的字体，传入一个字体名称；</li>
+<li>mask：词云背景图片，接收一个 Numpy 数组。可以使用 PIL 或者 cv2 读取图片，然后生成数组；</li>
+<li>stopwords：要屏蔽的词语，接收一个集合，生成词云的时候会忽略掉屏蔽的词语；</li>
+<li>max_font_size：字体的最大大小，默认为 None；</li>
+<li>min_font_size：字体的最小大小，默认为 None；</li>
+<li>max_words：最多显示多少个单词，默认为200。比如文本数据有 10000 个不重复单词，肯定不可能全部显示，而是按照出现的频率高低排序，选择出现频率最高的 N 个单词，默认是 200 个；</li>
+<li>contour_width：轮廓粗细；</li>
+<li>contour_color：轮廓颜色；</li>
+<li>scale：用来控制生成的图片大小，默认为 1。如果我们改成了 10，那么生成的图片大小会扩大 10 倍。这个参数不用管，没太大用，默认为 1 即可；</li>
+</ul>
+<p>我们举例说明：</p>
+<pre><code class="language-python">from wordcloud import WordCloud
+sentence = &quot;i do not need sex, because life fucks me every every single day&quot;
+wc = WordCloud(
+    width=500,  # 设置宽度为500px
+    height=300,  # 设置高度为300px
+    background_color='pink',  # 设置背景为粉色
+    stopwords={&quot;sex&quot;, &quot;fucks&quot;},  # 设置禁用词
+    max_font_size=100,  # 设置最大的字体大小，所有词都不会超过 100px
+    min_font_size=10,  # 设置最小的字体大小，所有词都会超过 10px
+    max_words=10  # 最多生成 10 个词，当然这里单词比较少，看不出来什么
+)
+
+wc.generate(sentence)
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>看看生成的图片：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>可以看到图片变宽了、变高了，背景变成粉色了，并且也没有出现禁用词。但这个图片是正方形的，而我们平常见到的词云是有形状的，比如一个圆形、或者一个人的形状等等。显然这是根据图片生成的，而 wordcloud 也支持这么做，下面来演示一下。</p>
+<pre><code class="language-python">from wordcloud import WordCloud
+from PIL import Image
+import numpy as np
+
+# 一篇英文文章
+with open(&quot;article.txt&quot;) as f:
+    sentence = f.read()
+# 加载一张图片，转化成numpy中的数组
+mask = np.array(Image.open(&quot;哆啦A梦.png&quot;))
+# 传入mask
+wc = WordCloud(mask=mask)
+wc.generate(sentence)
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>看一下生成的结果：</p>
+<p><img src="./3.png" alt="" /></p>
+<p>下面是原始的图片，&quot;多啦A梦.png&quot;</p>
+<p><img src="./4.png" alt="" /></p>
+<p>会自动将周围的白色区域给忽略掉，因此选择的图片建议最好是白底的。</p>
+<p>然后目前生成词云所使用的单词都是英文的，那中文可不可以呢？我们来看一下。</p>
+<pre><code class="language-python">from wordcloud import WordCloud
+
+wc = WordCloud()
+wc.generate(&quot;古明地觉的编程教室&quot;)
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>生成的结果如下：</p>
+<p><img src="./5.png" alt="" /></p>
+<p>显然默认是不支持中文的，此时我们需要指定一个中文字体。</p>
+<pre><code class="language-python">from wordcloud import WordCloud
+
+# 传入本机支持中文的字体名称
+wc = WordCloud(font_path=&quot;Arial Unicode.ttf&quot;)
+wc.generate(&quot;古明地觉的编程教室&quot;)
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>看看效果：</p>
+<p><img src="./6.png" alt="" /></p>
+<p>中文正常显示了，但显示的是一整句话。因为 wordcloud 默认是以空格分隔单词的，所以对于英文我们不需要做什么处理，因为英文单词之间就是以空格分隔的。但中文则是所有的汉字都连在一起，因此整体被当成了一个词。</p>
+<p>这个时候推荐使用 jieba 分词，将单词进行分隔。</p>
+<pre><code class="language-python">from wordcloud import WordCloud
+import jieba
+
+with open(&quot;出师表.txt&quot;) as f:
+    sentence = f.read()
+# 分词得到列表，手动使用空格拼接
+sentence = &quot; &quot;.join(jieba.cut(sentence))
+wc = WordCloud(font_path=&quot;Arial Unicode.ttf&quot;)
+wc.generate(sentence)
+wc.to_file(&quot;word.png&quot;)
+</code></pre>
+<p>我们基于出师表的内容生成词云：</p>
+<p><img src="./7.png" alt="" /></p>
+<p>结果没有问题，当然这里图片有点小了，你也可以调整它的宽高。</p>
+<p>另外我们一直都是将词云保存成图片，除了图片，还可以保存成其它格式。</p>
+<pre><code class="language-python">from io import BytesIO
+from wordcloud import WordCloud
+import jieba
+
+with open(&quot;出师表.txt&quot;) as f:
+    sentence = f.read()
+
+sentence = &quot; &quot;.join(jieba.cut(sentence))
+wc = WordCloud(font_path=&quot;Arial Unicode.ttf&quot;)
+wc.generate(sentence)
+
+# 将词云保存为 PIL 的 Image 对象
+im = wc.to_image()
+buf = BytesIO()
+# 将词云的字节流保存在 buf 中，这样可以直接交给客户端进行渲染
+im.save(buf, &quot;png&quot;)
+print(buf.getvalue())
+
+# 当然也可以保存为文件，im.save(filename)
+# wc.to_file() 底层也是先转成 Image 对象、然后调用 im.save() 实现的
+
+# 或者还可以保存为 SVG 格式
+svg = wc.to_svg()
+# 将 svg 的内容保存成文件，就得到 SVG 图片了
+print(svg)
+</code></pre>
+<p>以上就是 Python 中词云生成相关的内容，快来试试吧。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../模拟 TLS 指纹实现反反爬/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../模拟 TLS 指纹实现反反爬/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
