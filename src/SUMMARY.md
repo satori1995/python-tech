@@ -37,3 +37,4 @@
 + [你知道 Python 其实自带了小型数据库吗](./你知道%20Python%20其实自带了小型数据库吗/doc.md)
 + [聊一聊 Python 的换行以及转义](./聊一聊%20Python%20的换行以及转义/doc.md)
 + [分享一个 Python 处理音频的库](./分享一个%20Python%20处理音频的库/doc.md)
++ [pyquery：一个灵活方便的 HTML 解析库](./pyquery：一个灵活方便的%20HTML%20解析库/doc.md)
