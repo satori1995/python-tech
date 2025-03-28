@@ -38,3 +38,4 @@
 + [聊一聊 Python 的换行以及转义](./聊一聊%20Python%20的换行以及转义/doc.md)
 + [分享一个 Python 处理音频的库](./分享一个%20Python%20处理音频的库/doc.md)
 + [pyquery：一个灵活方便的 HTML 解析库](./pyquery：一个灵活方便的%20HTML%20解析库/doc.md)
++ [生成并识别图片验证码](./生成并识别图片验证码/doc.md)

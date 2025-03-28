@@ -81,7 +81,7 @@ p = PyQuery(html)
 
 我们以上面这个 HTML 为例，来看看相关操作。
 
-**基于标签进行选择**
+<font color="blue">**基于标签进行选择**</font>
 
 ```Python
 # 选择所有的 p 标签
@@ -101,7 +101,7 @@ print(p("p"))
 
 会选择所有指定的标签，并且包含标签里面的内容。
 
-**同时选择多个标签**
+<font color="blue">**同时选择多个标签**</font>
 
 在基于标签选择时，也可以同时选择多个标签。
 
@@ -127,7 +127,7 @@ print(p("p,a"))
 
 注意：筛选的标签之间是独立的，比如第二个 a 标签，它在 p 标签里面。我们筛选 p 标签的时候，已经将它内部的 a 标签筛选出来了，但在筛选 a 标签的时候又筛选出来一次，因此标签之间是独立的。
 
-**选择指定标签下的子标签**
+<font color="blue">**选择指定标签下的子标签**</font>
 
 ```Python
 # 选择所有的 div 标签下的所有 a 标签
@@ -155,7 +155,7 @@ print(p("div>a"))
 
 当标签之间是空格，那么会从子孙节点当中选择；当标签之间是大于号，那么只会从儿子节点当中选择。
 
-**按照 id 选择标签**
+<font color="blue">**按照 id 选择标签**</font>
 
 ```Python
 # 选择 id = "six_six_six" 的标签
@@ -169,7 +169,7 @@ print(p("#six_six_six"))
 
 id 在一个 html 中具有唯一性，所以有 id 属性的话，那么会非常好定位。
 
-**按照 class 选择标签**
+<font color="blue">**按照 class 选择标签**</font>
 
 ```Python
 p = PyQuery(html)
@@ -246,7 +246,7 @@ print(p("div.div_cls1.div_cls2>div.div_cls3"))
 
 综上所述，pyquery 还是很强大的。
 
-**选择是否具有指定属性的标签**
+<font color="blue">**选择是否具有指定属性的标签**</font>
 
 ```python
 # 选择具有 class 属性的 p 标签
@@ -315,7 +315,7 @@ True
 """
 ```
 
-**选择指定位置的标签**
+<font color="blue">**选择指定位置的标签**</font>
 
 ```python
 # 先选择所有 class 包含 div_cls1、div_cls2 的标签
@@ -344,7 +344,7 @@ print(p(".div_cls1.div_cls2>p:nth-child(2)"))
 """
 ```
 
-**选择兄弟标签**
+<font color="blue">**选择兄弟标签**</font>
 
 ```python
 # 选择 class 包含 p_cls1 的所有 p 标签，然后选择它的兄弟标签
