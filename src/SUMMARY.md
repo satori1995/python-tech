@@ -31,3 +31,4 @@
 + [使用 unicodedata 模块对字符串标准化](./使用%20unicodedata%20模块对字符串标准化/doc.md)
 + [使用 struct 模块打包、解包二进制数据](./使用%20struct%20模块打包、解包二进制数据/doc.md)
 + [使用 watchfiles 模块监控目录变更](./使用%20watchfiles%20模块监控目录变更/doc.md)
++ [读取照片的 Exif 信息](./读取照片的%20Exif%20信息/doc.md)
