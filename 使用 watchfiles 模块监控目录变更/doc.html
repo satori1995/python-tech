@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>使用 watchfiles 模块监控目录变更 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html">通过 contextlib 模块详细复习一下 with 语句的用法</a></li><li class="chapter-item expanded "><a href="../使用 collections 模块扩展你的数据类/doc.html">使用 collections 模块扩展你的数据类</a></li><li class="chapter-item expanded "><a href="../使用 unicodedata 模块对字符串标准化/doc.html">使用 unicodedata 模块对字符串标准化</a></li><li class="chapter-item expanded "><a href="../使用 struct 模块打包、解包二进制数据/doc.html">使用 struct 模块打包、解包二进制数据</a></li><li class="chapter-item expanded "><a href="../使用 watchfiles 模块监控目录变更/doc.html" class="active">使用 watchfiles 模块监控目录变更</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>在工作中难免会碰到这样的需求，监控指定目录，如果该目录下发生文件变更，那么进行一系列的处理。而如何监视一个目录，就是我们本次探讨的主题。</p>
+<p>监视目录可以使用 watchfiles 模块，该模块不仅简单，而且性能也不错。主要原因是，和底层文件系统交互的代码是基于 Rust 编写的，所以性能是有保证的。通过 pip install watchfiles 安装之后，我们来看看它的用法。</p>
+<pre><code class="language-python">from watchfiles import watch
+
+# 当前目录为 /Users/satori/Desktop/project
+for change in watch(&quot;.&quot;):
+    print(change)
+</code></pre>
+<p>执行此程序，会处于阻塞状态，并持续监听指定目录的变化。然后我们在当前目录创建几个文件，看看效果。</p>
+<p><font color="blue">创建一个 data.txt 文本文件，程序输出如下：</font></p>
+<pre><code class="language-python">{(&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/data.txt')}
+</code></pre>
+<p>返回的是一个集合，目前只涉及一个文件的变更，所以集合里面只有一个元素。而集合里面存储的都是元组，元组的第一个元素表示操作类型，总共有三种：分别是增加、修改和删除。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>元组的第二个参数就是具体的文件路径，因此程序的输出就告诉我们，当前目录新增了一个 data.txt。</p>
+<p><font color="blue">再创建一个 txt_files 目录，程序输出如下：</font></p>
+<pre><code class="language-python">{(&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/txt_files')}
+</code></pre>
+<p>不管是目录文件还是文本文件，都属于文件，所以输出是一样的。如果想知道新增的到底是目录还是普通文件，那么还需要通过 os 模块检测一下。</p>
+<p><font color="blue">然后在 txt_files 目录中创建一个 data.txt，程序输出如下：</font></p>
+<pre><code class="language-python">{(&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/txt_files/data.txt')}
+</code></pre>
+<p>所以 watch 函数监听的不仅是指定目录，其内部的递归子目录也会一并监听。</p>
+<p>问题来了，当前目录下存在一个 data.txt 文件和一个 txt_files 目录，而 txt_files 目录也存在一个 data.txt。那么如果将当前目录的 data.txt 移动到 txt_files 中，并同意覆盖，那么程序会输出什么呢？</p>
+<pre><code class="language-python">{(&lt;Change.deleted: 3&gt;, '/Users/satori/Desktop/project/txt_files/data.txt'), 
+ (&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/txt_files/data.txt'), 
+ (&lt;Change.deleted: 3&gt;, '/Users/satori/Desktop/project/data.txt')}
+</code></pre>
+<p>此时输出的集合包含三个元组，因此该过程涉及到三次文件的变更。因为 txt_files 里面的文件被替换掉了，所以相当于先被删除、然后重新创建。而当前目录中的 data.txt 被移走了，因此相当于被删除了。</p>
+<p><font color="blue">然后我们再通过 mkdir -p a/b/c 同时创建多级目录，程序输出如下：</font></p>
+<pre><code class="language-python">{(&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/a/b/c'), 
+ (&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/a/b'), 
+ (&lt;Change.added: 1&gt;, '/Users/satori/Desktop/project/a')}
+</code></pre>
+<p>整个过程还是比较简单的，然后除了 watch 函数之外，还有一个 awatch。这两者的作用是一样的，参数也全部一样，只不过 awatch 需要和协程搭配，我们举个例子。</p>
+<pre><code class="language-python">import sys
+import asyncio
+from asyncio import StreamReader
+from watchfiles import awatch, Change
+
+# 监视指定目录
+async def watch_files(path):
+    # awatch(...) 返回的是异步生成器，需要通过 async for 遍历
+    async for change in awatch(path):
+        print(&quot;-&quot; * 20)
+        # change 是一个集合，里面可能会涉及到多个文件的变更
+        for item in change:
+            if item[0] == Change.added:
+                operation = &quot;你增加了&quot;
+            elif item[0] == Change.modified:
+                operation = &quot;你修改了&quot;
+            else:
+                operation = &quot;你删除了&quot;
+            print(f&quot;{operation} `{item[1]}`&quot;)
+        print(&quot;\n&quot;)
+
+# 读取命令行输入，但是注意：不可以使用 input 函数，因为它是同步阻塞调用
+# 这种调用在协程当中是大忌，会阻塞整个线程，我们需要改造成异步模式
+async def read_from_stdin():
+    reader = asyncio.StreamReader()
+    protocol = asyncio.StreamReaderProtocol(reader)
+    loop = asyncio.get_running_loop()
+    await loop.connect_read_pipe(lambda: protocol, sys.stdin)
+    return reader
+
+# read_from_stdin 函数的具体细节暂时不用太关注，只需要知道它能异步读取命令行即可
+# 然后定义主协程
+async def main():
+    # 监视当前目录
+    asyncio.create_task(watch_files(&quot;.&quot;))
+    # 创建读取器
+    stdin_reader = await read_from_stdin()
+    while True:
+        # 从命令行读取输入
+        command = await stdin_reader.readline()
+        # 执行命令
+        procs = await asyncio.create_subprocess_shell(command)
+        await procs.wait()
+
+loop = asyncio.get_event_loop()
+try:
+    loop.run_until_complete(main())
+finally:
+    loop.close()
+</code></pre>
+<p>来看一下效果：</p>
+<p><img src="./2.png" alt="" /></p>
+<p>结果没有问题，文件的变化都检测出来了。然后补充一点：watch 和 awatch 可以同时监听多个目录，因为第一个参数是 *paths。</p>
+<p>我们同时监听多个目录来测试一下，先在当前目录创建两个子目录：boy 和 girl，然后分别监视它们。</p>
+<p><img src="./3.png" alt="" /></p>
+<p>输出正常，因此这两个函数可以监听任意多个目录。另外，由于目前监听的是当前目录的两个子目录，所以当前目录的文件变更就看不到了，因为它没有被监视。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>以上就是这两个函数的基本用法，当然这两个函数还有其它参数：</p>
+<p><img src="./5.png" alt="" /></p>
+<p>这里简单介绍几个。</p>
+<p><strong><font color="darkblue">过滤器（watch_filter）</font></strong></p>
+<p>watchfiles 会监视目录的文件变化，但不是所有的文件都会记录。</p>
+<p><img src="./6.png" alt="" /></p>
+<p>watchfiles 有一个内置的过滤器，会将和业务无关的文件过滤掉，如果你还希望将其它格式的文件过滤掉，那么修改过滤器即可。</p>
+<p><strong><font color="darkblue">停止事件（stop_event）</font></strong></p>
+<p>监视文件的时候，迭代器是不会停止的，如果想自由控制它的结束，可以传递一个事件。</p>
+<pre><code class="language-python">import asyncio
+from watchfiles import awatch
+
+async def watch_files(*paths, stop_event):
+    async for _ in awatch(*paths, stop_event=stop_event):
+        pass
+    print(&quot;停止监视&quot;)
+
+async def main():
+    event = asyncio.Event()
+    # 传递一个事件，准确的说，只要有 is_set 方法，任何对象都行
+    asyncio.create_task(watch_files(&quot;.&quot;, stop_event=event))
+    # 当 event.is_set() 为 True 的时候，停止监视
+    print(&quot;is_set: &quot;, event.is_set())
+    await asyncio.sleep(3)  # sleep 3
+    event.set()
+    print(&quot;三秒后, is_set: &quot;, event.is_set())
+    # 等待子协程打印完毕
+    await asyncio.sleep(0.1)
+
+asyncio.run(main())
+&quot;&quot;&quot;
+is_set:  False
+三秒后, is_set:  True
+停止监视
+&quot;&quot;&quot;
+</code></pre>
+<p><strong><font color="darkblue">是否递归监视（recursive）</font></strong></p>
+<p>如果该参数为 True，那么会递归监视子目录，否则只监视顶层目录。</p>
+<p>其它参数基本很少用，就不再赘述了，有兴趣可以自己了解一下。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../使用 struct 模块打包、解包二进制数据/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../使用 struct 模块打包、解包二进制数据/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
