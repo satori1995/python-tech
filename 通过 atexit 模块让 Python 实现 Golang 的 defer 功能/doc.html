@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>通过 atexit 模块让 Python 实现 Golang 的 defer 功能 - Python 实用技巧</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/custom.css">
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../如何优雅地遍历可迭代对象？/doc.html">如何优雅地遍历可迭代对象？</a></li><li class="chapter-item expanded "><a href="../解密可迭代对象的排序问题/doc.html">解密可迭代对象的排序问题</a></li><li class="chapter-item expanded "><a href="../通过 TOP K 问题，探究堆和优先队列的秘密/doc.html">通过 TOP K 问题，探究堆和优先队列的秘密</a></li><li class="chapter-item expanded "><a href="../如何优雅地对数据进行分组？/doc.html">如何优雅地对数据进行分组？</a></li><li class="chapter-item expanded "><a href="../全方位解析 f-string/doc.html">全方位解析 f-string</a></li><li class="chapter-item expanded "><a href="../最好的日期处理库：pendulum/doc.html">最好的日期处理库：pendulum</a></li><li class="chapter-item expanded "><a href="../你知道创建模块都有哪些方式吗？/doc.html">你知道创建模块都有哪些方式吗？</a></li><li class="chapter-item expanded "><a href="../exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？/doc.html">exit、quit、sys.exit、os._exit，这么多退出方式，它们之间有什么区别呢？</a></li><li class="chapter-item expanded "><a href="../文件处理的一些最佳实践/doc.html">文件处理的一些最佳实践</a></li><li class="chapter-item expanded "><a href="../使用 os 模块更高效地读写文件/doc.html">使用 os 模块更高效地读写文件</a></li><li class="chapter-item expanded "><a href="../将文件映射到内存，像数组一样访问/doc.html">将文件映射到内存，像数组一样访问</a></li><li class="chapter-item expanded "><a href="../使用 psutil 获取硬件、网络以及进程信息/doc.html">使用 psutil 获取硬件、网络以及进程信息</a></li><li class="chapter-item expanded "><a href="../使用临时文件保存数据/doc.html">使用临时文件保存数据</a></li><li class="chapter-item expanded "><a href="../shutil：更优雅地拷贝文件/doc.html">shutil：更优雅地拷贝文件</a></li><li class="chapter-item expanded "><a href="../使用 contextvars 管理上下文变量/doc.html">使用 contextvars 管理上下文变量</a></li><li class="chapter-item expanded "><a href="../自定义异常堆栈信息/doc.html">自定义异常堆栈信息</a></li><li class="chapter-item expanded "><a href="../prettytable：像数据库一样格式化输出内容/doc.html">prettytable：像数据库一样格式化输出内容</a></li><li class="chapter-item expanded "><a href="../轻松绘制动态条形图/doc.html">轻松绘制动态条形图</a></li><li class="chapter-item expanded "><a href="../自定义 jupyter 魔法命令/doc.html">自定义 jupyter 魔法命令</a></li><li class="chapter-item expanded "><a href="../解析 ini、yaml、toml 配置文件/doc.html">解析 ini、yaml、toml 配置文件</a></li><li class="chapter-item expanded "><a href="../使用 fuzzywuzzy 模块计算两个字符串之间的相似度/doc.html">使用 fuzzywuzzy 模块计算两个字符串之间的相似度</a></li><li class="chapter-item expanded "><a href="../命令行解析工具 argparse/doc.html">命令行解析工具 argparse</a></li><li class="chapter-item expanded "><a href="../使用 urllib.parse 模块优雅地处理 URL/doc.html">使用 urllib.parse 模块优雅地处理 URL</a></li><li class="chapter-item expanded "><a href="../Python 实现复制粘贴/doc.html">Python 实现复制粘贴</a></li><li class="chapter-item expanded "><a href="../Python 生成、解析二维码/doc.html">Python 生成、解析二维码</a></li><li class="chapter-item expanded "><a href="../解密 __getattr__ 和 __getattribute__ 的用法与区别/doc.html">解密 __getattr__ 和 __getattribute__ 的用法与区别</a></li><li class="chapter-item expanded "><a href="../使用 fcntl 模块对文件进行加解锁/doc.html">使用 fcntl 模块对文件进行加解锁</a></li><li class="chapter-item expanded "><a href="../详解新一代 HTTP 请求库：httpx/doc.html">详解新一代 HTTP 请求库：httpx</a></li><li class="chapter-item expanded "><a href="../通过 contextlib 模块详细复习一下 with 语句的用法/doc.html">通过 contextlib 模块详细复习一下 with 语句的用法</a></li><li class="chapter-item expanded "><a href="../使用 collections 模块扩展你的数据类/doc.html">使用 collections 模块扩展你的数据类</a></li><li class="chapter-item expanded "><a href="../使用 unicodedata 模块对字符串标准化/doc.html">使用 unicodedata 模块对字符串标准化</a></li><li class="chapter-item expanded "><a href="../使用 struct 模块打包、解包二进制数据/doc.html">使用 struct 模块打包、解包二进制数据</a></li><li class="chapter-item expanded "><a href="../使用 watchfiles 模块监控目录变更/doc.html">使用 watchfiles 模块监控目录变更</a></li><li class="chapter-item expanded "><a href="../读取照片的 Exif 信息/doc.html">读取照片的 Exif 信息</a></li><li class="chapter-item expanded "><a href="../模拟 TLS 指纹实现反反爬/doc.html">模拟 TLS 指纹实现反反爬</a></li><li class="chapter-item expanded "><a href="../生成词云/doc.html">生成词云</a></li><li class="chapter-item expanded "><a href="../你知道 Python 其实自带了小型数据库吗/doc.html">你知道 Python 其实自带了小型数据库吗</a></li><li class="chapter-item expanded "><a href="../聊一聊 Python 的换行以及转义/doc.html">聊一聊 Python 的换行以及转义</a></li><li class="chapter-item expanded "><a href="../分享一个 Python 处理音频的库/doc.html">分享一个 Python 处理音频的库</a></li><li class="chapter-item expanded "><a href="../pyquery：一个灵活方便的 HTML 解析库/doc.html">pyquery：一个灵活方便的 HTML 解析库</a></li><li class="chapter-item expanded "><a href="../生成并识别图片验证码/doc.html">生成并识别图片验证码</a></li><li class="chapter-item expanded "><a href="../数据解压缩/doc.html">数据解压缩</a></li><li class="chapter-item expanded "><a href="../用 Python 操作你的鼠标和键盘/doc.html">用 Python 操作你的鼠标和键盘</a></li><li class="chapter-item expanded "><a href="../itertools：用于处理可迭代对象的模块/doc.html">itertools：用于处理可迭代对象的模块</a></li><li class="chapter-item expanded "><a href="../通过 atexit 模块让 Python 实现 Golang 的 defer 功能/doc.html" class="active">通过 atexit 模块让 Python 实现 Golang 的 defer 功能</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Python 实用技巧</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/satori1995/python-tech" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>在 Go 里面可以通过 defer 语句让函数在结束时执行预定义好的一些操作，举个例子。</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+    defer fmt.Println(&quot;高老师总能分享出好东西&quot;)
+    fmt.Println(&quot;执行结束&quot;)
+    /*
+    执行结束
+    高老师总能分享出好东西
+    */
+}
+</code></pre>
+<p>这个功能非常方便，比如打开文件之后可以执行 <code>defer fp.Close()</code>，这样函数结束时会自动关闭文件句柄。那么在 Python 里面可不可以实现类似的功能呢？本次来聊一聊 atexit 模块，它能帮我们实现类似的效果。</p>
+<pre><code class="language-python">import atexit
+
+def exit_func(words):
+    print(words)
+
+# 将函数注册进去
+atexit.register(exit_func, &quot;高老师总能分享出好东西&quot;)
+print(&quot;Hello&quot;)
+print(&quot;World&quot;)
+&quot;&quot;&quot;
+Hello
+World
+高老师总能分享出好东西
+&quot;&quot;&quot;
+</code></pre>
+<p>通过 atexit.register 将函数注册进去之后，会在程序结束之前执行，当然也可以同时注册多个。</p>
+<pre><code class="language-python">import atexit
+
+def exit_func(words):
+    print(words)
+
+# 将函数注册进去
+atexit.register(exit_func, &quot;高老师总能分享出好东西&quot;)
+atexit.register(exit_func, &quot;S 老师今年 18，单身带俩娃&quot;)
+atexit.register(exit_func, &quot;只因^(*￣(oo)￣)^只因大(出海版)&quot;)
+print(&quot;Hello&quot;)
+print(&quot;World&quot;)
+&quot;&quot;&quot;
+Hello
+World
+只因^(*￣(oo)￣)^只因大(出海版)
+S 老师今年 18，单身带俩娃
+高老师总能分享出好东西
+&quot;&quot;&quot;
+</code></pre>
+<p>如果同时注册了多个函数，那么会按照先入后出的顺序执行。非常简单，其实 atexit 模块就是将我们注册的函数保存在了一个数组中，程序结束的时候，从后往前依次执行。</p>
+<p><img src="./1.png" alt="" /></p>
+<p>既然可以注册函数，那么也可以取消注册。</p>
+<pre><code class="language-python">import atexit
+
+def exit_func1(words):
+    print(words)
+
+def exit_func2(words):
+    print(words)
+
+atexit.register(exit_func1, &quot;高老师总能分享出好东西&quot;)
+atexit.register(exit_func1, &quot;S 老师今年 18，单身带俩娃&quot;)
+atexit.register(exit_func2, &quot;只因^(*￣(oo)￣)^只因大(出海版)&quot;)
+
+# 取消注册，所有注册的 exit_func1 函数都会被删除
+atexit.unregister(exit_func1)
+&quot;&quot;&quot;
+只因^(*￣(oo)￣)^只因大(出海版)
+&quot;&quot;&quot;
+</code></pre>
+<p>而它的逻辑也很简单，就是遍历数组，如果和指定的函数相等，那么就删掉。我们看一下源代码。</p>
+<p><img src="./2.png" alt="" /></p>
+<p>如果你想将注册的函数全部取消掉，那么也可以调用 _clear() 函数。</p>
+<pre><code class="language-python">import atexit
+
+def exit_func1(words):
+    print(words)
+
+def exit_func2(words):
+    print(words)
+
+atexit.register(exit_func1, &quot;高老师总能分享出好东西&quot;)
+atexit.register(exit_func1, &quot;S 老师今年 18，单身带俩娃&quot;)
+atexit.register(exit_func2, &quot;只因^(*￣(oo)￣)^只因大(出海版)&quot;)
+
+atexit._clear()
+</code></pre>
+<p>此时程序不会有任何输出，因为注册的函数全部被清空了，同样可以看一下它的源代码。</p>
+<p><img src="./3.png" alt="" /></p>
+<p>最后就是函数的调用时机，我们注册的函数在程序结束时才会调用，可不可以让它们在任意时刻调用呢？</p>
+<pre><code class="language-python">import atexit
+
+def exit_func1(words):
+    print(words)
+
+def exit_func2(words):
+    print(words)
+
+atexit.register(exit_func1, &quot;AAA&quot;)
+atexit.register(exit_func1, &quot;BBB&quot;)
+# 调用注册的函数，调用之后函数会被删除
+atexit._run_exitfuncs()
+print(&quot;++++++++++++++++&quot;)
+
+atexit.register(exit_func2, &quot;CCC&quot;)
+atexit._run_exitfuncs()
+print(&quot;----------------&quot;)
+&quot;&quot;&quot;
+BBB
+AAA
+++++++++++++++++
+CCC
+----------------
+&quot;&quot;&quot;
+</code></pre>
+<p>输出结果表明，一旦调用了 _run_exitfuncs，所有注册的函数会立即被调用。我们看一下源代码。</p>
+<p><img src="./4.png" alt="" /></p>
+<p>以上就是 atexit 模块的用法，那我们如何基于它实现 Golang 的 defer 呢？</p>
+<pre><code class="language-python">from typing import Callable
+import atexit
+
+def defer(func: Callable, *args, **kwargs):
+    atexit.register(func, *args, **kwargs)
+
+def get_file_content(file_path):
+    fp = open(file_path, encoding=&quot;utf-8&quot;)
+    defer(fp.close)  # 注册函数
+    content = fp.read()
+    # do something
+    ...
+    atexit._run_exitfuncs()  # 触发注册函数执行
+
+get_file_content(&quot;config.py&quot;)
+</code></pre>
+<p>不过这个例子明显有点刻意了，因为必须要在函数的结尾调用 atexit._run_exitfuncs，而之所以要实现 Go 的 defer，就是为了避免遗忘某些逻辑。</p>
+<p>如果每次都要在函数结尾调用 atexit._run_exitfuncs，那还不如不用，于是我们可以考虑使用装饰器。</p>
+<pre><code class="language-python">from typing import Callable
+from functools import wraps
+import atexit
+
+def defer(func: Callable, *args, **kwargs):
+    atexit.register(func, *args, **kwargs)
+
+# 给函数赋予 defer 功能
+def enable_defer(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        ret = func(*args, **kwargs)
+        atexit._run_exitfuncs()
+        return ret
+    return inner
+
+@enable_defer  # 通过装饰器，让函数支持 defer 功能
+def get_file_content(file_path):
+    fp = open(file_path, encoding=&quot;utf-8&quot;)
+    # 注册函数
+    defer(fp.close)
+    defer(print, &quot;get_file_content 函数实现了 defer 功能&quot;)
+
+    content = fp.read()
+    print(&quot;函数执行结束&quot;)
+
+get_file_content(&quot;config.py&quot;)
+print(&quot;程序结束&quot;)
+&quot;&quot;&quot;
+函数执行结束
+get_file_content 函数实现了 defer 功能
+程序结束
+&quot;&quot;&quot;
+</code></pre>
+<p>输出结果表明，在函数结束后，通过 defer 注册的函数执行了。</p>
+<p>以上就是用 Python 实现 Go 的 defer，不过在工作中还是不建议这么做，没啥必要，这里只是想分享一下 atexit 模块。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../itertools：用于处理可迭代对象的模块/doc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../itertools：用于处理可迭代对象的模块/doc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/custom.js"></script>
+    </body>
+</html>
