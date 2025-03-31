@@ -46,3 +46,4 @@
 + [Python 实现 RSA 加密](./Python%20实现%20RSA%20加密/doc.md)
 + [计算机是怎么存储整数的，原码、反码、补码又是个啥？](./计算机是怎么存储整数的，原码、反码、补码又是个啥？/doc.md)
 + [详解如何使用 Python 操作 Telegram（电报）机器人](./详解如何使用%20Python%20操作%20Telegram（电报）机器人/doc.md)
++ [granian：让你的 Web 应用程序快如闪电](./granian：让你的%20Web%20应用程序快如闪电/doc.md)
